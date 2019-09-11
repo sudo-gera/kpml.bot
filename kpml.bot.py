@@ -19,8 +19,8 @@ def get(a=0):
 
 def send(id,text):
   q=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text)
-  print(q)
+  if list(q.keys())!=['response']:
+   print(q)
 
-while 1:
- for q in get():
-  send(q[0],q[1])
+for q in get():
+ send(q[0],q[1])

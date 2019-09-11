@@ -26,15 +26,15 @@ def send(id,text):
 db=loads(open('db.json').read())
 
 for q in get():
- if w[0] not in db.keys():
-  db[w[0]]=dict()
- if w[1]=='$$reboot':
+ if q[0] not in db.keys():
+  db[q[0]]=dict()
+ if q[1]=='$$reboot':
   open('db.json','w').write(dump(db))
   exit()
- elif w[1]=='help':
-  send(w[0],'nothing to do')
+ elif q[1]=='help':
+  send(q[0],'nothing to do')
  else:
-  send(w[0],'nothing to mention')
+  send(q[0],'nothing to mention')
 
 #=======
 #for q in look():

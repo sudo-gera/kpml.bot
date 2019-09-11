@@ -22,7 +22,6 @@ def send(id,text):
   if list(q.keys())!=['response']:
    print(q)
 
-#<<<<<<< HEAD
 db=loads(open('db.json').read())
 
 for q in look():
@@ -32,11 +31,7 @@ for q in look():
   open('db.json','w').write(dump(db))
   exit()
  elif q[1]=='help':
-  send(q[0],'nothing to do')
+  send(q[0],'nothing to help')
  else:
   send(q[0],'nothing to mention')
 
-#=======
-#for q in look():
-# send(q[0],q[1])
-#>>>>>>> 60f987b4b902d55d37c39862e0584a6df9382180

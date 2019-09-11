@@ -25,7 +25,7 @@ def send(id,text):
 #<<<<<<< HEAD
 db=loads(open('db.json').read())
 
-for q in get():
+for q in look():
  if q[0] not in db.keys():
   db[q[0]]=dict()
  if q[1]=='$$reboot':

@@ -32,7 +32,7 @@ for q in look():
   send(q[0],dumps(db))
  elif q[1]=='help':
   send(q[0],'для указания классов для получения изменений в расписани напиши class потом перечисли все классы через символ ;\n пример команды:\nclass 9А;10В;1Б')
- elif q[1][:5]=='class'
+ elif q[1][:5]=='class':
   tmp=q[1][5:]
   tmp=tmp.upper()
   tmp=tmp.split(';')

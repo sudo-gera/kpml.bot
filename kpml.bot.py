@@ -31,7 +31,22 @@ for q in look():
  if q[1] == 'json':
   send(q[0],dumps(db))
  elif q[1]=='help':
-  send(q[0],'nothing to help')
+  send(q[0],'для указания классов для получения изменений в расписани напиши class потом перечисли все классы через символ ;\n пример команды:\nclass 9А;10В;1Б')
+ elif q[1][:5]=='class'
+  tmp=q[1][5:]
+  tmp=tmp.upper()
+  tmp=tmp.split(';')
+  db[q[0]]['class']=[]
+  se='вы подписались на изменения в расписании для классов:'
+  for w in tmp:
+   nu=[e for e in w if e in '01234567890']
+   nu=''.join(nu)
+   nu=int('1'+nu)-10**len(nu)
+   le=[e for e in w if e in 'АБВГД']
+   le=''.join(le)
+   db[q[0]]['class']+=[nu+le]
+   se+=' '+nu+le
+  send(q[0],se)
  else:
   send(q[0],'nothing to mention')
 

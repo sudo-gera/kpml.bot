@@ -36,6 +36,7 @@ for q in look():
   tmp=q[1][5:]
   tmp=tmp.upper()
   tmp=tmp.split(';')
+  send(q[0],'debug 1')
   db[q[0]]['class']=[]
   se='вы подписались на изменения в расписании для классов:'
   for w in tmp:

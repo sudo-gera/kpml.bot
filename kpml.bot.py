@@ -24,6 +24,7 @@ def send(id,text):
 
 db=loads(open('db.json').read())
 
+open('../kpml.bot.db.json','w').write('{}')
 for q in look():
  if q[0] not in db.keys():
   db[q[0]]=dict()

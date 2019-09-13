@@ -42,10 +42,12 @@ for q in look():
    nu=[e for e in w if e in '01234567890']
    nu=''.join(nu)
    nu=int('1'+nu)-10**len(nu)
+   nu=str(nu)
    le=[e for e in w if e in 'АБВГД']
    le=''.join(le)
-   db[q[0]]['class']+=[nu+le]
-   se+=' '+nu+le
+   if nu and le:
+    db[q[0]]['class']+=[nu+le]
+    se+=' '+nu+le
   send(q[0],se)
  else:
   send(q[0],'nothing to mention')

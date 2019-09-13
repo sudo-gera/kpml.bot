@@ -28,7 +28,7 @@ for q in look():
  if q[0] not in db.keys():
   db[q[0]]=dict()
  if q[1] == 'json':
-  send(w[0],dumps(db))
+  send(q[0],dumps(db))
  elif q[1]=='help':
   send(q[0],'nothing to help')
  else:

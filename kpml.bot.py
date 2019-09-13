@@ -22,17 +22,16 @@ def send(id,text):
   if list(q.keys())!=['response']:
    print(q)
 
-db=loads(open('db.json').read())
+db=loads(open('../kpml.bot.db.json').read())
 
-open('../kpml.bot.db.json','w').write('{}')
 for q in look():
  if q[0] not in db.keys():
   db[q[0]]=dict()
- if q[1]=='$$reboot':
-  open('db.json','w').write(dump(db))
-  exit()
+ if q[1] == 'json':
+  send(w[0],dumps(db))
  elif q[1]=='help':
   send(q[0],'nothing to help')
  else:
   send(q[0],'nothing to mention')
 
+open('../kpml.bot.db.json','w').write(dumps(db))

@@ -15,6 +15,7 @@ def look(a=0):
  q=[[w['conversation']['peer']['id'],w['last_message']['text'],w] for w in q if w['conversation']['can_write']['allowed']]
  if a==0:
   q=[w[:2] for w in q]
+ q=[[str(w[0])]+w[1:] for w in q]
  return q
 
 def send(id,text):

@@ -50,6 +50,6 @@ for q in look():
     se+=' '+nu+le
   send(q[0],se)
  else:
-  send(q[0],'nothing to mention')
+  send(q[0],'введи help')
 
 open('../kpml.bot.db.json','w').write(dumps(db))

@@ -4,10 +4,12 @@ from json import dumps
 from urllib.parse import quote
 from time import sleep
 from time import time
+token='4a2843c76eb198b26ada0a77f1ffe56319f51a7e4b936226cabdb4060efaabc76177977ce585e91e30a5f'
 def api(path,data):
  sleep(1/3)
  data=data.encode()
- return loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token=4a2843c76eb198b26ada0a77f1ffe56319f51a7e4b936226cabdb4060efaabc76177977ce585e91e30a5f',data=data).read().decode())
+ global token
+ return loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
 
 def look(a=0):
  q=api('messages.getConversations?count=200&filter=unread&','')
@@ -25,6 +27,7 @@ def send(id,text):
 
 db=loads(open('../kpml.bot.db.json').read())
 
+open('../kpml.bot.token','w').write(token)
 for q in look():
  if q[0] not in db.keys():
   db[q[0]]=dict()

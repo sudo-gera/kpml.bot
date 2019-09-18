@@ -5,7 +5,6 @@ from urllib.parse import quote
 from time import sleep
 from time import time
 token=open('../kpml.bot.token').read()
-#token='4a2843c76eb198b26ada0a77f1ffe56319f51a7e4b936226cabdb4060efaabc76177977ce585e91e30a5f'
 def api(path,data):
  sleep(1/3)
  data=data.encode()

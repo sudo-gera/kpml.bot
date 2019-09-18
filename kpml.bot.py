@@ -4,7 +4,13 @@ from json import dumps
 from urllib.parse import quote
 from time import sleep
 from time import time
+from time import asctime
+
 token=open('../kpml.bot.token').read()
+db=loads(open('../kpml.bot.db.json').read())
+rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
+emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
+
 def api(path,data):
  sleep(1/3)
  data=data.encode()
@@ -25,7 +31,43 @@ def send(id,text):
   if list(q.keys())!=['response']:
    print(q)
 
-db=loads(open('../kpml.bot.db.json').read())
+def next(q,w):
+ q,w=int(q),int(w)
+ l=[31,28,31,30,31,30,31,31,30,31,30,31]
+ if q+1>l[w]:
+  return '1 '+str(w%12+1)
+ return str(q+1)+' '+str(w)
+
+def parse():
+ q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ q=q.split('\n')
+ q=[[len(w),w] for w in q]
+ q=max(q)[1]
+ q=q.replace('<','\n<').replace('>','>\n').replace('&nbsp;','')
+ q=q.split('\n')
+ q=[w for w in q if w and w[0] != '<']
+ q=[[w,] for w in q]
+ day=''
+ for w in q:
+  if w[0][:9].strip() == 'Изменения':
+   w[0]=w[0].split('-')[1].split()[:2]
+   w[0][1]=str(rmo.index(w[0][1].lower()))
+   w[0]=' '.join(w[0])
+   day=w[0]
+   w[0]=''
+  else:
+   w[0]=day+' '+w[0]
+ q=[w[0] for w in q if w[0]]
+ t=asctime()
+ t=t.split()[1:3]
+ t[0]=t[0].lower()
+ t[0]=emo.index(t[0])
+ tn=next(t[1],t[0])
+ t=str(t[1])+' '+str(t[0])
+ q=['1 1 Изменения на сегодня:']+[w for w in q if w[:len(t)]==t] + ['1 1 Изменения на завтра:']+ [w for w in q if w[:len(tn)]==tn]
+ q=[' '.join(w.split()[2:]) for w in q]
+ q='\n'.join(q)
+ return q
 
 for q in look():
  if q[0] not in db.keys():
@@ -51,7 +93,9 @@ for q in look():
     db[q[0]]['class']+=[nu+le]
     se+=' '+nu+le
   send(q[0],se)
+ elif q[1] == 'look':
+  send(q[0],parse())
  else:
-  send(q[0],'введи help')
+  send(q[0],'введи look')
 
 open('../kpml.bot.db.json','w').write(dumps(db))

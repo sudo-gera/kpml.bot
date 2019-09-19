@@ -100,6 +100,7 @@ for q in look():
    if len(t)==2 and t[0].isdigit() and t[1].isdigit() and 99<int('1'+'0'*(2-len(t[0]))+t[0])<124 and 99<int('1'+'0'*(2-len(t[1]))+t[1])<160:
     db[q[0]]['time']+=[int(t[0])*3600+int(t[1])*60-3*3600]
     ts+=' '+tmp
+    db[q[0]]['ls']=0
    else:
     send(q[0],'неправильный формат времени:'+tmp)
   if ts:

@@ -64,7 +64,7 @@ def parse():
  t[0]=emo.index(t[0])
  tn=next(t[1],t[0])
  t=str(t[1])+' '+str(t[0])
- q=['1 1 Изменения на сегодня:']+[w for w in q if w[:len(t)]==t] + ['1 1 Изменения на завтра:']+ [w for w in q if w[:len(tn)]==tn]
+ q=['1 1 Изменения на сегодня:']+[w for w in q if w[:len(t)]==t] + ['1 1','1 1 Изменения на завтра:']+ [w for w in q if w[:len(tn)]==tn]
  q=[' '.join(w.split()[2:]) for w in q]
  q='\n'.join(q)
  return q

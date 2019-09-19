@@ -96,8 +96,8 @@ for q in look():
  elif q[1][:4] == 'time':
   tmp=q[1][4:].strip()
   t=tmp.split(':')
-  if len(t)==2 and t[0].isdigit() and t[1].isdigit():
-   db[q[0]]['time']=tmp
+  if len(t)==2 and t[0].isdigit() and t[1].isdigit() and 99<int('1'+'0'*(2-len(t[0]))+t[0])<124 and 99<int('1'+'0'*(2-len(t[1]))+t[1])<160:
+   db[q[0]]['time']=t[0]*3600+t[1]*60
    send(q[0],'теперь автоматические оповещения будут приходить вам в '+tmp)
   else:
    send(q[0],'неправильный формат времени')
@@ -105,5 +105,12 @@ for q in look():
   send(q[0],parse())
  else:
   send(q[0],'введи look')
+
+for w if db.keys():
+ if 'ls' not in db[w].keys():
+  db[w]['ls']=0
+ if abs(int(time())%(24*3600)-db[w]['time'])<300 and (int(time())-db[w]['ls'])>900:
+  send(w,parse())
+  db[w]['ls']=int(time())
 
 open('../kpml.bot.db.json','w').write(dumps(db))

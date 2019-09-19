@@ -97,7 +97,7 @@ for q in look():
   tmp=q[1][4:].strip()
   t=tmp.split(':')
   if len(t)==2 and t[0].isdigit() and t[1].isdigit() and 99<int('1'+'0'*(2-len(t[0]))+t[0])<124 and 99<int('1'+'0'*(2-len(t[1]))+t[1])<160:
-   db[q[0]]['time']=t[0]*3600+t[1]*60
+   db[q[0]]['time']=int(t[0])*3600+int(t[1])*60
    send(q[0],'теперь автоматические оповещения будут приходить вам в '+tmp)
   else:
    send(q[0],'неправильный формат времени')

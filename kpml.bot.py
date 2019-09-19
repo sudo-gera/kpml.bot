@@ -117,7 +117,7 @@ for w in db.keys():
  if 'ls' not in db[w].keys():
   db[w]['ls']=0
  for e in db[w]['time']:
-  if abs(int(time())%(24*3600)-w)<300 and (int(time())-db[w]['ls'])>900:
+  if abs(int(time())%(24*3600)-int(w))<300 and (int(time())-db[w]['ls'])>900:
    send(w,parse())
    db[w]['ls']=int(time())
 

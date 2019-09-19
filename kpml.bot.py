@@ -106,7 +106,7 @@ for q in look():
  else:
   send(q[0],'введи look')
 
-for w if db.keys():
+for w in db.keys():
  if 'ls' not in db[w].keys():
   db[w]['ls']=0
  if abs(int(time())%(24*3600)-db[w]['time'])<300 and (int(time())-db[w]['ls'])>900:

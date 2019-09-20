@@ -9,13 +9,6 @@ from time import asctime
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 
-def next(q,w):
- q,w=int(q),int(w)
- l=[31,28,31,30,31,30,31,31,30,31,30,31]
- if q+1>l[w]:
-  return '1 '+str(w%12+1)
- return str(q+1)+' '+str(w)
-
 def parse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('\n')
@@ -40,3 +33,19 @@ def parse(t):
  q=[' '.join(w.split()[2:]) for w in q]
  return q
 
+def get(clas,day):
+ text=parse(day)
+ '''
+.∧＿∧
+( ･ω･｡)つ━☆・*。
+⊂. ノ ...・゜+.
+しーＪ...°。+ *´¨)
+..........· ´¸.·*´¨) ¸.·*¨)
+..........(¸.·´ (¸.·'* ☆  your code ☆
+ '''
+ return text
+
+print(get('9А','20 0'))  #20 января
+print(get('10Б','1 9'))  #1 октября
+print(get('1А','15 10')) #15 ноября
+print(get('4В','4 11'))  #4 декабря

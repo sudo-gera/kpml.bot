@@ -31,14 +31,6 @@ def send(id,text):
   if list(q.keys())!=['response']:
    print(q)
 
-'''
-def next(q,w):
- q,w=int(q),int(w)
- l=[31,28,31,30,31,30,31,31,30,31,30,31]
- if q+1>l[w]:
-  return '1 '+str(w%12+1)
- return str(q+1)+' '+str(w)
-'''
 
 def parse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()

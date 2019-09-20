@@ -31,12 +31,14 @@ def send(id,text):
   if list(q.keys())!=['response']:
    print(q)
 
+'''
 def next(q,w):
  q,w=int(q),int(w)
  l=[31,28,31,30,31,30,31,31,30,31,30,31]
  if q+1>l[w]:
   return '1 '+str(w%12+1)
  return str(q+1)+' '+str(w)
+'''
 
 def parse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
@@ -67,7 +69,12 @@ def work():
  t=t.split()[1:3]
  t[0]=t[0].lower()
  t[0]=emo.index(t[0])
- tn=next(t[1],t[0])
+ q,w=int(t[1]),int(t[0])
+ l=[31,28,31,30,31,30,31,31,30,31,30,31]
+ if q+1>l[w]:
+  tn= '1 '+str(w%12+1)
+ else:
+  tn= str(q+1)+' '+str(w)
  t=str(t[1])+' '+str(t[0])
  q=['Изменения на сегодня, '+t.split()[0]+' '+rmo[int(t.split()[1])]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+' '+rmo[int(tn.split()[1])]+':']+parse(tn)
  q='\n'.join(q)

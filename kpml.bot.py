@@ -120,7 +120,7 @@ for q in look():
   che.sort()
   chs=0
   for w in range(len(che)-1):
-   if che[w]-che[w+1]>900:
+   if che[w]-che[w+1]>-900:
     chs=1
   if chs:
    send(q[0],'бот не может отправлять автоматические оповещения чаще, чем раз в 15 минут')

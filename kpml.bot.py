@@ -77,7 +77,7 @@ def work():
  else:
   tn= str(q+1)+' '+str(w)
  t=str(t[1])+' '+str(t[0])
- q=['Изменения на сегодня, '+t.split()[0]+' '+rmo[int(t.split()[1])]+' '+rdw[edw.index(dw)]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+' '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
+ q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[edw.index(dw)]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
  q='\n'.join(q)
  return q
 
@@ -135,7 +135,7 @@ for q in look():
   if chs:
    send(q[0],'бот не может отправлять автоматические оповещения чаще, чем раз в 15 минут')
  elif q[1] == 'look':
-  ts='изменения по вашим классам:'
+  ts='изменения классам, на которые вы подписаны:'
   if db[q[0]]['class']:
    ts+=work()
   send(q[0],ts)

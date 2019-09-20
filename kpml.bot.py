@@ -62,8 +62,8 @@ def parse(t):
 def work():
  t=asctime()
  t=t.split()[0:5]
- t=t[1:]+[t[0]]
- t[4]=t[4].lower()
+ dw=t[0].lower()
+ t=t[1:]
  t[0]=t[0].lower()
  t[0]=emo.index(t[0])
  q,w,e=int(t[1]),int(t[0]),int(t[3])
@@ -77,7 +77,7 @@ def work():
  else:
   tn= str(q+1)+' '+str(w)
  t=str(t[1])+' '+str(t[0])
- q=['Изменения на сегодня, '+t.split()[0]+' '+rmo[int(t.split()[1])]+' '+rdw[edw.index(t[4])]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+' '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(t[4])+1)%7]+':']+parse(tn)
+ q=['Изменения на сегодня, '+t.split()[0]+' '+rmo[int(t.split()[1])]+' '+rdw[edw.index(dw)]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+' '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
  q='\n'.join(q)
  return q
 

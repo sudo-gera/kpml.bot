@@ -38,7 +38,7 @@ def next(q,w):
   return '1 '+str(w%12+1)
  return str(q+1)+' '+str(w)
 
-def parse():
+def parse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('\n')
  q=[[len(w),w] for w in q]
@@ -58,14 +58,18 @@ def parse():
   else:
    w[0]=day+' '+w[0]
  q=[w[0] for w in q if w[0]]
+ q=[w for w in q if w[:len(t)]==t]
+ q=[' '.join(w.split()[2:]) for w in q]
+ return q
+
+def work():
  t=asctime()
  t=t.split()[1:3]
  t[0]=t[0].lower()
  t[0]=emo.index(t[0])
  tn=next(t[1],t[0])
  t=str(t[1])+' '+str(t[0])
- q=['1 1 Изменения на сегодня, '+t.split()[0]+' '+rmo[int(t.split()[1])]+':']+[w for w in q if w[:len(t)]==t] + ['1 1 <=========================>','1 1 Изменения на завтра, '+tn.split()[0]+' '+rmo[int(tn.split()[1])]+':']+ [w for w in q if w[:len(tn)]==tn]
- q=[' '.join(w.split()[2:]) for w in q]
+ q=['Изменения на сегодня, '+t.split()[0]+' '+rmo[int(t.split()[1])]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+' '+rmo[int(tn.split()[1])]+':']+parse(tn)
  q='\n'.join(q)
  return q
 
@@ -108,9 +112,9 @@ for q in look():
   else:
    send(q[0],'теперь вам не будут приходить оповещения')
  elif q[1] == 'look':
-  send(q[0],parse())
+  send(q[0],work())
  elif q[1] == 'lookall':
-  send(q[0],parse())
+  send(q[0],work())
  else:
   send(q[0],'Привет, это бот-оповещатель об изменениях в расписании. Чтобы подписаться на изменения напиши class потом перечисли все интересующие классы через символ ;\n примеры команды:\nclass 9А;10В;1Б\nclass 10А\nдля указания времени, когда должны приходить оповещения напиши time потом введи московское время через символ :, если несколько, то разделяй символом ;, чтобы отписаться, напиши time не указав время\n примеры команды:\ntime 20:00\ntime 21:12;23:23\nЧтобы получить изменения своих классов прямо сейчас напиши look\nдля получения изменений по всем классам введи lookall')
 
@@ -120,7 +124,7 @@ for w in db.keys():
  if 'time' in db[w].keys():
   for e in db[w]['time']:
    if 0<int(time())%(24*3600)-int(e)<300 and (int(time())-db[w]['ls'])>900:
-    send(w,parse())
+    send(w,work())
     db[w]['ls']=int(time())
 
 open('../kpml.bot.db.json','w').write(dumps(db))

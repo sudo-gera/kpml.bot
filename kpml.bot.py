@@ -58,10 +58,10 @@ def parse(t):
 
 def work():
  t=asctime()
- t=t.split()[1:4]
+ t=t.split()[1:5]
  t[0]=t[0].lower()
  t[0]=emo.index(t[0])
- q,w,e=int(t[1]),int(t[0]),int(t[2])
+ q,w,e=int(t[1]),int(t[0]),int(t[3])
  if e%4==0 and e%100 or e%400:
   l=[31,29,31,30,31,30,31,31,30,31,30,31]
  else:

@@ -24,6 +24,7 @@ def look(a=0):
  if a==0:
   q=[w[:2] for w in q]
  q=[[str(w[0])]+w[1:] for w in q]
+ q=[[w[0],w[1].lower(),w[1]] for w in q]
  return q
 
 def send(id,text):

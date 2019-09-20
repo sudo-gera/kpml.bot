@@ -102,6 +102,8 @@ for q in look():
   tmp1=q[1][4:].strip()
   ts=''
   db[q[0]]['time']=[]
+  tmp1=';'.join([tmp.strip() for tmp in tmp1.split(';')])
+  tmp1=':'.join([tmp.strip() for tmp in tmp1.split(':')])
   for tmp in tmp1.split(';'):
    t=tmp.split(':')
    if len(t)==2 and t[0].isdigit() and t[1].isdigit() and 99<int('1'+'0'*(2-len(t[0]))+t[0])<124 and 99<int('1'+'0'*(2-len(t[1]))+t[1])<160:
@@ -114,6 +116,14 @@ for q in look():
    send(q[0],'теперь автоматические оповещения будут приходить вам в '+ts)
   else:
    send(q[0],'теперь вам не будут приходить оповещения')
+  che=db[q[0]]['time'][:]
+  che.sort()
+  chs=0
+  for w in range(len(che)-1):
+   if che[w]-che[w+1]>900:
+    chs=1
+  if chs:
+   send(q[0],'бот не может отправлять автоматические оповещения чаще, чем раз в 15 минут')
  elif q[1] == 'look':
   send(q[0],work())
  elif q[1] == 'lookall':

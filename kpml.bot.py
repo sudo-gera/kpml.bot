@@ -156,6 +156,7 @@ if 1:
    tmp=q[1][7:].split()
    if len(tmp)>1 and tmp[0].isdigit() and tmp[1].isdigit():
     tmp=tmp[0]+' '+str(int(tmp[0])-1)
+    send(q[0],tmp)
     tmp=parse(tmp)
     tmp='\n'.join(tmp)
     tmp='Изменения на '+q[1][7:]+':\n'+tmp
@@ -175,10 +176,6 @@ time 20:00
 time 21:12;23:23
 Чтобы получить изменения своих классов прямо сейчас напиши look
 для получения изменений по всем классам введи lookall
-для просмотра изменений на произвольный день введи look день или lookall день
-примеры:
-look 10 12
-lookall 23 7
 есть вопросы - введи faq
 Бот работает не так как надо? пиши админy
 vk.com/roscomnadpozor''')
@@ -193,3 +190,9 @@ vk.com/roscomnadpozor''')
      db[w]['ls']=int(time())
 
 open('../kpml.bot.db.json','w').write(dumps(db))
+
+'''для просмотра изменений на произвольный день введи look день или lookall день
+примеры:
+look 10 12
+lookall 23 7
+'''

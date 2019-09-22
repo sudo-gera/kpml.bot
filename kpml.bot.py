@@ -155,7 +155,7 @@ if 1:
   elif q[1][:7] == 'lookall':
    tmp=q[1][7:].split()
    if len(tmp)>1 and tmp[0].isdigit() and tmp[1].isdigit():
-    tmp=tmp[0]+' '+str(int(tmp[0])-1)
+    tmp=tmp[0]+' '+str(int(tmp[1])-1)
     send(q[0],tmp)
     tmp=parse(tmp)
     tmp='\n'.join(tmp)

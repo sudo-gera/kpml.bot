@@ -105,6 +105,8 @@ if 1:
    send(q[0],dumps(db))
   elif q[1] == 'len':
    send(q[0],len(db.keys()))
+  elif q[1] == 'xg':
+   send(q[0],'\n'.join(list(enumerate([[w,db[w]] for w in db.keys()]))))
   elif q[1][:5]=='class':
    tmp=q[1][5:]
    tmp=tmp.upper()

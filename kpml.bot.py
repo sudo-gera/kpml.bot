@@ -85,6 +85,16 @@ def work():
  return q
 
 if 1:
+
+ for w in db.keys():
+  if 'ls' not in db[w].keys():
+   db[w]['ls']=0
+  if 'time' in db[w].keys():
+   for e in db[w]['time']:
+    if 0<int(time())%(24*3600)-int(e)<300 and (int(time())-db[w]['ls'])>900:
+     send(w,work())
+     db[w]['ls']=int(time())
+
  for q in look():
   added=0
   if q[0] not in db.keys():
@@ -184,14 +194,6 @@ lookall 23 7
 Бот работает не так как надо? пиши админy
 vk.com/roscomnadpozor''')
 
- for w in db.keys():
-  if 'ls' not in db[w].keys():
-   db[w]['ls']=0
-  if 'time' in db[w].keys():
-   for e in db[w]['time']:
-    if 0<int(time())%(24*3600)-int(e)<300 and (int(time())-db[w]['ls'])>900:
-     send(w,work())
-     db[w]['ls']=int(time())
 
 open('../kpml.bot.db.json','w').write(dumps(db))
 

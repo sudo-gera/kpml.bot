@@ -92,6 +92,8 @@ if 1:
    added=1
   if q[1] == 'json':
    send(q[0],dumps(db))
+  elif q[1] == 'len':
+   send(q[0],len(db.keys()))
   elif q[1][:5]=='class':
    tmp=q[1][5:]
    tmp=tmp.upper()

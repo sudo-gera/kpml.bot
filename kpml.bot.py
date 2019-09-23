@@ -30,6 +30,7 @@ def look(a=0):
  return q
 
 def send(id,text):
+  text=str(text)
   q=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text)
   if list(q.keys())!=['response']:
    print(q)
@@ -103,7 +104,7 @@ if 1:
   if q[1] == 'json':
    send(q[0],dumps(db))
   elif q[1] == 'len':
-   send(q[0],len([w for w in db.keys()]))
+   send(q[0],len(db.keys()))
   elif q[1][:5]=='class':
    tmp=q[1][5:]
    tmp=tmp.upper()

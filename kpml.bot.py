@@ -98,7 +98,7 @@ if 1:
      send(w,work())
      db[w]['ls']=int(time())
 
- for q in look():
+ for q in []:
   added=0
   if q[0] not in db.keys():
    db[q[0]]=dict()

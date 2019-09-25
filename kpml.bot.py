@@ -6,7 +6,7 @@ from time import sleep
 from time import time
 from time import asctime
 
-print('\x1b[93m'+'█'*20+'\x1b[0m')
+print('\x1b[93m'+'█'*20+asctime()+'\x1b[0m')
 
 token=open('../kpml.bot.token').read()
 db=loads(open('../kpml.bot.db.json').read())
@@ -100,7 +100,7 @@ if 1:
      send(w,work())
      db[w]['ls']=int(time())
 
- for q in []:
+ for q in look():
   added=0
   if q[0] not in db.keys():
    db[q[0]]=dict()

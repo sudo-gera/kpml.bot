@@ -6,6 +6,8 @@ from time import sleep
 from time import time
 from time import asctime
 
+print('\x1b[93m'+'█'*20+'\x1b[0m')
+
 token=open('../kpml.bot.token').read()
 db=loads(open('../kpml.bot.db.json').read())
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()

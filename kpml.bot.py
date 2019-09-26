@@ -87,7 +87,6 @@ def work():
  q='\n'.join(q)
  return q
 
-send('225847803','test')
 
 if 1:
 

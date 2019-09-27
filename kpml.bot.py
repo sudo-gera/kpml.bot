@@ -80,7 +80,7 @@ def work():
  else:
   tn= str(q+1)+' '+str(w)
  t=str(t[1])+' '+str(t[0])
- if int(time()+3)%(24*3600)<15*3600:
+ if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[edw.index(dw)]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
  else:
   q=['Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)

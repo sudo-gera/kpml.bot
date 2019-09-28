@@ -194,7 +194,7 @@ if 1:
     qq,w,e=int(t[1]),int(t[0]),int(t[3])
     for sw in ' '*int(tmp[0][1:]):
      qq,w=next(qq,w,e).split()
-     if str(qq)=='1' and str(w)=='0':
+     if str(qq)=='1' and str(w)=='0' and 0:
       e+=1
     send(q[0],parse(str(qq)+' '+str(w)))
    else:

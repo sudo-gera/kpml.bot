@@ -71,6 +71,7 @@ def next(q,w,e):
   tn= '1 '+str(w%12+1)
  else:
   tn= str(q+1)+' '+str(w)
+ return tn
 
 def work():
  t=asctime()

@@ -187,7 +187,7 @@ if 1:
     tmp='\n'.join(tmp)
     tmp='Изменения на '+q[1][7:]+':\n'+tmp
     send(q[0],tmp)
-   elif len(tmp)==1 and tmp[0][0]=='+' and tmp[0][1:].isdigit():
+   elif len(tmp)==1 and tmp[0][0]=='+' and tmp[0][1:].isdigit() and int(tmp[0][1:]) < 60:
     t=asctime()
     t=t.split()[1:5]
     t[0]=t[0].lower()
@@ -197,7 +197,9 @@ if 1:
      qq,w=next(qq,w,e).split()
      if str(qq)=='1' and str(w)=='0':
       e+=1
-    send(q[0],'Изменения через '+tmp[0][1:]+' дней:\n'+'\n'.join(parse(str(qq)+' '+str(w))))
+    send(q[0],'Изменения вперёд на '+tmp[0][1:]+' дней:\n'+'\n'.join(parse(str(qq)+' '+str(w))))
+   elif len(tmp)==1 and tmp[0][0]=='+' and tmp[0][1:].isdigit():
+    send(q[0],'слишком далеко')
    else:
     send(q[0],'не удалось распознать день')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:
@@ -216,6 +218,9 @@ time 21:12;23:23
 для просмотра изменений на произвольный день введи lookall день
 примеры:
 lookall 23 7
+для просмотра на несколько дней вперёд введи lookall +дни
+пример:
+lookall +2
 есть вопросы - введи faq
 Бот работает не так как надо? пиши админy
 vk.com/roscomnadpozor''')

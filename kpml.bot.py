@@ -187,7 +187,7 @@ if 1:
     tmp='\n'.join(tmp)
     tmp='Изменения на '+q[1][7:]+':\n'+tmp
     send(q[0],tmp)
-   elif len(tmp)==1 and tmp[0][0]=='+' and tmp[0][1:].isdigit() and int(tmp[0][1:]) < 60:
+   elif len(tmp)==1 and tmp[0][0]=='>' and tmp[0][1:].isdigit() and int(tmp[0][1:]) < 60:
     t=asctime()
     t=t.split()[1:5]
     t[0]=t[0].lower()
@@ -220,7 +220,7 @@ time 21:12;23:23
 lookall 23 7
 для просмотра на несколько дней вперёд введи lookall +дни
 пример:
-lookall \+2
+lookall >2
 есть вопросы - введи faq
 Бот работает не так как надо? пиши админy
 vk.com/roscomnadpozor''')

@@ -188,15 +188,13 @@ if 1:
     send(q[0],tmp)
    elif len(tmp)==1 and tmp[0][0]=='+' and tmp[0][1:].isdigit():
     t=asctime()
-    t=t.split()[0:5]
-    dw=t[0].lower()
-    t=t[1:]
+    t=t.split()[1:5]
     t[0]=t[0].lower()
     t[0]=emo.index(t[0])
     q,w,e=int(t[1]),int(t[0]),int(t[3])
     for sw in ' '*int(tmp[0][1:]):
      q,w=next(q,w,e).split()
-    send(parse(str(q)+' '+str(w)))
+    send(q[0],parse(str(q)+' '+str(w)))
    else:
     send(q[0],'не удалось распознать день')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:

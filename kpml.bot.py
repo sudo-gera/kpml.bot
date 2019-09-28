@@ -81,7 +81,7 @@ def work():
  t[0]=emo.index(t[0])
  q,w,e=int(t[1]),int(t[0]),int(t[3])
  t=str(t[1])+' '+str(t[0])
- tn=next()
+ tn=next(q,w,e)
  tn=tn.split()
  tn=str(tn[0])+' '+str(tn[1])
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:

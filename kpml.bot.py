@@ -62,6 +62,16 @@ def parse(t):
  q=[' '.join(w.split()[2:]) for w in q]
  return q
 
+def next(q,w,e):
+ if e%4==0 and e%100 or e%400:
+  l=[31,29,31,30,31,30,31,31,30,31,30,31]
+ else:
+  l=[31,28,31,30,31,30,31,31,30,31,30,31]
+ if q+1>l[w]:
+  tn= '1 '+str(w%12+1)
+ else:
+  tn= str(q+1)+' '+str(w)
+
 def work():
  t=asctime()
  t=t.split()[0:5]
@@ -70,16 +80,10 @@ def work():
  t[0]=t[0].lower()
  t[0]=emo.index(t[0])
  q,w,e=int(t[1]),int(t[0]),int(t[3])
- if e%4==0 and e%100 or e%400:
-  l=[31,29,31,30,31,30,31,31,30,31,30,31]
- else:
-  l=[31,28,31,30,31,30,31,31,30,31,30,31]
- t=t[:2]
- if q+1>l[w]:
-  tn= '1 '+str(w%12+1)
- else:
-  tn= str(q+1)+' '+str(w)
  t=str(t[1])+' '+str(t[0])
+ tn=next()
+ tn=tn.split()
+ tn=str(tn[0])+' '+str(tn[1])
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[edw.index(dw)]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
  else:
@@ -178,6 +182,17 @@ if 1:
     tmp='\n'.join(tmp)
     tmp='Изменения на '+q[1][7:]+':\n'+tmp
     send(q[0],tmp)
+   elif len(tmp)==1 and tmp[0][0]=='+' and tmp[0][1:].isdigit():
+    t=asctime()
+    t=t.split()[0:5]
+    dw=t[0].lower()
+    t=t[1:]
+    t[0]=t[0].lower()
+    t[0]=emo.index(t[0])
+    q,w,e=int(t[1]),int(t[0]),int(t[3])
+    for w in tmp[0][1:].isdigit():
+     q,w=next(q,w,e)
+    send(parse(q+' '+w))
    else:
     send(q[0],'не удалось распознать день')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:

@@ -192,8 +192,8 @@ if 1:
     t[0]=emo.index(t[0])
     q,w,e=int(t[1]),int(t[0]),int(t[3])
     for w in tmp[0][1:].isdigit():
-     q,w=next(q,w,e)
-    send(parse(q+' '+w))
+     q,w=next(q,w,e).split()
+    send(parse(str(q)+' '+str(w)))
    else:
     send(q[0],'не удалось распознать день')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:

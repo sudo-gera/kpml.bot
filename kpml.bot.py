@@ -31,11 +31,14 @@ def look(a=0):
  q=[[w[0],w[1].lower(),w[1]] for w in q]
  return q
 
-def send(id,text):
+def send(id,text=None):
+  global q
+  if text==None:
+   id,text=q[0],id
   text=str(text)
-  q=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text)
-  if list(q.keys())!=['response']:
-   print(q)
+  qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text)
+  if list(qq.keys())!=['response']:
+   print(qq)
 
 
 def parse(t):

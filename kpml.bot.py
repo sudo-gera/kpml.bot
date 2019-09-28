@@ -197,7 +197,7 @@ if 1:
      qq,w=next(qq,w,e).split()
      if str(qq)=='1' and str(w)=='0':
       e+=1
-    send(q[0],parse(str(qq)+' '+str(w)))
+    send(q[0],parse(''.join(str(qq)+' '+str(w))))
    else:
     send(q[0],'не удалось распознать день')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:

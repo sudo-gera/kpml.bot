@@ -66,6 +66,7 @@ def parse(t):
  return q
 
 def next(q,w,e):
+ q,w=int(q),int(w)
  if e%4==0 and e%100 or e%400:
   l=[31,29,31,30,31,30,31,31,30,31,30,31]
  else:
@@ -194,9 +195,9 @@ if 1:
     qq,w,e=int(t[1]),int(t[0]),int(t[3])
     for sw in ' '*int(tmp[0][1:]):
      qq,w=next(qq,w,e).split()
-     if str(qq)=='1' and str(w)=='0' and 0:
+     if str(qq)=='1' and str(w)=='0':
       e+=1
-    send(q[0],(str(qq)+' '+str(w)))
+    send(q[0],parse(str(qq)+' '+str(w)))
    else:
     send(q[0],'не удалось распознать день')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:

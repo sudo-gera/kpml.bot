@@ -191,10 +191,12 @@ if 1:
     t=t.split()[1:5]
     t[0]=t[0].lower()
     t[0]=emo.index(t[0])
-    q,w,e=int(t[1]),int(t[0]),int(t[3])
+    qq,w,e=int(t[1]),int(t[0]),int(t[3])
     for sw in ' '*int(tmp[0][1:]):
-     q,w=next(q,w,e).split()
-    send(q[0],parse(str(q)+' '+str(w)))
+     qq,w=next(qq,w,e).split()
+     if str(qq)=='1' and str(w)=='0':
+      e+=1
+    send(q[0],parse(str(qq)+' '+str(w)))
    else:
     send(q[0],'не удалось распознать день')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:

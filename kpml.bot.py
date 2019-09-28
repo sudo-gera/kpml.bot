@@ -114,7 +114,7 @@ if 1:
    db[q[0]]=dict()
    added=1
   if q[1] == 'json':
-   send(q[0],dumps(db))
+   send(dumps(db))
   elif q[1] == 'len':
    send(q[0],len(db.keys()))
   elif q[1] == 'xg':

@@ -108,7 +108,8 @@ if 1:
      send(w,work())
      db[w]['ls']=int(time())
 
- for q in look():
+ wai=look()
+ for q in wai:
   added=0
   if q[0] not in db.keys():
    db[q[0]]=dict()
@@ -204,6 +205,11 @@ if 1:
     send('не удалось распознать день')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:
    send('нужна помощь по боту - пиши help. Хочешь что-то сказать админу - напиши админу, а не сюда')
+  elif q[1][:5] == 'setup':
+   tmp=q[1][5:]
+   tmp=tmp.split()
+   wai+=[[q[0],'class '+tmp[0]]]
+   wai+=[[q[0],'time '+tmp[1]]]
   elif q[1] == 'other':
    send('''
 Вы можете изменить класс подписки или подписаться сразу на несколько

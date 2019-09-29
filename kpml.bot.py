@@ -204,6 +204,7 @@ if 1:
    else:
     send('не удалось распознать день')
   elif q[1][0].isdigit():
+   tmp=q[1]
    tmp=tmp.split()
    wai+=[[q[0],'class '+tmp[0]]]
    wai+=[[q[0],'time '+tmp[1]]]

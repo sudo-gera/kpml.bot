@@ -203,7 +203,7 @@ if 1:
     send('слишком далеко')
    else:
     send('не удалось распознать день')
-  elif q[1][0].isdigit():
+  elif q[1][0].isdigit() and len(q[1].split())>1:
    tmp=q[1]
    tmp=tmp.split()
    wai+=[[q[0],'class '+tmp[0]]]

@@ -62,6 +62,10 @@ def parse(t):
   else:
    w[0]=day+' '+w[0]
  q=[w[0] for w in q if w[0]]
+ t=t.split()
+ t[0]=str(int(t[0]))
+ t[1]=str(int(t[1]))
+ t=' '.join(t)
  q=[w for w in q if w[:len(t)]==t]
  q=[' '.join(w.split()[2:]) for w in q]
  return q

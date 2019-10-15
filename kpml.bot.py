@@ -102,7 +102,8 @@ def work():
  return q
 
 
-if 1:
+
+try:
 
  for w in db.keys():
   if 'ls' not in db[w].keys():
@@ -250,7 +251,9 @@ lookall >2
 Важно: буква класса должна быть русской, а не латинской.
 чтобы увидеть остальные возможности бота введи other
 ''')
-
+except:
+ from traceback import format_exc as fo
+ send('225847803',fo())
 
 open('../kpml.bot.db.json','w').write(dumps(db))
 

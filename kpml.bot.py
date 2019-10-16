@@ -120,7 +120,9 @@ try:
   if q[0] not in db.keys():
    db[q[0]]=dict()
    added=1
-  if q[1] == 'json':
+  if q[1] == '':
+   send('текстом, пожалуйста')
+  elif q[1] == 'json':
    send(dumps(db))
   elif q[1] == 'len':
    send(len(db.keys()))

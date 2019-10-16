@@ -207,7 +207,7 @@ try:
      if str(qq)=='1' and str(w)=='0':
       e+=1
     send('Изменения вперёд на '+tmp[0][1:]+' дней:\n'+'\n'.join(parse(str(qq)+' '+str(w))))
-   elif len(tmp)==1 and tmp[0][0]=='+' and tmp[0][1:].isdigit():
+   elif len(tmp)==1 and tmp[0][0]=='>' and tmp[0][1:].isdigit():
     send('слишком далеко')
    else:
     send('не удалось распознать день')

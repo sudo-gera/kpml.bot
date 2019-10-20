@@ -24,7 +24,7 @@ def api(path,data):
 def look(a=0):
  q=api('messages.getConversations?count=200&filter=unread&','')
  if 'response' not in q.keys():
-  raise SyntaxError (str(q))
+  raise KeyError (str(q))
  q=q['response']['items']
  q=[[w['conversation']['peer']['id'],w['last_message']['text'],w] for w in q if w['conversation']['can_write']['allowed']]
  if a==0:
@@ -40,7 +40,7 @@ def send(id,text=None):
   text=str(text)
   qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text)
   if list(qq.keys())!=['response']:
-   raise SyntaxError(str(qq))
+   raise KeyError(str(qq))
 
 
 def parse(t):

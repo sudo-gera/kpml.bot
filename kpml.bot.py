@@ -39,8 +39,13 @@ def send(id,text=None):
    id,text=q[0],id
   text=str(text)
   qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text)
+  r=1
   if list(qq.keys())!=['response']:
-   raise KeyError(str(qq))
+   if 'error' in qq.keys():
+    if qq['error']['error_code']==901:
+     r=0
+   if r:
+    raise KeyError(str(qq))
 
 
 def parse(t):

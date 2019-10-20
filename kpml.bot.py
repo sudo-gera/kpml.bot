@@ -38,7 +38,7 @@ def send(id,text=None):
   text=str(text)
   qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text)
   if list(qq.keys())!=['response']:
-   print(qq)
+   raise SyntaxError(str(qq))
 
 
 def parse(t):

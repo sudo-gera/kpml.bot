@@ -122,6 +122,9 @@ try:
      db[w]['ls']=int(time())
 
  wai=look()
+
+ if wai == []:
+  sleep(30)
  for q in wai:
   added=0
   if q[0] not in db.keys():

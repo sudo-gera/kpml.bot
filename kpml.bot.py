@@ -124,7 +124,7 @@ try:
  wai=look()
 
  if wai == []:
-  sleep(30)
+  sleep(5)
  for q in wai:
   added=0
   if q[0] not in db.keys():

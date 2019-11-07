@@ -58,6 +58,7 @@ def parse(t):
  q=[w for w in q if w and w[0] != '<']
  q=[[w,] for w in q]
  day=''
+ send('225847803',str(q))
  for w in q:
   if w[0][:9].strip() == 'Изменения':
    w[0]=w[0].split('-')[1].split()[:2]

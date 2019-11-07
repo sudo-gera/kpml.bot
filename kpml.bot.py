@@ -83,7 +83,7 @@ def parse(t):
   return hparse(t)
  except:
   send('225847803',fo())
-  return ['error']
+  return ['an error generated. see http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii']
 
 def next(q,w,e):
  q,w=int(q),int(w)

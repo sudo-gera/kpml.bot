@@ -5,6 +5,7 @@ from urllib.parse import quote
 from time import sleep
 from time import time
 from time import asctime
+from traceback import format_exc as fo
 
 print('\x1b[93m'+'█'*20+asctime()+'\x1b[0m')
 
@@ -48,7 +49,7 @@ def send(id,text=None):
     raise KeyError(str(qq))
 
 
-def parse(t):
+def hparse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('\n')
  q=[[len(w),w] for w in q]
@@ -58,11 +59,9 @@ def parse(t):
  q=[w for w in q if w and w[0] != '<']
  q=[[w,] for w in q]
  day=''
- send('225847803',str(q))
  for w in q:
   if w[0][:9].strip() == 'Изменения':
    w[0]=w[0].split('-')[1].split()[:2]
-   send('225847803',str(w))
    w[0][1]=str(rmo.index(w[0][1].lower()))
    w[0][0]=str(int(w[0][0]))
    w[0]=' '.join(w[0])
@@ -78,6 +77,13 @@ def parse(t):
  q=[w for w in q if w[:len(t)]==t]
  q=[' '.join(w.split()[2:]) for w in q]
  return q
+
+def parse(t):
+ try:
+  return hparse(t)
+ except:
+  send('225847803',fo())
+  return ['error']
 
 def next(q,w,e):
  q,w=int(q),int(w)
@@ -266,7 +272,6 @@ lookall >2
 чтобы увидеть остальные возможности бота введи other
 ''')
 except:
- from traceback import format_exc as fo
  send('225847803',fo())
 
 open('../kpml.bot.db.json','w').write(dumps(db))

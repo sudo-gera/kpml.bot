@@ -61,6 +61,7 @@ def parse(t):
  for w in q:
   if w[0][:9].strip() == 'Изменения':
    w[0]=w[0].split('-')[1].split()[:2]
+   send('225847803',str(w))
    w[0][1]=str(rmo.index(w[0][1].lower()))
    w[0][0]=str(int(w[0][0]))
    w[0]=' '.join(w[0])

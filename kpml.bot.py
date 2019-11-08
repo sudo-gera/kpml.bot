@@ -83,7 +83,7 @@ def parse(t):
   return hparse(t)
  except:
   send('225847803',fo())
-  return ['При чтении изменений произошла ошибка, о которой админ бота уже оповещён. Для получения изменений в расписании перейдите по ссылке http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii']
+  return ['При чтении изменений произошла ошибка, о которой админ бота уже оповещён. Для получения изменений в расписании перейдите по ссылке http://кфмл.рф/pages/raspisanie/izmeneniya-v-raspisanii']
 
 def next(q,w,e):
  q,w=int(q),int(w)

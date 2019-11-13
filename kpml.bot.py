@@ -63,10 +63,10 @@ def hparse(t):
  q=[w for w in q if w and w[0] != '<']
  q=[[w,] for w in q]
  day=''
- log(q)
+ lt=''
  for w in q:
   ss=w[0]
-  log(ss)
+  lt+='\n'+ss
   if ss[:26] == 'Изменения в расписании на ' and ' - ' in ss and ss.split(' - ')[0].strip().split()[0].strip().isdigit():
    w[0]=w[0].split('-')[1].split()[:2]
    w[0][1]=str(rmo.index(w[0][1].lower()))
@@ -83,6 +83,7 @@ def hparse(t):
  t=' '.join(t)
  q=[w for w in q if w[:len(t)]==t]
  q=[' '.join(w.split()[2:]) for w in q]
+ log(lt)
  return q
 
 def parse(t):

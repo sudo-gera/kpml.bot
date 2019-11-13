@@ -66,7 +66,8 @@ def hparse(t):
  log(q)
  for w in q:
   ss=w[0]
-  if ss[:25] == 'Изменения в расписании на' and ' - ' in ss and ss[ss.index(' - '):].strip().split()[0].strip().isdigit():
+  log(ss)
+  if ss[:26] == 'Изменения в расписании на ' and ' - ' in ss and ss.split(' - ')[0].strip().split()[0].strip().isdigit():
    w[0]=w[0].split('-')[1].split()[:2]
    w[0][1]=str(rmo.index(w[0][1].lower()))
    w[0][0]=str(int(w[0][0]))

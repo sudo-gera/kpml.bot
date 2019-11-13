@@ -67,7 +67,11 @@ def hparse(t):
  for w in q:
   ss=w[0]
   lt+='\n'+ss
-  if ss[:26] == 'Изменения в расписании на ' and ' - ' in ss and ss.split(' - ')[0].strip().split()[0].strip().isdigit():
+  a1=ss[:26] == 'Изменения в расписании на '
+  a2=' - ' in ss
+  a3=a2 and ss.split(' - ')[0].strip().split()[0].strip().isdigit()
+  lt+=str(a1)+' '+str(a2)+' '+str(a3)+'\n'
+  if a1 and a2 and a3:
    w[0]=w[0].split('-')[1].split()[:2]
    w[0][1]=str(rmo.index(w[0][1].lower()))
    w[0][0]=str(int(w[0][0]))

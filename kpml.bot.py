@@ -15,6 +15,7 @@ rmo='января февраля марта апреля мая июня июл�
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
+admin='225847803'
 
 def api(path,data):
  sleep(1/3)
@@ -49,6 +50,9 @@ def send(id,text=None):
     raise KeyError(str(qq))
 
 
+def log(q):
+ send(admin,str(q))
+
 def hparse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('\n')
@@ -60,7 +64,8 @@ def hparse(t):
  q=[[w,] for w in q]
  day=''
  for w in q:
-  if w[0][:12] == 'Изменения на' and ' - ' in w[0] and w[0][w[0].index(' - '):].split()[0].strip().isdigit():
+  ss=w[0]
+  if ss[:12] == 'Изменения на' and ' - ' in ss and ss[ss.index(' - '):].strip().split()[0].strip().isdigit():
    w[0]=w[0].split('-')[1].split()[:2]
    w[0][1]=str(rmo.index(w[0][1].lower()))
    w[0][0]=str(int(w[0][0]))
@@ -260,7 +265,7 @@ lookall 23 7
 пример:
 lookall >2
 есть вопросы - введи faq
-Бот работает не так как надо? пиши @id225847803 (админy)
+Бот работает не так как надо? пиши @'+admin+' (админy)
 ''')
   elif added==0 and [w for w in q[1] if w in 'qawszedxrfctgvyhbujnikmolp']==[]:
    send('нужна помощь по боту - пиши help. Хочешь что-то сказать админу - напиши админу, а не сюда')
@@ -277,7 +282,7 @@ lookall >2
 чтобы увидеть остальные возможности бота введи other
 ''')
 except:
- send('225847803',fo())
+ log(fo())
 
 open('../kpml.bot.db.json','w').write(dumps(db))
 

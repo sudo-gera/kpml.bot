@@ -63,6 +63,7 @@ def hparse(t):
  q=[w for w in q if w and w[0] != '<']
  q=[[w,] for w in q]
  day=''
+ log(q)
  for w in q:
   ss=w[0]
   if ss[:12] == 'Изменения на' and ' - ' in ss and ss[ss.index(' - '):].strip().split()[0].strip().isdigit():

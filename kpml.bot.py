@@ -12,6 +12,15 @@ keyboard=[{
   [{"color":"negative","action":{"text":"hell"}}]
  ]
 }]
+keyboard='''
+r:hell|g:ffff
+w:rrr
+
+w:rrrrrr
+'''
+d={'w':'default','b':'primary','r':'negative','g':'positive'}
+keyboard='['+','.join(['{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split(':')[0]]+'","action":{"text":"'+e.split(':')[1]+'"}}' for e in w.split('|')]) +']' for w in k.split('\n') if w])+']}' for k in keyboard.split('\n\n')])+']'
+print(keyboard)
 print('\x1b[93m'+asctime()+'\x1b[0m')
 
 token=open('../kpml.bot.token').read()

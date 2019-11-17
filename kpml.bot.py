@@ -52,7 +52,7 @@ def look(a=0):
 def send(text,id=None,key=''):
   global q
   gg=0
-  if type(id)==type(g):
+  if type(id)==type(gg):
    key=id
    id=None
   if id==None:

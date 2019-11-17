@@ -51,13 +51,14 @@ def look(a=0):
 
 def send(text,id=None,key=''):
   global q
-  if type(id)==type(3):
+  gg=0
+  if type(id)==type(g):
    key=id
    id=None
   if id==None:
    id=q[0]
   global keyboard
-  if key:
+  if key!='':
    key='&keyboard='+dumps(keyboard[key])
   text=str(text)
   qq=api('messages.send?random_id='+str(int(time()*2**28))+key+'&user_id='+str(id)+'&','message='+text)

@@ -7,7 +7,12 @@ from time import time
 from time import asctime
 from traceback import format_exc as fo
 
-print('\x1b[93m'+'█'*20+asctime()+'\x1b[0m')
+keyboard=[{
+ "buttons":[
+  [{"color":"negative","action":{"text":"hell"}}]
+ ]
+}]
+print('\x1b[93m'+asctime()+'\x1b[0m')
 
 token=open('../kpml.bot.token').read()
 db=loads(open('../kpml.bot.db.json').read())
@@ -35,12 +40,18 @@ def look(a=0):
  q=[[w[0],w[1].lower(),w[1]] for w in q]
  return q
 
-def send(id,text=None):
+def send(text,id=None,key=''):
   global q
-  if text==None:
-   id,text=q[0],id
+  if type(id)==type(3):
+   key=id
+   id=None
+  if id==None:
+   id=q[0]
+  global keyboard
+  if key:
+   key='&keyboard='+dumps(keyboard[key])
   text=str(text)
-  qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text)
+  qq=api('messages.send?random_id='+str(int(time()*2**28))+key+'&user_id='+str(id)+'&','message='+text)
   r=1
   if list(qq.keys())!=['response']:
    if 'error' in qq.keys():
@@ -51,7 +62,7 @@ def send(id,text=None):
 
 
 def log(q):
- send(admin,str(q))
+ send(str(q),admin)
 
 def hparse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()

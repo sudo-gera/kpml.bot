@@ -13,14 +13,12 @@ keyboard=[{
  ]
 }]
 keyboard='''
-r:hell|g:ffff
-w:rrr
-
-w:rrrrrr
+r:hell
 '''
 d={'w':'default','b':'primary','r':'negative','g':'positive'}
-keyboard='['+','.join(['{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split(':')[0]]+'","action":{"text":"'+e.split(':')[1]+'"}}' for e in w.split('|')]) +']' for w in k.split('\n') if w])+']}' for k in keyboard.split('\n\n')])+']'
+keyboard='['+','.join(['{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split(':')[0]]+'","action":{"type":"text","label":"'+e.split(':')[1]+'"}}' for e in w.split('|')]) +']' for w in k.split('\n') if w])+']}' for k in keyboard.split('\n\n')])+']'
 print(keyboard)
+keyboard=loads(keyboard)
 print('\x1b[93m'+asctime()+'\x1b[0m')
 
 token=open('../kpml.bot.token').read()
@@ -61,7 +59,9 @@ def send(text,id=None,key=''):
   if key!='':
    key='&keyboard='+dumps(keyboard[key])
   text=str(text)
-  qq=api('messages.send?random_id='+str(int(time()*2**28))+key+'&user_id='+str(id)+'&','message='+text)
+  sleep(5)
+  qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text+key)
+  print(qq)
   r=1
   if list(qq.keys())!=['response']:
    if 'error' in qq.keys():

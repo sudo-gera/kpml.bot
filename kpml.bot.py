@@ -49,11 +49,11 @@ def send(text,id=None,key=''):
    id=q[0]
   global d
   global defkey
-  if key!='':
-   key=key[0]
-   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
-  else:
+  if key=='':
    key=defkey[:]
+  else:
+   key=key[0]
+  key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
   key='&keyboard='+key
   text=str(text)
   sleep(5)

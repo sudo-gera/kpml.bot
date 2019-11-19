@@ -159,7 +159,7 @@ try:
  wai=look()
 
  if wai == []:
-  sleep(5)
+  sleep(2)
  for q in wai:
   added=0
   if q[0] not in db.keys():

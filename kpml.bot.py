@@ -49,7 +49,7 @@ def send(text,id=None,key=''):
    id=q[0]
   global d
   if key!='':
-   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split(':')[0]]+'","action":{"type":"text","label":"'+e.split(':')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
+   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
   key='&keyboard='+key
   text=str(text)
   sleep(5)
@@ -233,15 +233,15 @@ try:
     send(ts)
   elif q[1] == 'получить изменения':
    w,e,r=today()
-   kb='b:'+str(w)+'.'+str(e)
+   kb='b×'+str(w)+'.'+str(e)
    w,e,r=next(w,e,r)
-   kb+='|b:'+str(w)+'.'+str(e)
+   kb+='|b×'+str(w)+'.'+str(e)
    for t in range(5):
     w,e,r=next(w,e,r)
-    kb+='\nb:'+str(w)+'.'+str(e)
+    kb+='\nb×'+str(w)+'.'+str(e)
     w,e,r=next(w,e,r)
-    kb+='|b:'+str(w)+'.'+str(e)
-   send('выберите дату\n'+kb)
+    kb+='|b×'+str(w)+'.'+str(e)
+   send('выберите дату',[kb])
   elif q[1] == 'faq':
    send('частые ошибки, которые мешают пользоваться ботом:\nдля команд class и time убедитесь, что элементы разделены символом ; а не пробелом\nдля команды class убедитесь, что буквы классов русские, а не латинские\nдля команды lookall день, убедитесь, что сначала написали число, потом номер месяца, и между ними пробел. Введи help и проверь, что команда написана верно')
   elif q[1] == 'lookall':

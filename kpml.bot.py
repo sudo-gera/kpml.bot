@@ -7,16 +7,10 @@ from time import time
 from time import asctime
 from traceback import format_exc as fo
 
-keyboard=[{
- "buttons":[
-  [{"color":"negative","action":{"text":"hell"}}]
- ]
-}]
-keyboard='''
+keyboards='''
 r:hell
 '''
 d={'w':'default','b':'primary','r':'negative','g':'positive'}
-keyboard='['+','.join(['{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split(':')[0]]+'","action":{"type":"text","label":"'+e.split(':')[1]+'"}}' for e in w.split('|')]) +']' for w in k.split('\n') if w])+']}' for k in keyboard.split('\n\n')])+']'
 print(keyboard)
 keyboard=loads(keyboard)
 print('\x1b[93m'+asctime()+'\x1b[0m')
@@ -49,15 +43,16 @@ def look(a=0):
 
 def send(text,id=None,key=''):
   global q
-  gg=0
+  gg=[]
   if type(id)==type(gg):
-   key=id
+   key=id[0]
    id=None
   if id==None:
    id=q[0]
-  global keyboard
+  global d
   if key!='':
-   key='&keyboard='+dumps(keyboard[key])
+   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split(':')[0]]+'","action":{"type":"text","label":"'+e.split(':')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
+  key='&keyboard='+key
   text=str(text)
   sleep(5)
   qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text+key)
@@ -117,18 +112,18 @@ YambarError: Yambarysheva ohrenela
 Для получения изменений в расписании перейдите по ссылке http://кфмл.рф/pages/raspisanie/izmeneniya-v-raspisanii''']
 
 def next(q,w,e):
- q,w=int(q),int(w)
+ q,w,e=int(q),int(w),int(e)
  if e%4==0 and e%100 or e%400:
   l=[31,29,31,30,31,30,31,31,30,31,30,31]
  else:
   l=[31,28,31,30,31,30,31,31,30,31,30,31]
  if q+1>l[w]:
-  tn= '1 '+str(w%12+1)
+  tn= [1,w%12+1]
  else:
-  tn= str(q+1)+' '+str(w)
- return tn
+  tn= [q+1,w]
+ return tn+[e]
 
-def work():
+def today():
  t=asctime()
  t=t.split()[0:5]
  dw=t[0].lower()
@@ -136,9 +131,12 @@ def work():
  t[0]=t[0].lower()
  t[0]=emo.index(t[0])
  q,w,e=int(t[1]),int(t[0]),int(t[3])
- t=str(t[1])+' '+str(t[0])
+ return [q,w,e]
+
+def work():
+ q,w,e=today()
+ t=str(q)+' '+str(w)
  tn=next(q,w,e)
- tn=tn.split()
  tn=str(tn[0])+' '+str(tn[1])
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[edw.index(dw)]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
@@ -178,7 +176,7 @@ try:
   elif q[1] == 'xg':
    send('\n'.join([str([w,db[w]]) for w in db.keys()]))
   elif q[1] == 'key':
-   send('key',0)
+   send('key')
   elif q[1][:5]=='class':
    tmp=q[1][5:]
    tmp=tmp.upper()
@@ -235,6 +233,17 @@ try:
     send('вы не подписаны ни на один из классов. Если нужна помошь, введите help')
    else:
     send(ts)
+  elif q[1] == 'получить изменения':
+   w,e,r=today()
+   kb='b:'+str(w)+'.'+str(e)
+   w,e,r=next(w,e,r)
+   kb='|b:'+str(w)+'.'+str(e)
+   for t in range(5):
+    w,e,r=next(w,e,r)
+    kb='\nb:'+str(w)+'.'+str(e)
+    w,e,r=next(w,e,r)
+    kb='|b:'+str(w)+'.'+str(e)
+   send('выберите дату',[kb])
   elif q[1] == 'faq':
    send('частые ошибки, которые мешают пользоваться ботом:\nдля команд class и time убедитесь, что элементы разделены символом ; а не пробелом\nдля команды class убедитесь, что буквы классов русские, а не латинские\nдля команды lookall день, убедитесь, что сначала написали число, потом номер месяца, и между ними пробел. Введи help и проверь, что команда написана верно')
   elif q[1] == 'lookall':
@@ -254,9 +263,7 @@ try:
     t[0]=emo.index(t[0])
     qq,w,e=int(t[1]),int(t[0]),int(t[3])
     for sw in ' '*int(tmp[0][1:]):
-     qq,w=next(qq,w,e).split()
-     if str(qq)=='1' and str(w)=='0':
-      e+=1
+     qq,w,e=next(qq,w,e)
     send('Изменения вперёд на '+tmp[0][1:]+' дней:\n'+'\n'.join(parse(str(qq)+' '+str(w))))
    elif len(tmp)==1 and tmp[0][0]=='>' and tmp[0][1:].isdigit():
     send('слишком далеко')

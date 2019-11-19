@@ -121,7 +121,7 @@ def next(q,w,e):
   tn= [q+1,w]
  return tn+[e]
 
-def today():
+def today(dwt=0):
  t=asctime()
  t=t.split()[0:5]
  dw=t[0].lower()
@@ -129,10 +129,10 @@ def today():
  t[0]=t[0].lower()
  t[0]=emo.index(t[0])
  q,w,e=int(t[1]),int(t[0]),int(t[3])
- return [q,w,e]
+ return [q,w,e]+[dw]*dwt
 
 def work():
- q,w,e=today()
+ q,w,e,dw=today(1)
  t=str(q)+' '+str(w)
  tn=next(q,w,e)
  tn=str(tn[0])+' '+str(tn[1])
@@ -269,7 +269,6 @@ try:
     send('не удалось распознать день')
   elif '.'in q[1] and q[1].split('.')[0].isdigit() and q[1].split('.')[1].isdigit():
    tla='lookall '+q[1].split('.')[0]+' '+q[1].split('.')[1]
-   send(tla)
    wai+=[[q[0],tla]]
   elif q[1][0].isdigit() and len(q[1].split())>1:
    tmp=q[1]

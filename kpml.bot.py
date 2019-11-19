@@ -7,7 +7,7 @@ from time import time
 from time import asctime
 from traceback import format_exc as fo
 
-keyboards='''
+defkey='''
 b×получить изменения
 '''
 d={'w':'default','b':'primary','r':'negative','g':'positive'}
@@ -153,7 +153,7 @@ try:
   if 'time' in db[w].keys():
    for e in db[w]['time']:
     if 0<int(time())%(24*3600)-int(e)<300 and (int(time())-db[w]['ls'])>900:
-     send(work(),w,[keyboards[0]])
+     send(work(),w,[defkey])
      db[w]['ls']=int(time())
 
  wai=look()
@@ -245,7 +245,7 @@ try:
   elif q[1] == 'faq':
    send('частые ошибки, которые мешают пользоваться ботом:\nдля команд class и time убедитесь, что элементы разделены символом ; а не пробелом\nдля команды class убедитесь, что буквы классов русские, а не латинские\nдля команды lookall день, убедитесь, что сначала написали число, потом номер месяца, и между ними пробел. Введи help и проверь, что команда написана верно')
   elif q[1] == 'lookall':
-   send(work(),[keyboards[0]])
+   send(work(),[defkey])
   elif q[1][:7] == 'lookall':
    tmp=q[1][7:].split()
    if len(tmp)>1 and tmp[0].isdigit() and tmp[1].isdigit():

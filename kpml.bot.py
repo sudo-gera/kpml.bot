@@ -268,7 +268,7 @@ try:
    else:
     send('не удалось распознать день')
   elif '.'in q[1] and q[1].split('.')[0].isdigit() and q[1].split('.')[1].isdigit():
-   wai+=['lookall '+q[1].split('.')[0]+' '+q[1].split('.')[0]
+   wai+=['lookall '+q[1].split('.')[0]+' '+q[1].split('.')[0]]
   elif q[1][0].isdigit() and len(q[1].split())>1:
    tmp=q[1]
    tmp=tmp.split()

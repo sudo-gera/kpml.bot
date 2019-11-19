@@ -11,8 +11,6 @@ keyboards='''
 r:hell
 '''
 d={'w':'default','b':'primary','r':'negative','g':'positive'}
-print(keyboard)
-keyboard=loads(keyboard)
 print('\x1b[93m'+asctime()+'\x1b[0m')
 
 token=open('../kpml.bot.token').read()

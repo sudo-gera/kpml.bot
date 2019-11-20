@@ -7,6 +7,9 @@ from time import time
 from time import asctime
 from traceback import format_exc as fo
 
+nokey=''
+
+
 a1defkey='''
 p×получить изменения
 g×увеличить кол-во оповещений в день
@@ -79,7 +82,7 @@ def send(text,id=None,key=''):
 
 
 def log(q):
- send(str(q),admin)
+ send(str(q),admin,[nokey])
 
 def hparse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()

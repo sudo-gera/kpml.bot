@@ -7,7 +7,7 @@ from time import time
 from time import asctime
 from traceback import format_exc as fo
 
-1defkey='''
+a1defkey='''
 p×получить изменения
 g×увеличить кол-во оповещений в день
 r×уменьшить кол-во оповещений в день

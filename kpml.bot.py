@@ -276,7 +276,7 @@ try:
    kb='w×'+str(w)+'.'+str(e+1)
    w,e,r=next(w,e,r)
    kb+='|w×'+str(w)+'.'+str(e+1)
-   for t in range(5):
+   for t in range(4):
     w,e,r=next(w,e,r)
     kb+='\nw×'+str(w)+'.'+str(e+1)
     w,e,r=next(w,e,r)

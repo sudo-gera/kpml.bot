@@ -287,7 +287,15 @@ try:
    else:
     send('не удалось распознать день')
   elif ':'in q[1] and q[1].split(':')[0].isdigit() and q[1].split(':')[1].isdigit():
-   send('tieme')
+   ms=q[1]
+   q[1]=q[1].split(':')
+   q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
+   if q[1] in db[q[0]]['time']:
+    db[q[0]]['time']=[w for w in db[q[0]]['time'] if w != q[1]]
+    send('количество оповещений в день уменьшено временем '+ms)
+   else:
+    db[q[0]]['time']+=[q[1]]
+    send('количество оповещений в день увеличено временем '+ms)
   elif '.'in q[1] and q[1].split('.')[0].isdigit() and q[1].split('.')[1].isdigit():
    tla='lookall '+q[1].split('.')[0]+' '+q[1].split('.')[1]
    wai+=[[q[0],tla]]

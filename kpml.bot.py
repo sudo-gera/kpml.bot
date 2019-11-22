@@ -163,7 +163,7 @@ def work():
 
 try:
  if 'times' in db.keys():
-  del(db['keys'])
+  del(db['times'])
  tn=time()
  for w in db.keys():
   if w.isdigit():

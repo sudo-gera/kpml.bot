@@ -10,12 +10,12 @@ from traceback import format_exc as fo
 nokey=''
 
 
-adefkey='''
+defkey='''
 b×получить изменения
 w×изменить кол-во оповещений в день
 w×изменить кол-во отслеживаемых классов
 '''
-defkey='''
+adefkey='''
 b×получить изменения
 '''
 backey='''

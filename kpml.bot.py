@@ -12,14 +12,14 @@ nokey=''
 
 defkey='''
 b×получить изменения
-w×изменить кол-во оповещений в день
-w×изменить кол-во отслеживаемых классов
+b×изменить кол-во оповещений в день
+b×изменить кол-во отслеживаемых классов
 '''
 adefkey='''
 b×получить изменения
 '''
 backey='''
-w×отмена
+r×отмена
 '''
 d={'w':'default','b':'primary','r':'negative','g':'positive'}
 print('\x1b[93m'+asctime()+'\x1b[0m')
@@ -184,6 +184,8 @@ try:
     db[w]['time']=[]
    if 'class' not in db[w].keys():
     db[w]['class']=[]
+   if 'empty' not in db[w].keys():
+    db[w]['empty']=1
    for e in db[w]['time']:
     if 0<int(tn)%(24*3600)-int(e)<300 and (int(tn)-db[w]['ls'])>300:
      send(work(),w,[defkey])

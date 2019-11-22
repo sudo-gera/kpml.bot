@@ -33,7 +33,7 @@ edw='mon tue wed thu fri sat sun'.split()
 admin='225847803'
 
 def api(path,data):
- sleep(1/3)
+ sleep(1/9)
  data=data.encode()
  global token
  return loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
@@ -162,8 +162,6 @@ def work():
 
 
 try:
- if 'times' in db.keys():
-  del(db['times'])
  tn=time()
  for w in db.keys():
   if w.isdigit():

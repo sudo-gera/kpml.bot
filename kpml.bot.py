@@ -11,7 +11,7 @@ nokey=''
 
 
 adefkey='''
-p×получить изменения
+b×получить изменения
 w×изменить кол-во оповещений в день
 w×изменить кол-во отслеживаемых классов
 '''
@@ -34,6 +34,7 @@ admin='225847803'
 
 def api(path,data):
  sleep(1/9)
+ print(path,data)
  data=data.encode()
  global token
  return loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
@@ -53,9 +54,9 @@ def look(a=0):
 def send(text,id=None,key=''):
   global q
   gg=[]
-  if type(id)==type(gg):
-   key=id
-   id=None
+  if type(id)==type(gg) and key=='':
+   key=id[:]
+   id=q[0]
   if id==None:
    id=q[0]
   global d
@@ -66,7 +67,6 @@ def send(text,id=None,key=''):
    key=key[0]
   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
   key='&keyboard='+key
-  print(key)
   text=str(text)
   sleep(5)
   qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text+key)
@@ -195,7 +195,7 @@ try:
   elif q[1] == 'xg':
    send('\n'.join([str([w,db[w]]) for w in db.keys()]))
   elif q[1] == 'ad':
-   send('ad',adefkey)
+   send('ad',[adefkey])
   elif q[1][:5]=='class':
    tmp=q[1][5:]
    tmp=tmp.upper()

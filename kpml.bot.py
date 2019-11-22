@@ -162,17 +162,22 @@ def work():
 
 
 try:
-
- if 'l' in db.keys():
-  del(db['l'])
+ db['times']=[]
  for w in db.keys():
-  if 'ls' not in db[w].keys():
-   db[w]['ls']=0
-  if 'time' in db[w].keys():
+  if w.isdigit():
+   if 'ls' not in db[w].keys():
+    db[w]['ls']=0
+   if 'time' not in db[w].keys():
+    db[w]['time']=[]
+   if 'class' not in db[w].keys():
+    db[w]['class']=[]
+   db['times']+=db[w]['time']
    for e in db[w]['time']:
     if 0<int(time())%(24*3600)-int(e)<300 and (int(time())-db[w]['ls'])>900:
      send(work(),w,[defkey])
      db[w]['ls']=int(time())
+
+ db['times']=list(set(db['times']))
 
  wai=look()
 

@@ -163,6 +163,8 @@ def work():
 
 try:
 
+ if 'l' in db.keys():
+  del(db['l'])
  for w in db.keys():
   if 'ls' not in db[w].keys():
    db[w]['ls']=0

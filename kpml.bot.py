@@ -332,6 +332,7 @@ try:
    tla='lookall '+q[1].split('.')[0]+' '+q[1].split('.')[1]
    wai+=[[q[0],tla]]
   elif iscl(q[1]):
+#   q[1]=q[1].upper()
    ms=q[1]
    if q[1] in db[q[0]]['class']:
     db[q[0]]['class']=[w for w in db[q[0]]['class'] if w != q[1]]

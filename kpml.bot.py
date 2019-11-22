@@ -66,6 +66,7 @@ def send(text,id=None,key=''):
    key=key[0]
   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
   key='&keyboard='+key
+  print(key)
   text=str(text)
   sleep(5)
   qq=api('messages.send?random_id='+str(int(time()*2**28))+'&user_id='+str(id)+'&','message='+text+key)
@@ -80,7 +81,7 @@ def send(text,id=None,key=''):
 
 
 def log(q):
- send(str(q),admin,[nokey])
+ send(str(q),admin,[defkey])
 
 def hparse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()

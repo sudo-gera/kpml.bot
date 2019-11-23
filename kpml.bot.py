@@ -194,8 +194,6 @@ def isdt(q):
   return 1
  return 0
 
-print(isdt('25.11, понедельник'))
-exit()
 
 try:
  tn=time()

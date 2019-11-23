@@ -334,7 +334,7 @@ try:
     send('слишком далеко')
    else:
     send('не удалось распознать день')
-  elif isdt(q[1]):
+  elif ':' in q[1] and q[1].split(':')[0].isdigit() and q[1].split(':')[1].isdigit():
    ms=q[1]
    q[1]=q[1].split(':')
    q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60

@@ -357,7 +357,7 @@ try:
    else:
     ts='Сейчас вам не приходят оповещения, введите время для оповещения'
    send(ts,[backey])
-  elif '.'in q[1] and q[1].split('.')[0].isdigit() and q[1].split('.')[1].isdigit():
+  elif isdt(q[1]):
    tla='lookall '+q[1].split('.')[0]+' '+q[1].split('.')[1]
    wai+=[[q[0],tla]]
   elif iscl(q[1]):

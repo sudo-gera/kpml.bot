@@ -177,6 +177,7 @@ def iscl(q):
  return 0
 
 def isdt(q):
+ log(q)
  if '.' not in q:
   return 0
  w=q.split('.')[0]
@@ -193,6 +194,8 @@ def isdt(q):
   return 1
  return 0
 
+print(isdt('25.11, понедельник'))
+exit()
 
 try:
  tn=time()

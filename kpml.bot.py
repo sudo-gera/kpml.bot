@@ -176,10 +176,10 @@ def iscl(q):
   return [q[:d],q[d:]]
  return 0
 
-def istm(q):
- if ':' not in q:
+def isdt(q):
+ if '.' not in q:
   return 0
- w=q.split(':')[0]
+ w=q.split('.')[0]
  if not w.isdigit():
   return 0
  q=q[len(w)+1:]
@@ -192,6 +192,8 @@ def istm(q):
  if q in rdw:
   return 1
  return 0
+
+
 try:
  tn=time()
  for w in db.keys():
@@ -331,7 +333,7 @@ try:
     send('слишком далеко')
    else:
     send('не удалось распознать день')
-  elif istm(q):
+  elif isdt(q):
    ms=q[1]
    q[1]=q[1].split(':')
    q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60

@@ -314,7 +314,6 @@ try:
    send(work(),[defkey])
   elif q[1][:7] == 'lookall':
    tmp=q[1][7:].split()
-   log(tmp)
    if len(tmp)>1 and tmp[0].isdigit() and tmp[1].isdigit():
     tmp=tmp[0]+' '+str(int(tmp[1])-1)
     tmp=parse(tmp)
@@ -358,7 +357,7 @@ try:
     ts='Сейчас вам не приходят оповещения, введите время для оповещения'
    send(ts,[backey])
   elif isdt(q[1]):
-   tla='lookall '+q[1].split('.')[0]+' '+q[1].split('.')[1]
+   tla='lookall '+q[1].split('.')[0]+' '+q[1].split('.')[1].split(',')[0]
    wai+=[[q[0],tla]]
   elif iscl(q[1]):
    q[1]=q[1].upper()

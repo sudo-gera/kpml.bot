@@ -138,25 +138,26 @@ def next(q,w,e):
   tn= [q+1,w]
  return tn+[e]
 
-def today(dwt=0):
+def today():
  t=asctime()
  t=t.split()[0:5]
  dw=t[0].lower()
+ dw=edw.index(dw)
  t=t[1:]
  t[0]=t[0].lower()
  t[0]=emo.index(t[0])
  q,w,e=int(t[1]),int(t[0]),int(t[3])
- return [q,w,e]+[dw]*dwt
+ return [q,w,e,dw]
 
 def work():
- q,w,e,dw=today(1)
+ q,w,e,dw=today()
  t=str(q)+' '+str(w)
  tn=next(q,w,e)
  tn=str(tn[0])+' '+str(tn[1])
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
-  q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[edw.index(dw)]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
+  q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[dw]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
  else:
-  q=['Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
+  q=['Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+parse(tn)
  q='\n'.join(q)
  return q
 
@@ -273,16 +274,16 @@ try:
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] == 'получить изменения':
-   w,e,r=today()
-   kb='w×'+str(w)+'.'+str(e+1)
+   w,e,r,dw=today()
+   kb='w×'+str(w)+'.'+str(e+1)+', '+rdw[dw]
    w,e,r=next(w,e,r)
-   kb+='|w×'+str(w)+'.'+str(e+1)
+   kb+='|w×'+str(w)+'.'+str(e+1)+', '+rdw[(dw+1)%7]
    for t in range(4):
     w,e,r=next(w,e,r)
-    kb+='\nw×'+str(w)+'.'+str(e+1)
+    kb+='\nw×'+str(w)+'.'+str(e+1)+', '+rdw[(dw+2+t*2)%7]
     w,e,r=next(w,e,r)
-    kb+='|w×'+str(w)+'.'+str(e+1)
-   w,e,r=today()
+    kb+='|w×'+str(w)+'.'+str(e+1)+', '+rdw[(dw+3+t*2)%7]
+   w,e,r,dw=today()
    send('выберите дату (сегодня '+str(w)+' '+rmo[e]+')',[kb])
   elif q[1] == 'сообщение об ошибке':
    send('напишите сообщение об ошибке, начните его с символа $')

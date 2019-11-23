@@ -177,7 +177,6 @@ def iscl(q):
  return 0
 
 def isdt(q):
- log(q)
  if '.' not in q:
   return 0
  w=q.split('.')[0]
@@ -315,6 +314,7 @@ try:
    send(work(),[defkey])
   elif q[1][:7] == 'lookall':
    tmp=q[1][7:].split()
+   log(tmp)
    if len(tmp)>1 and tmp[0].isdigit() and tmp[1].isdigit():
     tmp=tmp[0]+' '+str(int(tmp[1])-1)
     tmp=parse(tmp)

@@ -1,0 +1,1 @@
+python3 -m py_compile kpml.bot.py && git commit -am "send" && git push

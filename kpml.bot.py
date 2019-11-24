@@ -32,7 +32,7 @@ rmo='января февраля марта апреля мая июня июл�
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
-admin='225847803'
+admin=['225847803']
 
 def api(path,data):
  sleep(1/9)
@@ -88,7 +88,8 @@ def send(text,id=None,key=''):
 
 
 def log(q):
- send(str(q),admin,[defkey])
+ for w in admin:
+  send(str(q),w,[defkey])
 
 def hparse(t):
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()

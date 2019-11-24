@@ -66,6 +66,11 @@ def send(text,id=None,key=''):
    key=defkey[:]
   else:
    key=key[0]
+  if key==defkey:
+   if db[id]['empty']:
+    key+='r×отключить пустые сообщения'
+   else:
+    key+='g×включить пустые сообщения'
   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
   key='&keyboard='+key
   text=str(text)
@@ -216,8 +221,8 @@ try:
     db[w]['time']=[]
    if 'class' not in db[w].keys():
     db[w]['class']=[]
-   if 'empty' not in db[w].keys():
-    db[w]['empty']=1
+   if 1 or 'empty' not in db[w].keys():
+    db[w]['empty']=0
    for e in db[w]['time']:
     if 0<int(tn)%(24*3600)-int(e)<300 and (int(tn)-db[w]['ls'])>=300:
      send(work(),w,[defkey])
@@ -307,6 +312,12 @@ try:
     kb+='|w×'+str(w)+'.'+str(e+1)+', '+rdw[(dw+3+t*2)%7]
    w,e,r,dw=today()
    send('выберите дату (сегодня '+str(w)+' '+rmo[e]+')',[kb])
+  elif q[1] == 'отключить пустые сообщения':
+   db[q[0]]['empty']=1
+   send('теперь вам не будут приходить автоматические оповещения, если они не содержат изменений. Обратите внимание, что иногда вам всё же будут приходить пустые оповещения, сообщайте о таких ошибках и они будут исправлены.')
+  elif q[1] == 'включить пустые сообщения':
+   db[q[0]]['empty']=0
+   send('теперь вам будут приходить автоматические оповещения строго по расписанию, даже если в них ничего нет.')
   elif q[1] == 'сообщение об ошибке':
    send('напишите сообщение об ошибке, начните его с символа $',backey)
   elif q[1][0] == '$':

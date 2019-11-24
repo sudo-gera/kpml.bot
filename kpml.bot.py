@@ -1,4 +1,5 @@
-	from urllib.request import urlopen
+
+from urllib.request import urlopen
 from json import loads
 from json import dumps
 from urllib.parse import quote

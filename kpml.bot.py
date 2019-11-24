@@ -213,6 +213,7 @@ def istm(q):
   return 1
  return 0
 
+#po0
 try:
  tn=time()
  for w in db.keys():
@@ -223,7 +224,7 @@ try:
     db[w]['time']=[]
    if 'class' not in db[w].keys():
     db[w]['class']=[]
-   if 1 or 'empty' not in db[w].keys():
+   if 'empty' not in db[w].keys():
     db[w]['empty']=0
    for e in db[w]['time']:
     if 0<int(tn)%(24*3600)-int(e)<300 and (int(tn)-db[w]['ls'])>=300:

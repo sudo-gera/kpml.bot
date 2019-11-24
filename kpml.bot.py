@@ -123,7 +123,10 @@ def hparse(t):
 
 def parse(t):
  try:
-  return hparse(t)
+  parsed= hparse(t)
+  if parsed=='Изменений нет':
+   parsed==''
+  return parsed
  except:
   log(fo())
   return ['''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.

@@ -124,8 +124,7 @@ def hparse(t):
 def parse(t):
  try:
   parsed=hparse(t)
-  log([parsed])
-  if parsed=='Изменений нет':
+  if parsed==['Изменений нет']:
    parsed==''
   return parsed
  except:

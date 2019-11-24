@@ -234,7 +234,7 @@ try:
    if 'empty' not in db[w].keys():
     db[w]['empty']=0
    for e in db[w]['time']:
-    if 0<int(tn)%(24*3600)-int(e)<300 and (int(tn)-db[w]['ls'])>=300:
+    if 0<int(tn)%(24*3600)-int(e)<300 and (int(tn)-db[w]['ls'])>=900:
      worked=work(db[w]['empty'])
      if worked:
       send(worked,w,[defkey])

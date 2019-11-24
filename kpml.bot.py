@@ -69,9 +69,9 @@ def send(text,id=None,key=''):
    key=key[0]
   if key==defkey:
    if db[id]['empty']:
-    key+='r×отключить пустые сообщения'
-   else:
     key+='g×включить пустые сообщения'
+   else:
+    key+='r×отключить пустые сообщения'
   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
   key='&keyboard='+key
   text=str(text)

@@ -152,15 +152,23 @@ def today():
  q,w,e=int(t[1]),int(t[0]),int(t[3])
  return [q,w,e,dw]
 
-def work():
+def work(empty=0):
  q,w,e,dw=today()
  t=str(q)+' '+str(w)
  tn=next(q,w,e)
  tn=str(tn[0])+' '+str(tn[1])
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
-  q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[dw]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+parse(tn)
+  toq=[parse(t),parse(tn)]
+  if toq[0]+toq[1] or empty==0:
+   q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[dw]+':']+ toq[0] + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+toq[1]
+  else:
+   q=[]
  else:
-  q=['Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+parse(tn)
+  toq=[parse(t)]
+  if toq[0] or empty==0:
+   q=['Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+toq[0]
+  else:
+   q=[]
  q='\n'.join(q)
  return q
 
@@ -224,8 +232,10 @@ try:
     db[w]['empty']=0
    for e in db[w]['time']:
     if 0<int(tn)%(24*3600)-int(e)<300 and (int(tn)-db[w]['ls'])>=300:
-     send(work(),w,[defkey])
-     db[w]['ls']=int(time())
+     worked=work(db[w]['empty'])
+     if worked:
+      send(worked,w,[defkey])
+      db[w]['ls']=int(time())
 
 
  wai=look()

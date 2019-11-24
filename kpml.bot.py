@@ -210,9 +210,9 @@ def isdt(q):
 
 def istm(q):
  q=''.join(q.split())
- if '.' not in q:
+ if ':' not in q:
   return 0
- w=q.split('.')[0]
+ w=q.split(':')[0]
  if not w.isdigit():
   return 0
  q=q[len(w)+1:]

@@ -162,6 +162,7 @@ def work(empty=0):
  tn=str(tn[0])+' '+str(tn[1])
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   toq=[parse(t),parse(tn)]
+  log(toq)
   if toq[0]+toq[1] or empty==0:
    q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[dw]+':']+ toq[0] + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+toq[1]
   else:

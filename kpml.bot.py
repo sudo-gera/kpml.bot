@@ -208,7 +208,7 @@ def istm(q):
  if not w.isdigit():
   return 0
  q=q[len(w)+1:]
- if q.isdigit()
+ if q.isdigit():
   return 1
  return 0
 

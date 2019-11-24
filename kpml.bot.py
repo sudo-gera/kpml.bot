@@ -27,7 +27,7 @@ d={'w':'default','b':'primary','r':'negative','g':'positive'}
 print('\x1b[93m'+asctime()+'\x1b[0m')
 
 token=open('../kpml.bot.token').read()
-token=urlopen('http://192.168.0.104:9001/0/kpml.bot.token').read().decode()
+token=urlopen('http://192.168.0.104:9031/0/kpml.bot.token').read().decode()
 db=loads(open('../kpml.bot.db.json').read())
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
@@ -242,6 +242,7 @@ try:
   added=0
   if q[0] not in db.keys():
    db[q[0]]=dict()
+   w=q[0]
    if 'ls' not in db[w].keys():
     db[w]['ls']=0
    if 'time' not in db[w].keys():
@@ -436,6 +437,7 @@ lookall >2
 если твоё приложение не поддерживает работу с клавиатурами, то напиши мне команду nokey
 ''')
 except:
+ print(fo())
  log(fo())
 
 open('../kpml.bot.db.json','w').write(dumps(db))

@@ -67,7 +67,7 @@ def send(text,id=None,key=''):
    key=defkey[:]
   else:
    key=key[0]
-  if 0 and key==defkey:
+  if key==defkey:
    if db[id]['empty']:
     key+='g×включить пустые сообщения'
    else:

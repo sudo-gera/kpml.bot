@@ -125,7 +125,7 @@ def parse(t):
  try:
   parsed=hparse(t)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
-   parsed=['']
+   parsed=[]
   return parsed
  except:
   log(fo())

@@ -1,4 +1,4 @@
-from urllib.request import urlopen
+	from urllib.request import urlopen
 from json import loads
 from json import dumps
 from urllib.parse import quote
@@ -162,6 +162,7 @@ def work():
  return q
 
 def iscl(q):
+ q=''.join(q.split())
  w=0
  if q.isdigit():
   return 0
@@ -193,6 +194,17 @@ def isdt(q):
   return 1
  return 0
 
+def istm(q):
+ q=''.join(q.split())
+ if '.' not in q:
+  return 0
+ w=q.split('.')[0]
+ if not w.isdigit():
+  return 0
+ q=q[len(w)+1:]
+ if q.isdigit()
+  return 1
+ return 0
 
 try:
  tn=time()
@@ -325,7 +337,7 @@ try:
     send('слишком далеко')
    else:
     send('не удалось распознать день')
-  elif ':' in q[1] and q[1].split(':')[0].isdigit() and q[1].split(':')[1].isdigit():
+  elif istm(q[1]):
    ms=q[1]
    q[1]=q[1].split(':')
    q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60

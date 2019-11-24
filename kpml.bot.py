@@ -225,16 +225,8 @@ try:
  tn=time()
  for w in db.keys():
   if w.isdigit():
-   if 'ls' not in db[w].keys():
-    db[w]['ls']=0
-   if 'time' not in db[w].keys():
-    db[w]['time']=[]
-   if 'class' not in db[w].keys():
-    db[w]['class']=[]
-   if 'empty' not in db[w].keys():
-    db[w]['empty']=0
    for e in db[w]['time']:
-    if 0<int(tn)%(24*3600)-int(e)<300 and (int(tn)-db[w]['ls'])>=600:
+    if 0<int(tn)%(24*3600)-int(e)<300 and (int(tn)-db[w]['ls'])>=300:
      worked=work(db[w]['empty'])
      if worked:
       send(worked,w,[defkey])
@@ -246,8 +238,9 @@ try:
  if wai == []:
   sleep(0.1)
  for q in wai:
-  w=q[0]
-  if 1:
+  added=0
+  if q[0] not in db.keys():
+   db[q[0]]=dict()
    if 'ls' not in db[w].keys():
     db[w]['ls']=0
    if 'time' not in db[w].keys():
@@ -256,9 +249,6 @@ try:
     db[w]['class']=[]
    if 'empty' not in db[w].keys():
     db[w]['empty']=0
-  added=0
-  if q[0] not in db.keys():
-   db[q[0]]=dict()
    added=1
   if q[1] == '':
    send('текстом, пожалуйста')

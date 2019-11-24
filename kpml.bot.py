@@ -155,7 +155,7 @@ def work():
  tn=next(q,w,e)
  tn=str(tn[0])+' '+str(tn[1])
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
-  q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[dw]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(edw.index(dw)+1)%7]+':']+parse(tn)
+  q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[dw]+':']+ parse(t) + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+parse(tn)
  else:
   q=['Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+parse(tn)
  q='\n'.join(q)

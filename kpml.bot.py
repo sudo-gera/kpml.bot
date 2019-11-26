@@ -95,9 +95,8 @@ def log(q):
 
 def gparse():
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
- q=q.replace('\n','')
- q=q.replace('<','\n<').replace('>','>\n').replace('&nbsp;','')
- q=q.split('\n')
+ q=q.replace('<','\0<').replace('>','>\0').replace('&nbsp;','')
+ q=q.split('\0')
  q=[w for w in q if w and w[0] != '<']
  q=[[w,] for w in q]
  day=''

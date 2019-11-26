@@ -92,7 +92,7 @@ def log(q):
  for w in admin:
   send(str(q),w,[defkey])
 
-def hparse(t):
+def gparse():
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('\n')
  q=[[len(w),w] for w in q]
@@ -114,6 +114,10 @@ def hparse(t):
   else:
    w[0]=day+' '+w[0]
  q=[w[0] for w in q if w[0]]
+ return q
+
+def hparse(t):
+ q=gparse()
  t=t.split()
  t[0]=str(int(t[0]))
  t[1]=str(int(t[1]))
@@ -260,6 +264,9 @@ try:
    send(len(db.keys()))
   elif q[1] == 'xg':
    send('\n'.join([str([w,db[w]]) for w in db.keys()]))
+  elif q[1] == 'gp':
+   tmp=[str(w) for w in gparse()]
+   send('\n'.join(tmp))
   elif q[1] == 'ad':
    send('ad',[adefkey])
   elif q[1][:5]=='class':

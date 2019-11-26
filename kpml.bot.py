@@ -95,9 +95,7 @@ def log(q):
 
 def gparse():
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
- q=q.split('\n')
- q=[[len(w),w] for w in q]
- q=max(q)[1]
+ q=q.replace('\n','')
  q=q.replace('<','\n<').replace('>','>\n').replace('&nbsp;','')
  q=q.split('\n')
  q=[w for w in q if w and w[0] != '<']

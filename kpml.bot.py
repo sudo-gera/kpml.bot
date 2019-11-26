@@ -95,6 +95,8 @@ def log(q):
 
 def gparse():
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ q=q.split('''«Кировский физико-математический лицей».
+Все права защищены.''')[0]
  q=q.replace('<','\0<').replace('>','>\0').replace('&nbsp;','').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q.split('\0')
  q=[w for w in q if w and w[0] != '<']

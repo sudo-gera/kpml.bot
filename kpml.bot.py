@@ -171,7 +171,7 @@ def work(empty=0):
   else:
    q=[]
  else:
-  toq=[parse(t)]
+  toq=[parse(tn)]
   if toq[0] or empty==0:
    q=['Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+toq[0]
   else:

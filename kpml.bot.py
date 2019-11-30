@@ -8,9 +8,6 @@ from time import time
 from time import asctime
 from traceback import format_exc as fo
 
-code='''
-API.messages.send(
-'''
 
 defkey='''
 b×получить изменения
@@ -80,7 +77,6 @@ def send(text,id=None,key=''):
   key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
   key='&keyboard='+key
   text=str(text)
-  sleep(5)
   qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text+key)
   print(qq)
   r=1

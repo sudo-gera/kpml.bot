@@ -47,7 +47,7 @@ def api(path,data):
  return ret
 
 def look(a=0):
- q=api('messages.getConversations?count=200&filter=unread&','fields=id')
+ q=api('messages.getConversations?count=200&filter=unread&','')
  if 'response' not in q.keys():
   raise KeyError (str(q))
  q=q['response']['items']

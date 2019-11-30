@@ -44,7 +44,7 @@ def api(path,data):
  return loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
 
 def look(a=0):
- q=api('messages.getConversations?count=200&filter=unread&','')
+ q=api('messages.getConversations?count=200&filter=unread&','fields=id')
  if 'response' not in q.keys():
   raise KeyError (str(q))
  q=q['response']['items']

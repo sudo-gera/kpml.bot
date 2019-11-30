@@ -34,7 +34,7 @@ edw='mon tue wed thu fri sat sun'.split()
 admin=['225847803']
 
 def api(path,data):
- sleep(1/9)
+ sleep(1)
  print(path,data,time())
  data=data.encode()
  global token

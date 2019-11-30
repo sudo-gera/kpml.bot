@@ -34,7 +34,7 @@ edw='mon tue wed thu fri sat sun'.split()
 admin=['225847803']
 
 def api(path,data):
- sleep(1/9)
+ sleep(1/7)
  print(path,data,time())
  data=data.encode()
  global token
@@ -238,8 +238,6 @@ try:
 
  wai=look()
 
- if wai == []:
-  sleep(0.1)
  for q in wai:
   added=0
   if q[0] not in db.keys():

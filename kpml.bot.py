@@ -237,6 +237,8 @@ try:
 
 
  wai=look()
+ if not wai:
+  sleep(0.1)
 
  for q in wai:
   added=0

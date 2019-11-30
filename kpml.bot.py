@@ -41,6 +41,7 @@ def api(path,data):
  print(path,data,time())
  data=data.encode()
  global token
+ print(time())
  ret= loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
  print(path,data,time())
  return ret

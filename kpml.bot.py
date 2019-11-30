@@ -38,10 +38,12 @@ admin=['225847803']
 
 def api(path,data):
  sleep(1/9)
- print(path,data)
+ print(path,data,time())
  data=data.encode()
  global token
- return loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
+ ret= loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
+ print(path,data,time())
+ return ret
 
 def look(a=0):
  q=api('messages.getConversations?count=200&filter=unread&','fields=id')

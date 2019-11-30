@@ -237,9 +237,9 @@ try:
       db[w]['ls']=int(time())
 
 
- wai=look()
- if not wai:
-  sleep(0.1)
+ wai=[]
+ while wai==[]:
+  wai=look()
 
  for q in wai:
   added=0

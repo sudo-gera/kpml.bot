@@ -108,7 +108,7 @@ def nparse(day,mon):
  get=0
  new=[]
  mon+=100
- q=[w for w in q if w and not(w[0] == '<' and ' ' not in q)]
+ q=[w for w in q if w and not(w[0] == '<' and '=' not in q)]
  q='\0'.join(q)
  q=q.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q.split('\0')

@@ -230,7 +230,6 @@ def istm(q):
   return 1
  return 0
 
-log(str(db))
 #po0
 try:
  if 'time' not in  db.keys():

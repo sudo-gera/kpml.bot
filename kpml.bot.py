@@ -92,6 +92,33 @@ def log(q):
  for w in admin:
   send(str(q),w,[defkey])
 
+def nparse(day,mon):
+ day,mon=int(day),int(mon)
+ q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ q=q.split('''«Кировский''')[0]
+ q=q.replace('<','\0<').replace('>','>\0').replace('&nbsp;','').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
+ q=q.split('\0')
+ q=[w.strip() for w in q]
+ get=0
+ new=[]
+ mn+=100
+ for w in q:
+  if q[:25] == 'Изменения в расписании на':
+   date=q[25:].lower()
+   for w in range(12):
+    date=date.replace(rmo[w],str('\0'+str(w+100)+'\0'))
+   date=list(date)
+   for w in range(len(date)):
+    if not date[w].isdigit():
+     date[w]='\0'
+   date=[w for w in date.split('\0') if w]
+   if day in date and mon in date:
+    get =1
+   else:
+    get=0
+  elif get:
+   new+=[w]
+ return new
 def gparse():
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('''«Кировский''')[0]
@@ -260,6 +287,10 @@ try:
    send(dumps(db))
   elif q[1] == 'len':
    send(len(db.keys()))
+  elif q[1][:2] == 'np' and isdt(q[1][2:]):
+   dat=q[1].split()
+   dat[1]=int(dat[1])-1
+   send('\n'.join(nparse(dat[0],dat[1])))
   elif q[1] == 'xg':
    send('\n'.join([str([w,db[w]]) for w in db.keys()]))
   elif q[1] == 'gp':

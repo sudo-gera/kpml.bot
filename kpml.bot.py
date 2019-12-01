@@ -272,9 +272,6 @@ try:
    for e in db[w]['time']:
     if 0 < tn % (24*3600) - int(e) < 100 and tn - db[w]['ls'] >= 100:
      worked=work(db[w]['empty'])
-     if w in admin:
-      td=today()
-      worked+='\n'+'\n'.join(nparse(td[0],td[1]))
      if worked:
       send(worked,w,[defkey])
       db[w]['ls']=int(time())

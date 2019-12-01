@@ -230,15 +230,15 @@ def istm(q):
 
 #po0
 try:
- if 'time' not in  db.keys():
-  db['time']=[]
+ if 'time' not in  db.keys() or 1:
+  db['time']=dict()
  wai=[]
  while wai==[]:
   tn=int(time())
   for w in db.keys():
    if w.isdigit():
     for e in db[w]['time']:
-     db['time']+=[w]
+     db['time'][w]=w
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
       worked=work(db[w]['empty'])
       if worked:
@@ -273,8 +273,6 @@ try:
    send('\n'.join(nparse(dat[0],dat[1])))
   elif q[1] == 'xg':
    send('\n'.join([str([w,db[w]]) for w in db.keys()]))
-  elif q[1] == 'увеличить кол-во оповещений в день':
-   send('Будет добавлено ещё одно оповещение. Введите время для него в формате ЧЧ:ММ')
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:

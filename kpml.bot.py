@@ -26,7 +26,10 @@ print('\x1b[93m'+asctime()+'\x1b[0m')
 
 #token=urlopen('http://192.168.0.104:9002/0/kpml.bot.token').read().decode()
 token=open('../kpml.bot.token').read()
-db=loads(open('../kpml.bot.db.json').read())
+try:
+ db=loads(open('../kpml.bot.db.json').read())
+except:
+ db='{}'
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()

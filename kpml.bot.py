@@ -134,7 +134,7 @@ def parse(t):
  except:
   log(fo())
   return ['''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
-Для получения изменений в расписании перейдите по ссылке http://кфмл.рф/pages/raspisanie/izmeneniya-v-raspisanii''']
+Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii''']
 
 def next(q,w,e):
  q,w,e=int(q),int(w),int(e)
@@ -266,6 +266,8 @@ try:
   elif q[1] == 'gp':
    tmp=[str(w) for w in gparse()]
    send('\n'.join(tmp))
+  elif q[1][0]== "~" and len(q[1])>2:
+   send(q[1][1]*int(q[1][2:]))
   elif q[1] == 'ad':
    send('ad',[adefkey])
   elif q[1][:5]=='class':

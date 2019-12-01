@@ -90,7 +90,6 @@ def send(text,key='',id=None):
 
 
 def log(q):
- sleep(60)
  for w in admin:
   send(str(q),defkey,w)
 

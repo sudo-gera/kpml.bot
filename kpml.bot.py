@@ -231,8 +231,8 @@ def istm(q):
 
 #po0
 try:
- if 'time' not in  db.keys():
-  db['time']=dict()
+# if 'time' not in  db.keys():
+#  db['time']=dict()
 # db['time']=dict()
  wai=[]
  while wai==[]:
@@ -320,23 +320,23 @@ try:
    q[1]=q[1].split(':')
    q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
    if q[1] in db[q[0]]['time']:
-    q[1]=str(q[1])
-    db['time'][q[1]]=[w for w in db['time'][q[1]] if w != q[0]]
-    if db['time'][q[1]]==[]:
-     del(db['time'][q[1]])
-    q[1]=int(q[1])
-    db[q[0]]['time']=[w for w in db[q[0]]['time'] if w != q[1]]
+#    q[1]=str(q[1])
+#    db['time'][q[1]]=[w for w in db['time'][q[1]] if w != q[0]]
+#    if db['time'][q[1]]==[]:
+#     del(db['time'][q[1]])
+#    q[1]=int(q[1])
+#    db[q[0]]['time']=[w for w in db[q[0]]['time'] if w != q[1]]
     t='количество оповещений в день уменьшено временем '+ms
    else:
-    if q[1] not in db['time']:
-     db['time'][q[1]]=[]
-    db['time'][q[1]]+=[q[0]]
-    db[q[0]]['time']+=[q[1]]
+#    if q[1] not in db['time']:
+#     db['time'][q[1]]=[]
+#    db['time'][q[1]]+=[q[0]]
+#    db[q[0]]['time']+=[q[1]]
     t='количество оповещений в день увеличено временем '+ms
     send(t+'. Обратие внимание, что оповещение не содержит изменений, опубликованных позднее, чем оно пришло')
   elif q[1] in ['изменить кол-во оповещений в день','время']:
-   ts=[int(w) for w in db['time'] if q[0] in db['time'][w]]
-#   ts=db[q[0]]['time'][:]
+#   ts=[int(w) for w in db['time'] if q[0] in db['time'][w]]
+   ts=db[q[0]]['time'][:]
    ts=[str((w//3600+3)%24)+':'+str(w%3600//60) for w in ts]
    lts=len(ts)
    ts='\n'.join(ts)

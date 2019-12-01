@@ -107,7 +107,7 @@ def nparse(day,mon):
  q=[w.strip() for w in q]
  get=0
  new=[]
- mn+=100
+ mon+=100
  for w in q:
   if q[:25] == 'Изменения в расписании на':
    date=q[25:].lower()

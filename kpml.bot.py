@@ -270,10 +270,11 @@ try:
    send('текстом, пожалуйста')
   elif q[1] == 'json':
    send(str(db))
+  elif q[1] == 'git':
+   t=popen('git show').read()
+   send([t])
   elif q[1] == 'len':
    send(len(db.keys()))
-  elif q[1][:4] == 'git ':
-   send(popen(q[1]).read())
   elif q[1][:2] == 'np':
    dat=q[1][2:].split('.')
    dat[1]=int(dat[1])-1

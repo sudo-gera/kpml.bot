@@ -25,9 +25,9 @@ d={'w':'default','b':'primary','r':'negative','g':'positive'}
 print('\x1b[93m'+asctime()+'\x1b[0m')
 
 #token=urlopen('http://192.168.0.104:9002/0/kpml.bot.token').read().decode()
-token=open('./kpml.bot.token').read()
+token=open('../kpml.bot.token').read()
 try:
- db=loads(open('../kpml.bot.db.json').read())
+ db=loads(open('./kpml.bot.db.json').read())
 except:
  db='{}'
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()

@@ -233,17 +233,17 @@ def istm(q):
 try:
  if 'time' not in  db.keys():
   db['time']=dict()
- db['time']=dict()
+# db['time']=dict()
  wai=[]
  while wai==[]:
   tn=int(time())
   for w in db.keys():
    if w.isdigit():
     for e in db[w]['time']:
-     if e not in db['time'].keys():
-      db['time'][str(e)]=[]
-     if w not in db['time'][str(e)]:
-      db['time'][str(e)]+=[w]
+#     if e not in db['time'].keys():
+#      db['time'][str(e)]=[]
+#     if w not in db['time'][str(e)]:
+#      db['time'][str(e)]+=[w]
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
       worked=work(db[w]['empty'])
       if worked:
@@ -322,8 +322,8 @@ try:
    if q[1] in db[q[0]]['time']:
     q[1]=str(q[1])
     db['time'][q[1]]=[w for w in db['time'][q[1]] if w != q[0]]
-    if db['time'][q[0]]==[]:
-     del(db['time'][q[0]])
+    if db['time'][q[1]]==[]:
+     del(db['time'][q[1]])
     q[1]=int(q[1])
     db[q[0]]['time']=[w for w in db[q[0]]['time'] if w != q[1]]
     t='количество оповещений в день уменьшено временем '+ms

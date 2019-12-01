@@ -233,12 +233,16 @@ def istm(q):
 
 #po0
 try:
- if 'time' not in  db.keys():
+ if 0 and 'time' not in  db.keys():
   db['time']=dict()
  wai=[]
  while wai==[]:
   tn=int(time())
   for w in db.keys():
+   if e not in db['time'].keys():
+    db['time'][e]=[]
+   if w not in db['time'][e]:
+    db['time'][e]+=[w]
    if w.isdigit():
     for e in db[w]['time']:
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:

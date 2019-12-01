@@ -102,12 +102,16 @@ def nparse(day,mon):
  day,mon=int(day),int(mon)
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('''«Кировский''')[0]
- q=q.replace('<','\0<').replace('>','>\0').replace('&nbsp;','').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
+ q=q.replace('<','\0<').replace('>','>\0')
  q=q.split('\0')
  q=[w.strip() for w in q]
  get=0
  new=[]
  mon+=100
+ q=[w for w in q if not(w[0] == '<' and ' ' not in q)]
+ q='\0'.join(q)
+ q=q.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
+ q=q.split('\0')
  got=q[:]
  for q in got:
   if q[:25] == 'Изменения в расписании на':

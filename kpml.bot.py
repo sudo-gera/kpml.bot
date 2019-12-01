@@ -34,7 +34,7 @@ edw='mon tue wed thu fri sat sun'.split()
 admin=['225847803']
 
 def api(path,data):
- sleep(1/9)
+ sleep(1/10)
  print(path,data,time())
  data=data.encode()
  global token
@@ -44,7 +44,7 @@ def api(path,data):
  return ret
 
 def look(a=0):
- q=api('messages.getConversations?count=200&filter=unread&','fields=id')
+ q=api('messages.getConversations?count=200&filter=unread&','')
  if 'response' not in q.keys():
   raise KeyError (str(q))
  q=q['response']['items']
@@ -56,6 +56,7 @@ def look(a=0):
  return q
 
 def send(text,id=None,key=''):
+  text=str(text)
   global q
   gg=[]
   if type(id)==type(gg) and key=='':
@@ -69,6 +70,10 @@ def send(text,id=None,key=''):
    key=defkey[:]
   else:
    key=key[0]
+  if len(text)>4096:
+   while text:
+    send(text[:4096])
+    text=text[4096:]
   if key==defkey:
    if db[id]['empty']:
     key+='g×включить пустые сообщения'
@@ -89,6 +94,7 @@ def send(text,id=None,key=''):
 
 
 def log(q):
+ sleep(60)
  for w in admin:
   send(str(q),w,[defkey])
 
@@ -160,7 +166,7 @@ def parse(t):
  except:
   log(fo())
   return ['''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
-Для получения изменений в расписании перейдите по ссылке http://кфмл.рф/pages/raspisanie/izmeneniya-v-raspisanii''']
+Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii''']
 
 def next(q,w,e):
  q,w,e=int(q),int(w),int(e)
@@ -263,10 +269,10 @@ try:
       db[w]['ls']=int(time())
 
 
- wai=look()
+ wai=[]
+ while wai==[]:
+  wai=look()
 
- if wai == []:
-  sleep(0.1)
  for q in wai:
   added=0
   if q[0] not in db.keys():
@@ -284,7 +290,7 @@ try:
   if q[1] == '':
    send('текстом, пожалуйста')
   elif q[1] == 'json':
-   send(dumps(db))
+   send(str(db))
   elif q[1] == 'len':
    send(len(db.keys()))
   elif q[1][:2] == 'np' and isdt(q[1][2:]):
@@ -296,8 +302,6 @@ try:
   elif q[1] == 'gp':
    tmp=[str(w) for w in gparse()]
    send('\n'.join(tmp))
-  elif q[1] == 'ad':
-   send('ad',[adefkey])
   elif q[1][:5]=='class':
    tmp=q[1][5:]
    tmp=tmp.upper()

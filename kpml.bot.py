@@ -238,7 +238,9 @@ try:
   for w in db.keys():
    if w.isdigit():
     for e in db[w]['time']:
-     db['time'][e]=w
+     if e not in db['time'].keys():
+      db['time'][e]=dict()
+     db['time'][e]+=[w]
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
       worked=work(db[w]['empty'])
       if worked:

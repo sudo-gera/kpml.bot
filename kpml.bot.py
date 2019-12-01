@@ -263,7 +263,7 @@ try:
   if q[1] == '':
    send('текстом, пожалуйста')
   elif q[1] == 'json':
-   send(dumps(db))
+   send(str(db))
   elif q[1] == 'len':
    send(len(db.keys()))
   elif q[1] == 'xg':
@@ -271,10 +271,6 @@ try:
   elif q[1] == 'gp':
    tmp=[str(w) for w in gparse()]
    send('\n'.join(tmp))
-  elif q[1][0]== "~" and len(q[1])>2:
-   send(q[1][1]*int(q[1][2:]))
-  elif q[1] == 'ad':
-   send('ad',[adefkey])
   elif q[1][:5]=='class':
    tmp=q[1][5:]
    tmp=tmp.upper()

@@ -56,6 +56,7 @@ def look(a=0):
  return q
 
 def send(text,id=None,key=''):
+  text=str(text)
   global q
   gg=[]
   if type(id)==type(gg) and key=='':

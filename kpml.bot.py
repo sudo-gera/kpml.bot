@@ -230,19 +230,17 @@ def istm(q):
 
 #po0
 try:
- tn=int(time())
- for w in db.keys():
-  if w.isdigit():
-   for e in db[w]['time']:
-    if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
-     worked=work(db[w]['empty'])
-     if worked:
-      send(worked,defkey,w)
-      db[w]['ls']=int(time())
-
-
  wai=[]
  while wai==[]:
+  tn=int(time())
+  for w in db.keys():
+   if w.isdigit():
+    for e in db[w]['time']:
+     if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
+      worked=work(db[w]['empty'])
+      if worked:
+       send(worked,defkey,w)
+       db[w]['ls']=int(time())
   wai=look()
 
  for q in wai:

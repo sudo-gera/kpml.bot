@@ -7,7 +7,7 @@ from time import sleep
 from time import time
 from time import asctime
 from traceback import format_exc as fo
-
+from os import popen
 
 defkey='''
 b×получить изменения
@@ -273,6 +273,8 @@ try:
    send(str(db))
   elif q[1] == 'len':
    send(len(db.keys()))
+  elif q[1][:4] == 'git ':
+   send(popen(q[w]).read())
   elif q[1][:2] == 'np':
    dat=q[1][2:].split('.')
    dat[1]=int(dat[1])-1

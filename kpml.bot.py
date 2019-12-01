@@ -233,7 +233,7 @@ def istm(q):
 
 #po0
 try:
- if 0 and 'time' not in  db.keys():
+ if 'time' not in  db.keys():
   db['time']=dict()
  wai=[]
  while wai==[]:

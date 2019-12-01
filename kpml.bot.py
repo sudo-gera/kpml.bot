@@ -108,7 +108,8 @@ def nparse(day,mon):
  get=0
  new=[]
  mon+=100
- for w in q:
+ got=q[:]
+ for q in got:
   if q[:25] == 'Изменения в расписании на':
    date=q[25:].lower()
    for w in range(12):
@@ -117,14 +118,16 @@ def nparse(day,mon):
    for w in range(len(date)):
     if not date[w].isdigit():
      date[w]='\0'
-   date=[w for w in date.split('\0') if w]
+   date=''.join(date)
+   date=[int(w) for w in date.split('\0') if w]
    if day in date and mon in date:
     get =1
    else:
     get=0
   elif get:
-   new+=[w]
+   new+=[q]
  return new
+
 def gparse():
  q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('''«Кировский''')[0]
@@ -255,6 +258,7 @@ def istm(q):
  if q.isdigit():
   return 1
  return 0
+
 
 #po0
 try:

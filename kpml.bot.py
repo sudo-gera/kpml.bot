@@ -319,8 +319,6 @@ try:
    ms=q[1]
    q[1]=q[1].split(':')
    q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
-   send([q[1]])
-   send(db[q[0]]['time'])
    if q[1] in db[q[0]]['time']:
 #    q[1]=str(q[1])
 #    db['time'][q[1]]=[w for w in db['time'][q[1]] if w != q[0]]

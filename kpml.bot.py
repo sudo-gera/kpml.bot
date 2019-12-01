@@ -293,8 +293,8 @@ try:
    send(str(db))
   elif q[1] == 'len':
    send(len(db.keys()))
-  elif q[1][:2] == 'np' and isdt(q[1][2:]):
-   dat=q[1].split()
+  elif q[1][:2] == 'np':
+   dat=q[1].split('.')
    dat[1]=int(dat[1])-1
    send('\n'.join(nparse(dat[0],dat[1])))
   elif q[1] == 'xg':

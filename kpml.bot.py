@@ -268,7 +268,8 @@ try:
    send(str(db))
   elif q[1] == 'git':
    t=popen('git show').read()
-   send([t])
+   t=t.split('\n\n')[0]
+   send(t)
   elif q[1] == 'len':
    send(len(db.keys()))
   elif q[1][:2] == 'np':

@@ -239,7 +239,7 @@ try:
    if w.isdigit():
     for e in db[w]['time']:
      if e not in db['time'].keys():
-      db['time'][e]=dict()
+      db['time'][e]=[]
      db['time'][e]+=[w]
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
       worked=work(db[w]['empty'])

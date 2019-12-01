@@ -109,9 +109,6 @@ def nparse(day,mon):
  new=[]
  mon+=100
  q=[w for w in q if w and not(w[0] == '<' and '=' not in w)]
- q='\0'.join(q)
- q=q.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
- q=q.split('\0')
  got=q[:]
  for q in got:
   if q[:25] == 'Изменения в расписании на':
@@ -130,6 +127,10 @@ def nparse(day,mon):
     get=0
   elif get:
    new+=[q]
+ new='\0'.join(new)
+ new=new.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
+ new=new.split('\0')
+ new=[w for w in new if w[0]!='<']
  return new
 
 def gparse():

@@ -133,41 +133,9 @@ def nparse(day,mon):
  new=[w for w in new if w[0]!='<']
  return new
 
-def gparse():
- q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
- q=q.split('''«Кировский''')[0]
- q=q.replace('<','\0<').replace('>','>\0').replace('&nbsp;','').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
- q=q.split('\0')
- q=[w for w in q if w and w[0] != '<']
- q=[[w,] for w in q]
- day=''
- for w in q:
-  ss=w[0]
-  if ss[:26] == 'Изменения в расписании на ' and ' - ' in ss and ss.split(' - ')[1].strip().split()[0].strip().isdigit():
-   w[0]=w[0].split('-')[1].split()[:2]
-   w[0][1]=str(rmo.index(w[0][1].lower()))
-   w[0][0]=str(int(w[0][0]))
-   w[0]=' '.join(w[0])
-   day=w[0]
-   w[0]=''
-  else:
-   w[0]=day+' '+w[0]
- q=[w[0] for w in q if w[0]]
- return q
-
-def hparse(t):
- q=gparse()
- t=t.split()
- t[0]=str(int(t[0]))
- t[1]=str(int(t[1]))
- t=' '.join(t)
- q=[w for w in q if w[:len(t)]==t]
- q=[' '.join(w.split()[2:]) for w in q]
- return q
-
-def parse(t):
+def parse(day,mon):
  try:
-  parsed=hparse(t)
+  parsed=nparse(day,mon)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
    parsed=[]
   return parsed
@@ -201,19 +169,17 @@ def today():
 
 def work(empty=0):
  q,w,e,dw=today()
- t=str(q)+' '+str(w)
- tn=next(q,w,e)
- tn=str(tn[0])+' '+str(tn[1])
+ td=parse(q,w)
+ r,t,y=next(q,w,e)
+ tn=parse(r,t)
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
-  toq=[parse(t),parse(tn)]
-  if toq[0]+toq[1] or empty==0:
-   q=['Изменения на сегодня, '+t.split()[0]+', '+rmo[int(t.split()[1])]+' '+rdw[dw]+':']+ toq[0] + ['<=========================>','Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+toq[1]
+  if td+tn or empty==0:
+   q=['Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':']+ td + ['<=========================>','Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[(dw+1)%7]+':']+tn
   else:
    q=[]
  else:
-  toq=[parse(tn)]
-  if toq[0] or empty==0:
-   q=['Изменения на завтра, '+tn.split()[0]+', '+rmo[int(tn.split()[1])]+' '+rdw[(dw+1)%7]+':']+toq[0]
+  if tn or empty==0:
+   q=['Изменения на завтра, '+str(r)+', '+rmo[int(t)]+' '+rdw[(dw+1)%7]+':']+tn
   else:
    q=[]
  q='\n'.join(q)

@@ -130,7 +130,7 @@ def nparse(day,mon):
  new='\0'.join(new)
  new=new.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  new=new.split('\0')
- new=[w for w in new if w[0]!='<']
+ new=[w for w in new if w and w[0]!='<']
  return new
 
 def parse(day,mon):
@@ -362,7 +362,7 @@ try:
    tmp=q[1][7:].split()
    if len(tmp)>1 and tmp[0].isdigit() and tmp[1].isdigit():
     tmp=tmp[0]+' '+str(int(tmp[1])-1)
-    tmp=parse(tmp)
+    tmp=parse(tmp.split()[0],tmp.split()[1])
     tmp='\n'.join(tmp)
     tmp='Изменения на '+q[1][7:]+':\n'+tmp
     send(tmp)
@@ -374,7 +374,7 @@ try:
     qq,w,e=int(t[1]),int(t[0]),int(t[3])
     for sw in ' '*int(tmp[0][1:]):
      qq,w,e=next(qq,w,e)
-    send('Изменения вперёд на '+tmp[0][1:]+' дней:\n'+'\n'.join(parse(str(qq)+' '+str(w))))
+    send('Изменения вперёд на '+tmp[0][1:]+' дней:\n'+'\n'.join(parse(str(qq),str(w))))
    elif len(tmp)==1 and tmp[0][0]=='>' and tmp[0][1:].isdigit():
     send('слишком далеко')
    else:

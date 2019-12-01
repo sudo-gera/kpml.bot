@@ -242,7 +242,7 @@ try:
     for e in db[w]['time']:
      if e not in db['time'].keys():
       db['time'][str(e)]=[]
-     if w not in db['time'][e]:
+     if w not in db['time'][str(e)]:
       db['time'][str(e)]+=[w]
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
       worked=work(db[w]['empty'])

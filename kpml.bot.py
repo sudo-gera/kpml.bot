@@ -274,7 +274,7 @@ try:
   elif q[1] == 'len':
    send(len(db.keys()))
   elif q[1][:4] == 'git ':
-   send(popen(q[w]).read())
+   send(popen(q[1]).read())
   elif q[1][:2] == 'np':
    dat=q[1][2:].split('.')
    dat[1]=int(dat[1])-1

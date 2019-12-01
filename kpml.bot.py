@@ -69,6 +69,10 @@ def send(text,id=None,key=''):
    key=defkey[:]
   else:
    key=key[0]
+  if len(text)>4096:
+   while text:
+    send(text[:4096])
+    text=text[4096:]
   if key==defkey:
    if db[id]['empty']:
     key+='g×включить пустые сообщения'

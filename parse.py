@@ -45,19 +45,9 @@ def nparse(day,mon):
  new=[w for w in new if w and w[0]!='<']
  return new
 
-def parse(day,mon):
- try:
-  parsed=nparse(day,mon)
-  if len(parsed)==1 and parsed[0].lower()=='изменений нет':
-   parsed=[]
-  return parsed
- except:
-  log(fo())
-  return ['''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
-Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii''']
 
 def get(clas,day,mon):
- text=parse(day,mon)
+ text=nparse(day,mon)
  '''
 
 .∧＿∧

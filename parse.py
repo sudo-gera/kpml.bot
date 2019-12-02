@@ -56,8 +56,8 @@ def parse(day,mon):
   return ['''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii''']
 
-def get(clas,day):
- text=parse(day)
+def get(clas,day,mon):
+ text=parse(day,mon)
  '''
 
 .∧＿∧
@@ -70,7 +70,7 @@ def get(clas,day):
  '''
  return text
 
-print(get('9А','20 8'))  #20 января
-print(get('10Б','1 9'))  #1 октября
-print(get('1А','15 10')) #15 ноября
-print(get('4В','4 11'))  #4 декабря
+print(get('9А','20','0'))  #20 января
+print(get('10Б','1','9'))  #1 октября
+print(get('1А','15','10')) #15 ноября
+print(get('4В','4','11'))  #4 декабря

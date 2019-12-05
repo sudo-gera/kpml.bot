@@ -199,9 +199,9 @@ def parse(day=None,mon=None):
  try:
   if day==None and mon==None:
    parsed=mparse()
+   parsed=attach(parsed)
   else:
    parsed=repa(day,mon)
-  parsed=attach(parsed)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
    parsed=[]
   return parsed

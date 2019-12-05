@@ -15,9 +15,6 @@ b×изменить кол-во оповещений в день
 b×изменить кол-во отслеживаемых классов
 r×сообщение об ошибке
 '''
-adefkey='''
-b×получить изменения
-'''
 backey='''
 r×отмена
 '''
@@ -49,7 +46,15 @@ def api(path,data):
 def look(a=0):
  q=api('messages.getConversations?count=200&filter=unread&','')
  if 'response' not in q.keys():
-  raise KeyError (str(q))
+  r=1
+  try:
+   if q['error']['error_code']in[10]:
+    r=0
+  except:
+   pass
+  if r:
+   log(q)
+  return []
  q=q['response']['items']
  q=[[w['conversation']['peer']['id'],w['last_message']['text'],w] for w in q if w['conversation']['can_write']['allowed']]
  if a==0:

@@ -102,7 +102,7 @@ def log(q):
 def mparse():
  #q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
- t='Изменения в расписани на '
+ t='Изменения в расписании на '
  q=t+t.join(q.split(t)[1:])
  q=q.split('''«Кировский''')[0]
  q=q.replace('<','\0<').replace('>','>\0')
@@ -168,7 +168,7 @@ def attach(q):
 
 def parse(day=None,mon=None):
  try:
-  if day==mon==None:
+  if day==None and mon==None:
    parsed=mparse()
   else:
    parsed=nparse(day,mon)

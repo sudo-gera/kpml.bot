@@ -158,7 +158,7 @@ def attach(q):
   w[0]=uft(w[0],'img','src')
   w[0]=uft(w[0],'a','href')
  q=[w[0] for w in q if w and w[0][0]!='<' and w[0][-1]!='>']
- return [q]
+ return q
 
 def view(day=None,mon=None):
  try:

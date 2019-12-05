@@ -141,7 +141,10 @@ def nparse(day,mon):
     get=0
   elif get:
    new+=[q[0]]
+ if new==[]:
+  new=['возникли временная проблема, воспользуйтесь кнопкой "получить изменения для их просмотра"']
  return new
+
 def uft(q,w,e):
   ee=e
   if q[:len(w)+2]=='<'+w+' ':

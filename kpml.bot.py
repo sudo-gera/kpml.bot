@@ -135,7 +135,7 @@ def repa(day,mon):
  q='\n\n'.join(q)
  q=[w for w in q.split('\x01') if w and w[0]!='\x02']
  q=' '.join(q)
- return q
+ return [q]
 
 def nparse(day,mon):
  day,mon=int(day),int(mon)

@@ -108,6 +108,7 @@ def mparse():
  q=q.replace('<','\0<').replace('>','>\0')
  q=q.split('\0')
  q=[w.strip() for w in q]
+ q=[w for w in q if w and not(w[0] == '<' and '=' not in w)]
  return q
 
 def nparse(day,mon):
@@ -116,7 +117,6 @@ def nparse(day,mon):
  get=0
  new=[]
  mon+=100
- q=[w for w in q if w and not(w[0] == '<' and '=' not in w)]
  got=q[:]
  for q in got:
   if q[:25] == 'Изменения в расписании на':

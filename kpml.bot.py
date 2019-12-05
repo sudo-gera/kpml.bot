@@ -102,9 +102,10 @@ def log(q):
 def mparse():
  #q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
- t='Изменения в расписании на '
- q=t+t.join(q.split(t)[1:])
  q=q.split('''«Кировский''')[0]
+ t='Изменения в расписании на'
+ q=q.split(t)[1:]
+ q=t+t.join(q)
  q=q.replace('<','\0<').replace('>','>\0')
  q=q.split('\0')
  q=[w.strip() for w in q]
@@ -114,10 +115,27 @@ def mparse():
  q=q.split('\0')
  return q
 
-def date(day,mon):
- day,mon=int(day),int(mon)
- q=mparse()
- q='\n'.join(q)
+def repa(day,mon):
+ q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ q=q.replace('>','\x01').replace('<','\x01\x02').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
+ q=q.split('''«Кировский''')[0]
+ t='Изменения в расписании на'
+ q=q.split(t)[1:]
+ q=[w.split(rmo[mon]) for w in q if rmo[mon] in w]
+ q=[[w[0],rmo[mon].join(w[1:])] for w in q]
+ for w in q:
+  for e in w[0]:
+   if not e.isdigit():
+    w[0]=w[0].replace(e,'\0')
+  w[0]=w[0].split('\0')
+  w[0]=[int(e) for e in w[0] if e]
+  if day not in w[0]:
+   w[1]=''
+ q=[w[1] for w in q]
+ q='\n\n'.join(q)
+ q=[w for w in q.split('\x01') if w and w[0]!='\x02']
+ q=' '.join(q)
+ return q
 
 def nparse(day,mon):
  day,mon=int(day),int(mon)
@@ -179,10 +197,10 @@ def attach(q):
 
 def parse(day=None,mon=None):
  try:
-  if 1 and day==None and mon==None:
+  if day==None and mon==None:
    parsed=mparse()
   else:
-   parsed=nparse(day,mon)
+   parsed=repa(day,mon)
   parsed=attach(parsed)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
    parsed=[]

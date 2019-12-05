@@ -99,13 +99,18 @@ def log(q):
  for w in admin:
   send(str(q),defkey,w)
 
-def nparse(day,mon):
- day,mon=int(day),int(mon)
- q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+def mparse():
+ #q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.split('''«Кировский''')[0]
  q=q.replace('<','\0<').replace('>','>\0')
  q=q.split('\0')
  q=[w.strip() for w in q]
+ return q
+
+def nparse(day,mon):
+ day,mon=int(day),int(mon)
+ q=mparse()
  get=0
  new=[]
  mon+=100
@@ -131,12 +136,41 @@ def nparse(day,mon):
  new='\0'.join(new)
  new=new.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  new=new.split('\0')
- new=[w for w in new if w and w[0]!='<']
  return new
+def uft(q,w,e):
+  ee=e
+  if q[:len(w)+2]=='<'+w+' ':
+   t=q.split()
+   t=[[e[len(ee)+1:]] for e in t if e[:len(ee)+1]==ee+'=']
+   for e in t:
+    if e[0][0]=='"':
+     e[0]=e[0][1:]
+    if e[0][-1]=='"':
+     e[0]=e[0][:-1]
+    if e[0][0]=='/':
+     e[0]='http://kpml.ru'+e[0]
+    if e[0][:7]!='http://' and e[0][:8]!='https://':
+     e[0]='http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii/'+e[0]
+   t=[e[0] for e in t]
+   return '\n'.join(t)
+  else:
+   return q
 
-def parse(day,mon):
+def attach(q):
+ q=[[w] for w in q if w]
+ for w in q:
+  w[0]=uft(w[0],'img','src')
+  w[0]=uft(w[0],'a','href')
+ q=[w[0] for w in q if w and w[0]!='<' and w[-1]!='>']
+ return q
+
+def parse(day=None,mon=None):
  try:
-  parsed=nparse(day,mon)
+  if day==mon==None:
+   parsed=mparse()
+  else:
+   parsed=nparse(day,mon)
+  parsed=attach(parsed)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
    parsed=[]
   return parsed
@@ -282,15 +316,12 @@ try:
    send(t)
   elif q[1] == 'len':
    send(len(db.keys()))
-  elif q[1][:2] == 'np':
-   dat=q[1][2:].split('.')
-   dat[1]=int(dat[1])-1
-   send('\n'.join(nparse(dat[0],dat[1])))
   elif q[1] == 'xg':
    send('\n'.join([str([w,db[w]]) for w in db.keys()]))
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:
+   '''
    w,e,r,dw=today()
    kb='w×'+str(w)+'.'+str(e+1)+', '+rdw[dw]
    w,e,r=next(w,e,r)
@@ -302,6 +333,11 @@ try:
     kb+='|w×'+str(w)+'.'+str(e+1)+', '+rdw[(dw+3+t*2)%7]
    w,e,r,dw=today()
    send('выберите дату (сегодня '+str(w)+' '+rmo[e]+')',kb)
+   '''
+   tmp=parse()
+   tmp='\n'.join(tmp)
+   tmp='Изменения на '+q[1]+':\n'+tmp
+   send(tmp)
   elif q[1] == 'отключить пустые сообщения' or q[1] == 'пусто' and db[q[0]]['empty']==0:
    db[q[0]]['empty']=1
    send('теперь вам не будут приходить автоматические оповещения, если они не содержат изменений. Обратите внимание, что иногда вам всё же будут приходить пустые оповещения, сообщайте о таких ошибках и они будут исправлены.')

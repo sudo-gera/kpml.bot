@@ -109,7 +109,7 @@ def parse():
 
 def out():
  q=parse()
- t=beg
+ t='<===========>\n'+beg
  q=t+t.join(q)
  return q
 

@@ -15,24 +15,23 @@ b×изменить кол-во оповещений в день
 b×изменить кол-во отслеживаемых классов
 r×сообщение об ошибке
 '''
-backey='''
-r×отмена
-'''
+backey='r×отмена'
 d={'w':'default','b':'primary','r':'negative','g':'positive'}
+
 print('\x1b[93m'+asctime()+'\x1b[0m')
 
-#token=urlopen('http://192.168.0.104:9002/0/kpml.bot.token').read().decode()
 token=open('../kpml.bot.token').read()
 try:
  db=loads(open('../kpml.bot.db.json').read())
 except:
  db='{}'
+
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
 admin=['225847803']
-
+beg='Изменения в расписании на'
 def api(path,data):
  sleep(1/10)
  print(path,data,time())
@@ -99,28 +98,23 @@ def log(q):
  for w in admin:
   send(str(q),defkey,w)
 
-def mparse():
+def parse():
  #q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q.split('''«Кировский''')[0]
- t='Изменения в расписании на'
+ t=beg
  q=q.split(t)[1:]
+ return q
+
+def out():
+ q=parse()
+ t=beg
  q=t+t.join(q)
- q=q.replace('<','\0<').replace('>','>\0')
- q=q.split('\0')
- q=[w.strip() for w in q]
- q=[w for w in q if w and not(w[0] == '<' and '=' not in w)]
- q='\0'.join(q)
- q=q.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
- q=q.split('\0')
  return q
 
 def repa(day,mon):
- q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
- q=q.replace('>','\x01').replace('<','\x01\x02').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
- q=q.split('''«Кировский''')[0]
- t='Изменения в расписании на'
- q=q.split(t)[1:]
+ q=parse()
  q=[w.split(rmo[mon]) for w in q if rmo[mon] in w]
  q=[[w[0],rmo[mon].join(w[1:])] for w in q]
  for w in q:
@@ -135,42 +129,12 @@ def repa(day,mon):
  q='\n\n'.join(q)
  q=[w for w in q.split('\x01') if w and w[0]!='\x02']
  q=' '.join(q)
- return [q]
+ return q
 
-def nparse(day,mon):
- day,mon=int(day),int(mon)
- q=mparse()
- get=0
- new=[]
- mon+=100
- got=q[:]
- got +=''
- for w in range(len(got)-1):
-  got[w]=[got[w],got[w+1]]
- for q in got:
-  if (q[0]+q[1])[:25] == 'Изменения в расписании на':
-   date=(q[0]+q[1])[25:].lower()
-   for w in range(12):
-    date=date.replace(rmo[w],str('\0'+str(w+100)+'\0'))
-   date=list(date)
-   for w in range(len(date)):
-    if not date[w].isdigit():
-     date[w]='\0'
-   date=''.join(date)
-   date=[int(w) for w in date.split('\0') if w]
-   if day in date and mon in date:
-    get =1
-   else:
-    get=0
-  elif get:
-   new+=[q[0]]
- if new==[]:
-  new=['возникла временная проблема, воспользуйтесь кнопкой "получить изменения" для их просмотра']
- return new
 
 def uft(q,w,e):
   ee=e
-  if q[:len(w)+2]=='<'+w+' ':
+  if q[:len(w)+2]=='\x02'+w+' ':
    t=q.split()
    t=[[e[len(ee)+1:]] for e in t if e[:len(ee)+1]==ee+'=']
    for e in t:
@@ -188,20 +152,21 @@ def uft(q,w,e):
    return q
 
 def attach(q):
+ q=q.split('\x01')
  q=[[w] for w in q if w]
  for w in q:
   w[0]=uft(w[0],'img','src')
   w[0]=uft(w[0],'a','href')
  q=[w[0] for w in q if w and w[0][0]!='<' and w[0][-1]!='>']
- return q
+ return [q]
 
-def parse(day=None,mon=None):
+def view(day=None,mon=None):
  try:
   if day==None and mon==None:
-   parsed=mparse()
-   parsed=attach(parsed)
+   parsed=out()
   else:
    parsed=repa(day,mon)
+  parsed=attach(parsed)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
    parsed=[]
   return parsed
@@ -235,11 +200,11 @@ def today():
 
 def work(empty=0):
  q,w,e,dw=today()
- td=parse(q,w)
+ td=view(q,w)
  if td or empty==0:
   td=['Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':']+ td
  r,t,y=next(q,w,e)
- tn=parse(r,t)
+ tn=view(r,t)
  if tn or empty==0:
   tn=['Изменения на завтра, '+str(r)+', '+rmo[int(t)]+' '+rdw[(dw+1)%7]+':']+tn
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
@@ -366,7 +331,7 @@ try:
    w,e,r,dw=today()
    send('выберите дату (сегодня '+str(w)+' '+rmo[e]+')',kb)
    '''
-   tmp=parse()
+   tmp=view()
    tmp='\n'.join(tmp)
  #  tmp='Изменения в расписании:\n'+tmp
    send(tmp)
@@ -385,7 +350,7 @@ try:
    send(work())
   elif isdt(q[1]):
    tmp=isdt(q[1])
-   tmp=parse(tmp[0],tmp[1])
+   tmp=view(tmp[0],tmp[1])
    tmp='\n'.join(tmp)
    tmp='Изменения на '+q[1]+':\n'+tmp
    send(tmp)

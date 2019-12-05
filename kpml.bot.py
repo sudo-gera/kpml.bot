@@ -109,6 +109,9 @@ def mparse():
  q=q.split('\0')
  q=[w.strip() for w in q]
  q=[w for w in q if w and not(w[0] == '<' and '=' not in w)]
+ q='\0'.join(q)
+ q=q.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
+ q=q.split('\0')
  return q
 
 def nparse(day,mon):
@@ -118,9 +121,12 @@ def nparse(day,mon):
  new=[]
  mon+=100
  got=q[:]
+ got +=''
+ for w in range(len(got)-1):
+  got[w]=[got[w],got[w+1]]
  for q in got:
-  if q[:25] == 'Изменения в расписании на':
-   date=q[25:].lower()
+  if (q[0]+q[1])[:25] == 'Изменения в расписании на':
+   date=(q[0]+q[1])[25:].lower()
    for w in range(12):
     date=date.replace(rmo[w],str('\0'+str(w+100)+'\0'))
    date=list(date)
@@ -134,10 +140,7 @@ def nparse(day,mon):
    else:
     get=0
   elif get:
-   new+=[q]
- new='\0'.join(new)
- new=new.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
- new=new.split('\0')
+   new+=[q[0]]
  return new
 def uft(q,w,e):
   ee=e
@@ -272,6 +275,7 @@ def istm(q):
  if q.isdigit():
   return 1
  return 0
+
 
 #po0
 try:

@@ -168,12 +168,12 @@ def attach(q):
 
 def parse(day=None,mon=None):
  try:
-  if day==None and mon==None:
+  if 1 and day==None and mon==None:
    parsed=mparse()
   else:
    parsed=nparse(day,mon)
   send(parsed)
-  parsed=attach(parsed)
+#  parsed=attach(parsed)
   send(parsed)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
    parsed=[]

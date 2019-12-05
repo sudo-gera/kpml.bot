@@ -82,12 +82,13 @@ def send(text,key='',id=None):
   print(qq)
   r=1
   if list(qq.keys())!=['response']:
-   if 'error' in qq.keys():
+   try:
     if qq['error']['error_code'] in [901,10]:
      r=0
+   except:
+    pass
    if r:
-    raise KeyError(str(qq))
-
+    log(qq)
 
 def log(q):
  for w in admin:

@@ -172,7 +172,9 @@ def parse(day=None,mon=None):
    parsed=mparse()
   else:
    parsed=nparse(day,mon)
+  send(parsed)
   parsed=attach(parsed)
+  send(parsed)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
    parsed=[]
   return parsed
@@ -338,7 +340,7 @@ try:
    '''
    tmp=parse()
    tmp='\n'.join(tmp)
-   tmp='Изменения на '+q[1]+':\n'+tmp
+   tmp='Изменения в расписании:\n'+tmp
    send(tmp)
   elif q[1] == 'отключить пустые сообщения' or q[1] == 'пусто' and db[q[0]]['empty']==0:
    db[q[0]]['empty']=1

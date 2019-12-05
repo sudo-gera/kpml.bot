@@ -99,7 +99,6 @@ def log(q):
   send(str(q),defkey,w)
 
 def parse():
- #q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q.split('''«Кировский''')[0]
@@ -126,9 +125,7 @@ def repa(day,mon):
   if day not in w[0]:
    w[1]=''
  q=[w[1] for w in q]
- q='\n\n'.join(q)
- q=[w for w in q.split('\x01') if w and w[0]!='\x02']
- q=' '.join(q)
+ q='\n'.join(q)
  return q
 
 

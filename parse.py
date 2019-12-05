@@ -10,40 +10,31 @@ rmo='января февраля марта апреля мая июня июл�
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 
 
-def nparse(day,mon):
- day,mon=int(day),int(mon)
- q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+def parse():
+ q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q.split('''«Кировский''')[0]
- q=q.replace('<','\0<').replace('>','>\0')
- q=q.split('\0')
- q=[w.strip() for w in q]
- get=0
- new=[]
- mon+=100
- q=[w for w in q if w and not(w[0] == '<' and '=' not in w)]
- got=q[:]
- for q in got:
-  if q[:25] == 'Изменения в расписании на':
-   date=q[25:].lower()
-   for w in range(12):
-    date=date.replace(rmo[w],str('\0'+str(w+100)+'\0'))
-   date=list(date)
-   for w in range(len(date)):
-    if not date[w].isdigit():
-     date[w]='\0'
-   date=''.join(date)
-   date=[int(w) for w in date.split('\0') if w]
-   if day in date and mon in date:
-    get =1
-   else:
-    get=0
-  elif get:
-   new+=[q]
- new='\0'.join(new)
- new=new.replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
- new=new.split('\0')
- new=[w for w in new if w and w[0]!='<']
- return new
+ t=beg
+ q=q.split(t)[1:]
+ return q
+
+def repa(day,mon):
+ q=parse()
+ q=[w.split(rmo[mon]) for w in q if rmo[mon] in w]
+ q=[[w[0],rmo[mon].join(w[1:])] for w in q]
+ for w in q:
+  for e in w[0]:
+   if not e.isdigit():
+    w[0]=w[0].replace(e,'\0')
+  w[0]=w[0].split('\0')
+  w[0]=[int(e) for e in w[0] if e]
+  if day not in w[0]:
+   w[1]=''
+ q=[w[1] for w in q]
+ q='\n\n'.join(q)
+ q=[w for w in q.split('\x01') if w and w[0]!='\x02']
+ q=' '.join(q)
+ return q
 
 
 def get(clas,day,mon):

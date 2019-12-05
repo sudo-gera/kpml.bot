@@ -102,6 +102,8 @@ def log(q):
 def mparse():
  #q=urlopen('http://xn--j1acc5a.xn--p1ai/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
  q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ t='Изменения в расписани на '
+ q=t+t.join(q.split(t)[1:])
  q=q.split('''«Кировский''')[0]
  q=q.replace('<','\0<').replace('>','>\0')
  q=q.split('\0')
@@ -161,7 +163,7 @@ def attach(q):
  for w in q:
   w[0]=uft(w[0],'img','src')
   w[0]=uft(w[0],'a','href')
- q=[w[0] for w in q if w and w[0]!='<' and w[-1]!='>']
+ q=[w[0] for w in q if w and w[0][0]!='<' and w[0][-1]!='>']
  return q
 
 def parse(day=None,mon=None):

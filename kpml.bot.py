@@ -114,6 +114,11 @@ def mparse():
  q=q.split('\0')
  return q
 
+def date(day,mon):
+ day,mon=int(day),int(mon)
+ q=mparse()
+ q='\n'.join(q)
+
 def nparse(day,mon):
  day,mon=int(day),int(mon)
  q=mparse()

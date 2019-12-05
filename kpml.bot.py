@@ -342,7 +342,7 @@ try:
    '''
    tmp=parse()
    tmp='\n'.join(tmp)
-   tmp='Изменения в расписании:\n'+tmp
+ #  tmp='Изменения в расписании:\n'+tmp
    send(tmp)
   elif q[1] == 'отключить пустые сообщения' or q[1] == 'пусто' and db[q[0]]['empty']==0:
    db[q[0]]['empty']=1

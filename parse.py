@@ -18,6 +18,7 @@ def parse():
  q=q.split(t)[1:]
  return q
 
+
 def repa(day,mon):
  q=parse()
  q=[w.split(rmo[mon]) for w in q if rmo[mon] in w]
@@ -31,14 +32,12 @@ def repa(day,mon):
   if day not in w[0]:
    w[1]=''
  q=[w[1] for w in q]
- q='\n\n'.join(q)
- q=[w for w in q.split('\x01') if w and w[0]!='\x02']
- q=' '.join(q)
+ q='\n'.join(q)
  return q
 
 
 def get(clas,day,mon):
- text=nparse(day,mon)
+ text=repa(day,mon)
  '''
 
 .∧＿∧

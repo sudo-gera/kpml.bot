@@ -124,7 +124,7 @@ def repa(day,mon):
   w[0]=[int(e) for e in w[0] if e]
   if day not in w[0]:
    w[1]=''
- q=[w[1] for w in q]
+ q=[w[1] for w in q if w[1]]
  q='\n'.join(q)
  return q
 
@@ -213,6 +213,7 @@ def work(empty=0):
   q=tn
  q='\n'.join(q)
  return q
+
 
 def iscl(q):
  q=''.join(q.split())

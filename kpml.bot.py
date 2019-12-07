@@ -304,8 +304,6 @@ try:
    send('текстом, пожалуйста')
   elif q[1] == 'json':
    send(str(db))
-  elif q[1][0]=='~':
-   send(q[1][-1]*int(q[1][1:-1]))
   elif q[1] == 'git':
    t=popen('git show').read()
    t=t.split('\n\n')[0]

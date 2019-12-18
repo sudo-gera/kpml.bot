@@ -211,6 +211,7 @@ def work(empty=0):
    q=[]
  else:
   q=tn
+ q=[w.strip() for w in q]
  q='\n'.join(q)
  return q
 

@@ -1,4 +1,5 @@
 
+
 from urllib.request import urlopen
 from json import loads
 from json import dumps
@@ -47,7 +48,7 @@ def look(a=0):
  if 'response' not in q.keys():
   r=1
   try:
-   if q['error']['error_code']in[10]:
+   if q['error']['error_code']in[10,5]:
     r=0
   except:
    pass
@@ -87,7 +88,7 @@ def send(text,key='',id=None):
   r=1
   if list(qq.keys())!=['response']:
    try:
-    if qq['error']['error_code'] in [901,10]:
+    if qq['error']['error_code'] in [901,10,5]:
      r=0
    except:
     pass

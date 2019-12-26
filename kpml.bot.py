@@ -104,6 +104,7 @@ def parse():
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q.split('''«Кировский''')[0]
  t=beg
+# q=q.replace(t,'\x1b[93m'+t+'\x1b[0m')
  q=q.split(t)[1:]
  return q
 
@@ -264,7 +265,6 @@ def istm(q):
  if q.isdigit():
   return 1
  return 0
-
 
 #po0
 try:

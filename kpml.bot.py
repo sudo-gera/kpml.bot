@@ -100,8 +100,16 @@ def log(q):
   send(str(q),defkey,w)
 
 def parse():
- q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
- #q=open('../ru.kpml.html').read()
+ try:
+  q=open('../kpml.bot.html').read()
+ except:
+  q=str(time()-400)+'\x01'
+ bt=q.split('\x01')[0]
+ if time()-float(bt)>300:
+  q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+  open('../kpml.bot.html','w').write(str(time())+'\x01'+q)
+ else:
+  q=q.split('\x01')[1]
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q[:q.index('«Кировский')]
  q=q[q.index('\x01\x02body'):]
@@ -279,7 +287,7 @@ def istm(q):
  return 0
 
 
-
+print(out())
 #po0
 try:
  wai=[]

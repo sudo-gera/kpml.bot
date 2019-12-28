@@ -100,8 +100,8 @@ def log(q):
   send(str(q),defkey,w)
 
 def parse():
-# q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
- q=open('../ru.kpml.html').read()
+ q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ #q=open('../ru.kpml.html').read()
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q[:q.index('«Кировский')]
  q=q[q.index('\x01\x02body'):]

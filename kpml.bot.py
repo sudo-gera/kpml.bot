@@ -32,7 +32,7 @@ emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
 admin=['225847803']
-beg='Изменения'
+beg='Изменения в расписании на '
 def api(path,data):
  sleep(1/10)
  print(path,data,time())
@@ -100,13 +100,25 @@ def log(q):
   send(str(q),defkey,w)
 
 def parse():
- q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+# q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+ q=open('../ru.kpml.html').read()
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
- q=q.split('''«Кировский''')[0]
- t=beg
-# q=q.replace(t,'\x1b[93m'+t+'\x1b[0m')
- q=q.split(t)[1:]
+ q=q[:q.index('«Кировский')]
+ q=q[q.index('\x01\x02body'):]
+ q=q.replace('\x01\x02br ','\n\x01\x02br ')
+ q=q.replace('\x01\x02br/\x01','\n')
+ q=q.replace('\x01\x02br ','\n\x01\x02br ')
+ q=q.replace('\x01\x02/p\x01','\x01\x02/p\x01\n')
+ q=q.split('\x01')
+# q=[w if len(w) < 2 or w[0] != '\x02' else ('\x03'+w[2:] if w[:2] in ['\x02/','\x02!'] else ('\x04'+w[1:-1]+'\x04' if w[-1] == '/' else w))  for w in q]
+ q=[w for w in q if w and( w[0] != '\x02' or w[0] == '\x02' and w[-1] == '/')]
+ q=['\x01'+w+'\x01' if w[0] == '\x02' else w for w in q]
+ q=[w for w in q if w]
+ q=''.join(q)
+ q=q.strip()
+ q=q.split(beg)[1:]
  return q
+
 
 def out():
  q=parse()
@@ -265,6 +277,7 @@ def istm(q):
  if q.isdigit():
   return 1
  return 0
+
 
 #po0
 try:

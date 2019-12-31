@@ -201,10 +201,16 @@ def next(q,w,e):
  else:
   l=[31,28,31,30,31,30,31,31,30,31,30,31]
  if q+1>l[w]:
-  tn= [1,w%12+1]
+  if w+1==12:
+   q=1
+   w=0
+   e+=1
+  else:
+   q=1
+   w+=1
  else:
-  tn= [q+1,w]
- return tn+[e]
+  q+=1
+ return [q,w,e]
 
 def today():
  t=asctime()
@@ -225,7 +231,7 @@ def work(empty=0):
  r,t,y=next(q,w,e)
  tn=view(r,t)
  if tn or empty==0:
-  tn=['Изменения на завтра, '+str(r)+', '+rmo[int(t)]+' '+rdw[(dw+1)%7]+':']+tn
+  tn=['Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[(dw+1)%7]+':']+tn
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   if td+tn:
    q=td+['<=====================>']+tn
@@ -286,8 +292,6 @@ def istm(q):
   return 1
  return 0
 
-
-print(out())
 #po0
 try:
  wai=[]

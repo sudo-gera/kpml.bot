@@ -268,19 +268,12 @@ def istm(q):
 
 #po0
 try:
-# if 'time' not in  db.keys():
-#  db['time']=dict()
-# db['time']=dict()
  wai=[]
  while wai==[]:
   tn=int(time())
   for w in db.keys():
    if w.isdigit():
     for e in db[w]['time']:
-#     if e not in db['time'].keys():
-#      db['time'][str(e)]=[]
-#     if w not in db['time'][str(e)]:
-#      db['time'][str(e)]+=[w]
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
       worked=work(db[w]['empty'])
       if worked:
@@ -318,22 +311,8 @@ try:
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:
-   '''
-   w,e,r,dw=today()
-   kb='w×'+str(w)+'.'+str(e+1)+', '+rdw[dw]
-   w,e,r=next(w,e,r)
-   kb+='|w×'+str(w)+'.'+str(e+1)+', '+rdw[(dw+1)%7]
-   for t in range(4):
-    w,e,r=next(w,e,r)
-    kb+='\nw×'+str(w)+'.'+str(e+1)+', '+rdw[(dw+2+t*2)%7]
-    w,e,r=next(w,e,r)
-    kb+='|w×'+str(w)+'.'+str(e+1)+', '+rdw[(dw+3+t*2)%7]
-   w,e,r,dw=today()
-   send('выберите дату (сегодня '+str(w)+' '+rmo[e]+')',kb)
-   '''
    tmp=view()
    tmp='\n'.join(tmp)
- #  tmp='Изменения в расписании:\n'+tmp
    send(tmp)
   elif q[1] == 'отключить пустые сообщения' or q[1] == 'пусто' and db[q[0]]['empty']==0:
    db[q[0]]['empty']=1
@@ -359,22 +338,18 @@ try:
    q[1]=q[1].split(':')
    q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
    if q[1] in db[q[0]]['time']:
-#    q[1]=str(q[1])
-#    db['time'][q[1]]=[w for w in db['time'][q[1]] if w != q[0]]
-#    if db['time'][q[1]]==[]:
-#     del(db['time'][q[1]])
-#    q[1]=int(q[1])
     db[q[0]]['time']=[w for w in db[q[0]]['time'] if w != q[1]]
     t='количество оповещений в день уменьшено временем '+ms
    else:
-#    if q[1] not in db['time']:
-#     db['time'][q[1]]=[]
-#    db['time'][q[1]]+=[q[0]]
-    db[q[0]]['time']+=[q[1]]
-    t='количество оповещений в день увеличено временем '+ms
+    if len(db[q[0]]['time']) >= 256:
+     t='вы не можете получать более чем 256 уведомлений в сутки'
+    elif len(q[1]) > 16:
+     t='длина времени не может привышать 16 символов'
+    else:
+     db[q[0]]['time']+=[q[1]]
+     t='количество оповещений в день увеличено временем '+ms
    send(t+'. Обратие внимание, что оповещение не содержит изменений, опубликованных позднее, чем оно пришло')
   elif q[1] in ['изменить кол-во оповещений в день','время']:
-#   ts=[int(w) for w in db['time'] if q[0] in db['time'][w]]
    ts=db[q[0]]['time'][:]
    ts=[str((w//3600+3)%24)+':'+str(w%3600//60) for w in ts]
    lts=len(ts)
@@ -404,8 +379,13 @@ try:
     db[q[0]]['class']=[w for w in db[q[0]]['class'] if w != q[1]]
     t='количество отслеживаемых классов уменьшено классом '+ms+'.'
    else:
-    db[q[0]]['class']+=[q[1]]
-    t='количество отслеживаемых классов увеличено классом  '+ms+'.'
+    if len(db[q[0]]['class'])>=256:
+     t='вы не можете подписаться более чем на 256 классов'
+    elif len(q[1]) > 16:
+     t='длина класса не может превышать 16 символов'
+    else:
+     db[q[0]]['class']+=[q[1]]
+     t='количество отслеживаемых классов увеличено классом  '+ms+'.'
    send(t+' Система оповещения только по выбранным классам сейчас находится в разработке, поэтому вы будете получать оповещения по всем классам')
   elif q[1] in ['изменить кол-во отслеживаемых классов','класс']:
    ts=db[q[0]]['class'][:]

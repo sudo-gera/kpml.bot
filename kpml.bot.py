@@ -33,8 +33,14 @@ rdw='понедельник вторник среда четверг пятни�
 edw='mon tue wed thu fri sat sun'.split()
 admin=['225847803']
 beg='Изменения в расписании на '
-def api(path,data):
+
+def api(path,data=''):
  sleep(1/10)
+ if path and path[-1] not in '?&':
+  if '?' in path:
+   path+='&'
+  else:
+   path+='?'
  print(path,data,time())
  data=data.encode()
  global token

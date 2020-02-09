@@ -42,7 +42,7 @@ def api(path,data=''):
   else:
    path+='?'
  print(path,data,time())
- data=quote(data)
+# data=quote(data)
  data=data.encode()
  global token
  print(time())

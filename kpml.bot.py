@@ -364,7 +364,7 @@ try:
   elif q[1] == 'len':
    send(len(db.keys()))
   elif q[1] == 'xg':
-   send('\n'.join([str([w,db[w]]) for w in db.keys()]))
+   send('\n'.join(['vk.com/id'+w+' '+str(db[w]) for w in db.keys()]))
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:

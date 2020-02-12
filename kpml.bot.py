@@ -21,11 +21,14 @@ d={'w':'default','b':'primary','r':'negative','g':'positive'}
 
 print('\x1b[93m'+asctime()+'\x1b[0m')
 
-token=open('../kpml.bot.token').read()
+try:
+ token=open('../kpml.bot.token').read()
+except:
+ token=''
 try:
  db=loads(open('../kpml.bot.db.json').read())
 except:
- db='{}'
+ db=loads('{}')
 
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
@@ -34,8 +37,10 @@ edw='mon tue wed thu fri sat sun'.split()
 admin=['225847803']
 beg='Изменения в расписании на '
 
+#vkwork###################################################################
+
 def api(path,data=''):
- sleep(1/10)
+ sleep(1/3)
  if path and path[-1] not in '?&':
   if '?' in path:
    path+='&'
@@ -105,6 +110,42 @@ def send(text,key='',id=None):
 def log(q):
  for w in admin:
   send(str(q),defkey,w)
+
+#dates########################################################
+def next(q,w,e,dw=None):
+ q,w,e=int(q),int(w),int(e)
+ if dw!=None:
+  dw=int(dw)
+ if e%4==0 and e%100 or e%400:
+  l=[31,29,31,30,31,30,31,31,30,31,30,31]
+ else:
+  l=[31,28,31,30,31,30,31,31,30,31,30,31]
+ if q+1>l[w]:
+  if w+1==12:
+   q=1
+   w=0
+   e+=1
+  else:
+   q=1
+   w+=1
+ else:
+  q+=1
+ if dw!=None:
+  return [q,w,e,(dw+1)%7]
+ return [q,w,e]
+
+def today():
+ t=asctime()
+ t=t.split()[0:5]
+ dw=t[0].lower()
+ dw=edw.index(dw)
+ t=t[1:]
+ t[0]=t[0].lower()
+ t[0]=emo.index(t[0])
+ q,w,e=int(t[1]),int(t[0]),int(t[3])
+ return [q,w,e,dw]
+
+#kpml######################################################################
 
 def parse():
  try:
@@ -186,12 +227,22 @@ def attach(q):
  q=[w[0] for w in q if w and w[0][0]!='\x02']
  return q
 
-def view(day=None,mon=None):
+def get(day,mon,clas):
+ text=repa(int(day),int(mon))
+ text='\n'.join([w for w in text.split('\n') if clas in w])
+ return text
+
+
+def view(day=None,mon=None,id=None):
  try:
-  if day==None and mon==None:
+  if day==None and mon==None and id==None:
    parsed=out()
   else:
    parsed=repa(day,mon)
+   if parsed:
+    parsed='Происходит тестирование алгоритма, находящего изменения для вашего класса. Предлагаем вам помогать находить ошибки. Сейчас вы подписаны на классы: '+' '.join(db[id]['class'])+'\nИзменения по всем классам:\n'+parsed+'\n<=========================>\n<===================>изменения по вашим классам\n'
+    for w in db[id]['class']:
+     parsed+=get(day,mon,w)+'\n'
   parsed=attach(parsed)
   if len(parsed)==1 and parsed[0].lower()=='изменений нет':
    parsed=[]
@@ -201,44 +252,16 @@ def view(day=None,mon=None):
   return ['''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii''']
 
-def next(q,w,e):
- q,w,e=int(q),int(w),int(e)
- if e%4==0 and e%100 or e%400:
-  l=[31,29,31,30,31,30,31,31,30,31,30,31]
- else:
-  l=[31,28,31,30,31,30,31,31,30,31,30,31]
- if q+1>l[w]:
-  if w+1==12:
-   q=1
-   w=0
-   e+=1
-  else:
-   q=1
-   w+=1
- else:
-  q+=1
- return [q,w,e]
 
-def today():
- t=asctime()
- t=t.split()[0:5]
- dw=t[0].lower()
- dw=edw.index(dw)
- t=t[1:]
- t[0]=t[0].lower()
- t[0]=emo.index(t[0])
- q,w,e=int(t[1]),int(t[0]),int(t[3])
- return [q,w,e,dw]
-
-def work(empty=0):
+def work(id,empty=0):
  q,w,e,dw=today()
- td=view(q,w)
+ td=view(q,w,id)
  if td or empty==0:
   td=['Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':']+ td
- r,t,y=next(q,w,e)
- tn=view(r,t)
+ r,t,y,dw=next(q,w,e,dw)
+ tn=view(r,t,id)
  if tn or empty==0:
-  tn=['Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[(dw+1)%7]+':']+tn
+  tn=['Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':']+tn
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   if td+tn:
    q=td+['<=====================>']+tn
@@ -250,7 +273,7 @@ def work(empty=0):
  q='\n'.join(q)
  return q
 
-
+#inputparse######################################################33
 def iscl(q):
  q=''.join(q.split())
  w=0
@@ -299,21 +322,22 @@ def istm(q):
   return 1
  return 0
 
-#po0
+
 try:
  wai=[]
+#mainloop#########################################################33
  while wai==[]:
   tn=int(time())
   for w in db.keys():
    if w.isdigit():
     for e in db[w]['time']:
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
-      worked=work(db[w]['empty'])
+      worked=work(w,db[w]['empty'])
       if worked:
        send(worked,defkey,w)
        db[w]['ls']=int(time())
   wai=look()
-
+#gotmess###########################################################
  for q in wai:
   added=0
   if q[0] not in db.keys():
@@ -328,7 +352,7 @@ try:
    if 'empty' not in db[w].keys():
     db[w]['empty']=0
    added=1
-#po1
+#logic###############################################################
   if q[1] == '':
    send('текстом, пожалуйста')
   elif q[1] == 'json':
@@ -359,7 +383,7 @@ try:
    log('сообщение об ошибке\nавтор vk.com/id'+q[0]+'\n'+q[1][1:])
    send('сообщение отправлено администрации, с вами скоро свяжутся')
   elif q[1] == 'lookall':
-   send(work())
+   send(work(q[0]))
   elif isdt(q[1]):
    tmp=isdt(q[1])
    tmp=view(tmp[0],tmp[1])

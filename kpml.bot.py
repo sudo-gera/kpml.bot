@@ -11,7 +11,7 @@ from traceback import format_exc as fo
 from os import popen
 
 defkey='''
-b×получить изменения
+w×получить изменения
 b×изменить кол-во оповещений в день
 b×изменить кол-во отслеживаемых классов
 r×сообщение об ошибке
@@ -116,7 +116,7 @@ def next(q,w,e,dw=None):
  q,w,e=int(q),int(w),int(e)
  if dw!=None:
   dw=int(dw)
- if e%4==0 and e%100 or e%400:
+ if e%4==0 and e%100 or e%400==0:
   l=[31,29,31,30,31,30,31,31,30,31,30,31]
  else:
   l=[31,28,31,30,31,30,31,31,30,31,30,31]

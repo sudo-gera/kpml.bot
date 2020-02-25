@@ -35,7 +35,7 @@ emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
 admin=['225847803']
-beg='Изменения на '
+beg='Изменения в расписании на '
 
 #vkwork###################################################################
 

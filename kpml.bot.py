@@ -9,6 +9,7 @@ from time import time
 from time import asctime
 from traceback import format_exc as fo
 from os import popen
+from random import shuffle
 
 defkey='''
 w×получить изменения
@@ -337,6 +338,7 @@ try:
        send(worked,defkey,w)
        db[w]['ls']=int(time())
   wai=look()
+  shuffle(wai)
 #gotmess###########################################################
  for q in wai:
   added=0

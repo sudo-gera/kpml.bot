@@ -11,35 +11,63 @@ from traceback import format_exc as fo
 from os import popen
 from random import shuffle
 
-defkey='''
-w×получить изменения
-b×изменить кол-во оповещений в день
-b×изменить кол-во отслеживаемых классов
-r×сообщение об ошибке
-'''
-backey='r×отмена'
-d={'w':'default','b':'primary','r':'negative','g':'positive'}
 
-print('\x1b[93m'+asctime()+'\x1b[0m')
+#формат клавиатуры:
+#
+#скнопка|скнопка|скнопка
+#скнопка|скнопка|скнопка
+#скнопка|скнопка|скнопка
+#
+#где с это цвет из набора r - красный, g - зелёный, b - синий, w - белый
+
+defkey='''
+wполучить изменения
+bизменить кол-во оповещений в день
+bизменить кол-во отслеживаемых классов
+rсообщение об ошибке
+'''
+#клавиатура по умолчанию
+backey='rотмена'
+#клавиатура отмены
 
 try:
  token=open('../kpml.bot.token').read()
 except:
  token=''
+#открытие файла с токеном, который нельзя встраивать в код работы бота, ибо код находится в открытом доступе
 try:
  db=loads(open('../kpml.bot.db.json').read())
 except:
  db=loads('{}')
+#открытие базы данных с информацией кому что когда присылать
+admin=['225847803','382227482']
+#список id администрации, это люди, которые получают оповещения об ошибках. Дополнительных полномочий наличие в этом списке не даёт
 
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
-admin=['225847803']
 beg='Изменения в расписании на '
+d={'w':'default','b':'primary','r':'negative','g':'positive'}
+#некоторые константы
+
+#keygen###################################################################
+#функция, которая преобразует клавиатуру в формат вк
+def keygen(id,key):
+ global defkey, db,d
+ if key==None:
+  key=defkey
+ if key==defkey:
+  if db[id]['empty']:
+   key+='g×включить пустые сообщения'
+  else:
+   key+='r×отключить пустые сообщения'
+ key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e[0]]+'","action":{"type":"text","label":"'+e[1:]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
+ key='&keyboard='+key
+ return key
 
 #vkwork###################################################################
-
+#функция обращения к вк, идеально оттестирована, редактировать только в крайнем случае
 def api(path,data=''):
  sleep(1/3)
  if path and path[-1] not in '?&':
@@ -47,14 +75,11 @@ def api(path,data=''):
    path+='&'
   else:
    path+='?'
- print(path,data,time())
-# data=quote(data)
  data=data.encode()
  global token
- print(time())
  ret= loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
- print(path,data,time())
  return ret
+ print(asctime())
 
 def look(a=0):
  q=api('messages.getConversations?count=200&filter=unread&','')
@@ -76,26 +101,15 @@ def look(a=0):
  q=[[w[0],w[1].lower(),w[1]] for w in q]
  return q
 
-def send(text,key='',id=None):
+def send(text,key=None,id=None):
   text=str(text)
   global q
   if id==None:
    id=q[0]
-  global d
-  global defkey
-  if key=='':
-   key=defkey[:]
   while len(text)>4096:
    send(text[:4096],key,id)
    text=text[4096:]
-  if key==defkey:
-   if db[id]['empty']:
-    key+='g×включить пустые сообщения'
-   else:
-    key+='r×отключить пустые сообщения'
-  key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e.split('×')[0]]+'","action":{"type":"text","label":"'+e.split('×')[1]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
-  key='&keyboard='+key
-  text=str(text)
+  key=keygen(id,key)
   qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text+key)
   print(qq)
   r=1

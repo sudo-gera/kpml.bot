@@ -11,6 +11,15 @@ from traceback import format_exc as fo
 from os import popen
 from random import shuffle
 
+path='../'
+rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
+emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
+rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
+edw='mon tue wed thu fri sat sun'.split()
+beg='Изменения в расписании на '
+d={'w':'default','b':'primary','r':'negative','g':'positive'}
+#некоторые константы
+
 
 #формат клавиатуры:
 #
@@ -43,15 +52,6 @@ except:
 admin=['225847803','382227482']
 #admin=['225847803']
 #список id администрации, это люди, которые получают оповещения об ошибках. Дополнительных полномочий наличие в этом списке не даёт
-
-path='../'
-rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
-emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
-rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
-edw='mon tue wed thu fri sat sun'.split()
-beg='Изменения в расписании на '
-d={'w':'default','b':'primary','r':'negative','g':'positive'}
-#некоторые константы
 
 #keygen###################################################################
 #функция, которая преобразует клавиатуру в формат вк

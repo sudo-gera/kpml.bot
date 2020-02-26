@@ -31,12 +31,12 @@ backey='rотмена'
 #клавиатура отмены
 
 try:
- token=open('../kpml.bot.token').read()
+ token=open(path+'kpml.bot.token').read()
 except:
  token=''
 #открытие файла с токеном, который нельзя встраивать в код работы бота, ибо код находится в открытом доступе
 try:
- db=loads(open('../kpml.bot.db.json').read())
+ db=loads(open(path+'kpml.bot.db.json').read())
 except:
  db=loads('{}')
 #открытие базы данных с информацией кому что когда присылать
@@ -44,7 +44,7 @@ admin=['225847803','382227482']
 #admin=['225847803']
 #список id администрации, это люди, которые получают оповещения об ошибках. Дополнительных полномочий наличие в этом списке не даёт
 
-path='..'
+path='../'
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
@@ -176,13 +176,13 @@ def today():
 
 def parse():
  try:
-  q=open('../kpml.bot.html').read()
+  q=open(path+'kpml.bot.html').read()
  except:
   q=str(time()-400)+'\x01'
  bt=q.split('\x01')[0]
  if time()-float(bt)>300:
   q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
-  open('../kpml.bot.html','w').write(str(time())+'\x01'+q)
+  open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)
  else:
   q=q.split('\x01')[1]
  #opened
@@ -225,7 +225,6 @@ def repa(day,mon):
  q=[w[1] for w in q if w[1]]
  q='\n'.join(q)
  return q
-
 
 def uft(q,w,e):
   ee=e
@@ -279,7 +278,6 @@ def view(day=None,mon=None,id=None):
   log(fo())
   return ['''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii''']
-
 
 def work(id,empty=0):
  q,w,e,dw=today()
@@ -491,6 +489,6 @@ except:
  print(fo())
  log(fo())
 
-open('../kpml.bot.db.json','w').write(dumps(db))
+open(path+'kpml.bot.db.json','w').write(dumps(db))
 
 

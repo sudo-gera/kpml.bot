@@ -392,7 +392,7 @@ try:
   elif q[1] == 'len':
    send(len(db.keys()))
   elif q[1] == 'sub':
-   send(len([w for w in db if db[w]['time']]))
+   send(len([w for w in db if 'time' in db[w] and db[w]['time']]))
   elif q[1] == 'xg':
    send('\n'.join(['vk.com/id'+w+' '+str(db[w]) for w in db.keys()]))
   elif q[1] == 'отмена':

@@ -159,6 +159,7 @@ def parse():
   open('../kpml.bot.html','w').write(str(time())+'\x01'+q)
  else:
   q=q.split('\x01')[1]
+ #opened
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q[:q.index('«Кировский')]
  q=q[q.index('\x01\x02body'):]

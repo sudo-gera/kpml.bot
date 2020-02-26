@@ -40,9 +40,11 @@ try:
 except:
  db=loads('{}')
 #открытие базы данных с информацией кому что когда присылать
-admin=['225847803','382227482']
+#admin=['225847803','382227482']
+admin=['225847803']
 #список id администрации, это люди, которые получают оповещения об ошибках. Дополнительных полномочий наличие в этом списке не даёт
 
+path='..'
 rmo='января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split()
 emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
@@ -123,9 +125,18 @@ def send(text,key=None,id=None):
    if r:
     log(qq)
 
+#отправка сообщения администрации
 def log(q):
- for w in admin:
-  send(str(q),defkey,w)
+ q=str(q)
+ try:
+  a=open(path+'kpml.bot.error').read()
+ except:
+  a=str(time()-400)+'\x08'
+ bt=a.split('\x08')[0]
+ if time()-float(bt)>300 or '\x08'.join(a.split('\x08')[1:]) != q:
+  for w in admin:
+   send(str(q),defkey,w)
+  open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q)
 
 #dates########################################################
 def next(q,w,e,dw=None):

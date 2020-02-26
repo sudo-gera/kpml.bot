@@ -167,7 +167,7 @@ def parse():
  q=q.replace('\x01\x02br ','\n\x01\x02br ')
  q=q.replace('\x01\x02/p\x01','\x01\x02/p\x01\n')
  q=q.split('\x01')
-# q=[w if len(w) < 2 or w[0] != '\x02' else ('\x03'+w[2:] if w[:2] in ['\x02/','\x02!'] else ('\x04'+w[1:-1]+'\x04' if w[-1] == '/' else w))  for w in q]
+ ''' q=[w if len(w) < 2 or w[0] != '\x02' else ('\x03'+w[2:] if w[:2] in ['\x02/','\x02!'] else ('\x04'+w[1:-1]+'\x04' if w[-1] == '/' else w))  for w in q]'''
  q=[w for w in q if w and( w[0] != '\x02' or w[0] == '\x02' and w[-1] == '/')]
  q=['\x01'+w+'\x01' if w[0] == '\x02' else w for w in q]
  q=[w for w in q if w]
@@ -326,7 +326,7 @@ def istm(q):
 
 try:
  wai=[]
-#mainloop#########################################################33
+#mainloop#########################################################
  while wai==[]:
   tn=int(time())
   for w in db.keys():
@@ -343,17 +343,16 @@ try:
  for q in wai:
   added=0
   if q[0] not in db.keys():
-   db[q[0]]=dict()
-   w=q[0]
-   if 'ls' not in db[w].keys():
-    db[w]['ls']=0
-   if 'time' not in db[w].keys():
-    db[w]['time']=[]
-   if 'class' not in db[w].keys():
-    db[w]['class']=[]
-   if 'empty' not in db[w].keys():
-    db[w]['empty']=0
+   db[q]=dict()
    added=1
+  if 'ls' not in db[w].keys():
+   db[w]['ls']=0
+  if 'time' not in db[w].keys():
+   db[w]['time']=[]
+  if 'class' not in db[w].keys():
+   db[w]['class']=[]
+  if 'empty' not in db[w].keys():
+   db[w]['empty']=0
 #logic###############################################################
   if q[1] == '':
    send('текстом, пожалуйста')

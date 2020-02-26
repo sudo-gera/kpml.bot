@@ -67,7 +67,7 @@ def keygen(id,key):
  return key
 
 #vkwork###################################################################
-#функция обращения к вк, идеально оттестирована, редактировать только в крайнем случае
+#функция обращения к вк, идеально работает, редактировать только в крайнем случае
 def api(path,data=''):
  sleep(1/3)
  if path and path[-1] not in '?&':
@@ -81,6 +81,7 @@ def api(path,data=''):
  return ret
  print(asctime())
 
+#получить последние сообщения в формате [[id,сообщение],[id,сообщение],[id,сообщение]]
 def look(a=0):
  q=api('messages.getConversations?count=200&filter=unread&','')
  if 'response' not in q.keys():

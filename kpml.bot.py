@@ -370,15 +370,15 @@ try:
   if q[0] not in db.keys():
    db[q[0]]=dict()
    added=1
-  w=q[0]
-  if 'ls' not in db[w].keys():
-   db[w]['ls']=0
-  if 'time' not in db[w].keys():
-   db[w]['time']=[]
-  if 'class' not in db[w].keys():
-   db[w]['class']=[]
-  if 'empty' not in db[w].keys():
-   db[w]['empty']=0
+  for w in db:
+   if 'ls' not in db[w].keys():
+    db[w]['ls']=0
+   if 'time' not in db[w].keys():
+    db[w]['time']=[]
+   if 'class' not in db[w].keys():
+    db[w]['class']=[]
+   if 'empty' not in db[w].keys():
+    db[w]['empty']=0
 #logic###############################################################
   if q[1] == '':
    send('текстом, пожалуйста')

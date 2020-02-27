@@ -370,6 +370,7 @@ try:
   if q[0] not in db.keys():
    db[q[0]]=dict()
    added=1
+  w=q[0]
   if 'ls' not in db[w].keys():
    db[w]['ls']=0
   if 'time' not in db[w].keys():

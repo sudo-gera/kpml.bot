@@ -133,7 +133,7 @@ def log(q):
  except:
   a=str(time()-400)+'\x08'
  bt=a.split('\x08')[0]
- if time()-float(bt)>300 or '\x08'.join(a.split('\x08')[1:]) != q:
+ if time()-float(bt)>100 or '\x08'.join(a.split('\x08')[1:]) != q:
   for w in admin:
    send(str(q),defkey,w)
   open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q)

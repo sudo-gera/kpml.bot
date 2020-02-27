@@ -368,7 +368,7 @@ try:
  for q in wai:
   added=0
   if q[0] not in db.keys():
-   db[q]=dict()
+   db[q[0]]=dict()
    added=1
   if 'ls' not in db[w].keys():
    db[w]['ls']=0

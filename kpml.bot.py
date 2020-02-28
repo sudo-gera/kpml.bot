@@ -276,7 +276,7 @@ def view(day=None,mon=None,id=None):
    parsed=out()
   else:
    parsed=repa(day,mon)
-   if parsed:
+   if ' '.join([w for w in parsed.split('\x01') if w and w[0]!='\x02']).lower().split()!='изменений нет'.split():
     parsed='Происходит тестирование алгоритма, находящего изменения для вашего класса. Предлагаем вам помогать находить ошибки. Сейчас вы подписаны на классы: '+' '.join(db[id]['class'])+'\nИзменения по всем классам:\n'+parsed+'\n<=========================>\n<===================>изменения по вашим классам\n'
     for w in db[id]['class']:
      parsed+=get(day,mon,w)+'\n'

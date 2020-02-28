@@ -260,6 +260,8 @@ def attach(q):
   w[0]=uft(w[0],'img','src')
   w[0]=uft(w[0],'a','href')
  q=[w[0] for w in q if w and w[0][0]!='\x02']
+ q=[w.strip() for w in q]
+ q='\n'.join(q)
  return q
 
 def get(day,mon,clas):
@@ -267,8 +269,7 @@ def get(day,mon,clas):
  text='\n'.join([w for w in text.split('\n') if clas in w])
  return text
 
-print([repa(29,1)])
-exit()
+
 def view(day=None,mon=None,id=None):
  try:
   if day==None and mon==None and id==None:
@@ -280,28 +281,28 @@ def view(day=None,mon=None,id=None):
     for w in db[id]['class']:
      parsed+=get(day,mon,w)+'\n'
   parsed=attach(parsed)
-  if len(parsed)==1 and parsed[0].lower()=='изменений нет':
-   parsed=[]
+  if parsed.lower().split()=='изменений нет'.split():
+   parsed=''
   return parsed
  except:
   log(fo())
-  return ['''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
-Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii''']
+  return '''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
+Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii'''
 
 def work(id,empty=0):
  q,w,e,dw=today()
  td=view(q,w,id)
  if td or empty==0:
-  td=['Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':']+ td
+  td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':'+ td
  r,t,y,dw=next(q,w,e,dw)
  tn=view(r,t,id)
  if tn or empty==0:
-  tn=['Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':']+tn
+  tn='Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':'+tn
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
-  if td+tn:
-   q=td+['<=====================>']+tn
+  if td.split()+tn.split():
+   q=td+'<=====================>'+tn
   else:
-   q=[]
+   q=''
  else:
   q=tn
  q=[w.strip() for w in q if w]

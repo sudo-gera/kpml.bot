@@ -267,7 +267,8 @@ def get(day,mon,clas):
  text='\n'.join([w for w in text.split('\n') if clas in w])
  return text
 
-
+print([repa(29,1)])
+exit()
 def view(day=None,mon=None,id=None):
  try:
   if day==None and mon==None and id==None:

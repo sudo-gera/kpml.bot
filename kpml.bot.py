@@ -224,7 +224,15 @@ def repa(day,mon):
    w[1]=''
  q=[w[1] for w in q if w[1]]
  q='\n'.join(q)
- return q
+ e=q
+ q=q.strip()
+ if q[:4]=='2020':
+  q=q[4:]
+  q=q.strip()
+  if q[:4].lower()=='года':
+   q=q[4:]
+   e=e[e.index(q):]
+ return e
 
 def uft(q,w,e):
   ee=e

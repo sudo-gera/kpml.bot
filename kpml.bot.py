@@ -249,10 +249,6 @@ def repa(day,mon):
    e=e[e.index(q):]
  return e
 
-for w in range(5):
- print(repa(w,2),'lllllllll')
-exit()
-
 def uft(q,w,e):
   ee=e
   if q[:len(w)+2]=='\x02'+w+' ':

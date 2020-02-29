@@ -216,8 +216,23 @@ def repa(day,mon):
  q=[[w[0],rmo[mon].join(w[1:])] for w in q]
  for w in q:
   for e in w[0]:
-   if not e.isdigit():
+   if e not in '1234567890-':
     w[0]=w[0].replace(e,'\0')
+  w[0]=w[0].split('\0')
+  w[0]=[e for e in w[0] if e]
+  w[0]=[e.replace('-','\0-\0') for e in w[0]]
+  w[0]='\0'.join(w[0])
+  w[0]=w[0].split('\0')
+  w[0]=[w[0][e] if e==0 or w[0][e-1]!='-' or w[0][e]!='-' else '' for e in range(len(w[0]))]
+  w[0]=[e for e in w[0] if e]
+  for e in range(1,len(w[0])-1):
+   if w[0][e]=='-':
+    w[0][e]='\0'.join(list(map(str,range(int(w[0][e-1]),int(w[0][e+1])))))
+  if w[0][0]=='-':
+   w[0]=w[0][1:]
+  if w[0][-1]=='-':
+   w[0]=w[0][:-1]
+  w[0]='\0'.join(w[0])
   w[0]=w[0].split('\0')
   w[0]=[int(e) for e in w[0] if e]
   if day not in w[0]:
@@ -233,6 +248,10 @@ def repa(day,mon):
    q=q[4:]
    e=e[e.index(q):]
  return e
+
+for w in range(5):
+ print(repa(w,2),'lllllllll')
+exit()
 
 def uft(q,w,e):
   ee=e

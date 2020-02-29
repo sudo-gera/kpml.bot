@@ -423,7 +423,7 @@ try:
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:
    tmp=view()
-   tmp='\n'.join(tmp)
+   tmp=tmp
    send(tmp)
   elif q[1] == 'отключить пустые сообщения' or q[1] == 'пусто' and db[q[0]]['empty']==0:
    db[q[0]]['empty']=1

@@ -181,8 +181,11 @@ def parse():
   q=str(time()-400)+'\x01'
  bt=q.split('\x01')[0]
  if time()-float(bt)>300:
-  q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
-  open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)
+  try:
+   q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+   open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)
+  except:
+   q=q.split('\x01')[1]
  else:
   q=q.split('\x01')[1]
  #opened

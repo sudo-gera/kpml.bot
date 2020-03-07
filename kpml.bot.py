@@ -316,8 +316,6 @@ def get(day,mon,clas):
  q='\n'.join(q)
  return q
 
-print(get(11,2,'11А'))
-exit()
 
 def view(day=None,mon=None,id=None):
  try:

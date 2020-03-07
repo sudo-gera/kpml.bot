@@ -7,7 +7,7 @@ from urllib.parse import quote
 from time import sleep
 from time import time
 from time import asctime
-from traceback import format_exc as fo
+from traceback import format_exc as error
 from os import popen
 from random import shuffle
 
@@ -185,6 +185,7 @@ def parse():
    q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)
   except:
+   log(error())
    q=q.split('\x01')[1]
  else:
   q=q.split('\x01')[1]
@@ -282,11 +283,41 @@ def attach(q):
  q='\n'.join(q)
  return q
 
-def get(day,mon,clas):
- text=repa(int(day),int(mon))
- text='\n'.join([w for w in text.split('\n') if clas in w])
- return text
+def isin(q,c):
+ q=q.replace(' классы ',' ')
+ q=q.strip()
+ if q=='':
+  return 0
+ if ',' in q:
+  return sum([isin(w,c) for w in q.split(',')])
+ if ' и ' in q:
+  return sum([isin(w,c) for w in q.split(' и ')])
+ if q==c:
+  return 1
+ if q[-2:] == '-е':
+  q=q[:-2]
+  if [w for w in q if w not in '1234567890-']:
+   return 0
+  q=list(map(int,q.split('-')))
+  for w in c:
+   if not w.isdigit():
+    c=c.replace(w,'')
+  c=int(c)
+  if min(q)<=c<=max(q):
+   return 1
+ return 0
 
+def get(day,mon,clas):
+ q=repa(int(day),int(mon))
+ q=q.split('\n')
+ q=[w.split(' - ') for w in q]
+ q=[[w[0],' - '.join(w[1:])] for w in q]
+ q=[w[1] for w in q if isin(w[0],clas)]
+ q='\n'.join(q)
+ return q
+
+print(get(11,2,'11А'))
+exit()
 
 def view(day=None,mon=None,id=None):
  try:
@@ -304,7 +335,7 @@ def view(day=None,mon=None,id=None):
    parsed=''
   return parsed
  except:
-  log(fo())
+  log(error())
   return '''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii'''
 
@@ -516,8 +547,8 @@ try:
 если твоё приложение не поддерживает работу с клавиатурами, то напиши мне команду help
 ''')
 except:
- print(fo())
- log(fo())
+ print(error())
+ log(error())
 
 open(path+'kpml.bot.db.json','w').write(dumps(db))
 

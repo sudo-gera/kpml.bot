@@ -61,9 +61,9 @@ def keygen(id,key):
   key=defkey
  if key==defkey:
   if db[id]['empty']:
-   key+='g×включить пустые сообщения'
+   key+='gвключить пустые сообщения'
   else:
-   key+='r×отключить пустые сообщения'
+   key+='rотключить пустые сообщения'
  key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e[0]]+'","action":{"type":"text","label":"'+e[1:]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
  key='&keyboard='+key
  return key

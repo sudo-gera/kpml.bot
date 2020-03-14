@@ -497,7 +497,7 @@ try:
   elif q[1] == 'xg':
    send('\n'.join(['vk.com/id'+w+' '+str(db[w]) for w in db.keys()]))
   elif q[1] == 'sw':
-   send('\n'.join(['vk.com/id'+w+' class: '+str(db[w]['class'])+' time: '+str([str(e//3600+3)+':'+str(e//60%60) for e in db[w]['time']]) for w in db.keys()]))
+   send('\n'.join(['vk.com/id'+w+' class: '+str(db[w]['class'] if 'class' in db[w] else 0)+' time: '+str([str(e//3600+3)+':'+str(e//60%60) for e in db[w]['time']]) for w in db.keys()]))
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:

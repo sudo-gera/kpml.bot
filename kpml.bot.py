@@ -325,7 +325,9 @@ def view(day=None,mon=None,id=None):
   else:
    parsed=''
    for w in db[id]['class']:
-    parsed+=w+': '+get(day,mon,w)+'\n'
+    tj=get(day,mon,w)
+    if tj:
+     parsed+=w+': '+tj+'\n'
   parsed=attach(parsed)
   return parsed
  except:
@@ -337,11 +339,11 @@ def work(id,empty=0):
  q,w,e,dw=today()
  td=view(q,w,id)
  if td or empty==0:
-  td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':'+ td
+  td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':\n'+ td
  r,t,y,dw=next(q,w,e,dw)
  tn=view(r,t,id)
  if tn or empty==0:
-  tn='Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':'+tn
+  tn='Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':\n'+tn
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   if td.split()+tn.split():
    q=td+'<=====================>'+tn

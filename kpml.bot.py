@@ -496,6 +496,8 @@ try:
    send(len([w for w in db if 'time' in db[w] and db[w]['time']]))
   elif q[1] == 'xg':
    send('\n'.join(['vk.com/id'+w+' '+str(db[w]) for w in db.keys()]))
+  elif q[1] == 'sw':
+   send('\n'.join(['vk.com/id'+w+' class: '+db[w]['class']+' time: '+str(db[w]['time']//3600+3)+':'+str(db[w]['time']//60%60) for w in db.keys()]))
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:

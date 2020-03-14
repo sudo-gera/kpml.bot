@@ -94,7 +94,7 @@ def keygen(id,key):
  global defkey, db,d
  if key==None:
   key=defkey
- if key==optkey:
+ if key==setkey:
   if db[id]['empty']:
    key+='gвключить пустые сообщения'
   else:

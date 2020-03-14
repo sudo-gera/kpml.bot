@@ -317,20 +317,16 @@ def get(day,mon,clas):
  return q
 
 
+
 def view(day=None,mon=None,id=None):
  try:
   if day==None and mon==None and id==None:
    parsed=out()
   else:
-   parsed=repa(day,mon)
-   if ' '.join([w for w in parsed.split('\x01') if w and w[0]!='\x02']).lower().split()!='изменений нет'.split() and ' '.join([w for w in parsed.split('\x01') if w and w[0]!='\x02']).lower().split()!=[]:
-    parsed='Происходит тестирование алгоритма, находящего изменения для вашего класса. Предлагаем вам помогать находить ошибки. Сейчас вы подписаны на классы: '+' '.join(db[id]['class'])+'\nИзменения по всем классам:\n'+parsed+'\n<=========================>\n<===================>изменения по вашим классам\n'
-    for w in db[id]['class']:
-     parsed+=get(day,mon,w)+'\n'
-    parsed+='\u212D\nОтнеситесь к этому с пониманием, если вы видите в списке всех изменений то, которое должно было отправиться к вам, но его нет среди изменений по вашему классу, значит, если бы не тестирование то вы бы его не увидели'
-  parsed=attach(parsed)
-  if parsed.lower().split()=='изменений нет'.split():
    parsed=''
+   for w in db[id]['class']:
+    parsed+=w+': '+get(day,mon,w)+'\n'
+  parsed=attach(parsed)
   return parsed
  except:
   log(error())

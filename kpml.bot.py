@@ -116,7 +116,6 @@ def api(path,data=''):
  global token
  ret= loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
  return ret
- print(asctime())
 
 #получить последние сообщения в формате [[id,сообщение],[id,сообщение],[id,сообщение]]
 def look(a=0):
@@ -149,7 +148,6 @@ def send(text,key=None,id=None):
    text=text[4096:]
   key=keygen(id,key)
   qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text+key)
-  print(qq)
   r=1
   if list(qq.keys())!=['response']:
    try:
@@ -169,8 +167,11 @@ def log(q):
   a=str(time()-400)+'\x08'
  bt=a.split('\x08')[0]
  if time()-float(bt)>100 or '\x08'.join(a.split('\x08')[1:]) != q:
-  for w in admin:
-   send(str(q),defkey,w)
+  try:
+   for w in admin:
+    send(str(q),defkey,w)
+  except:
+   print(q,error())
   open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q)
 
 #dates########################################################
@@ -451,11 +452,11 @@ def isktm(q):
   return 1
  return 0
 
-for w in db.keys():
- if w.isdigit():
-  if db[w]['empty']==0:
-   db[w]['empty']=1
-   send('В связи с тем, что не все пользователи разобрались в настройке бота, администрацией было принято решение о включении для всех пользователей режима доставки только содержащих информацию сообщений. Если вы желаете получать оповещения строго по расписанию, не зависимо от того, содержит ли оно изменения в расписании или нет, вы можете включить это в настройках бота.',defkey,w)
+#for w in db.keys():
+# if w.isdigit():
+#  if db[w]['empty']==0:
+#   db[w]['empty']=1
+#   send('В связи с тем, что не все пользователи разобрались в настройке бота, администрацией было принято решение о включении для всех пользователей режима доставки только содержащих информацию сообщений. Если вы желаете получать оповещения строго по расписанию, не зависимо от того, содержит ли оно изменения в расписании или нет, вы можете включить это в настройках бота.',defkey,w)
 
 
 try:
@@ -622,7 +623,6 @@ try:
 если твоё приложение не поддерживает работу с клавиатурами, то напиши мне команду help
 ''')
 except:
- print(error())
  log(error())
 
 open(path+'kpml.bot.db.json','w').write(dumps(db))

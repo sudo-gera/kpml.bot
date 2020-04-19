@@ -58,7 +58,7 @@ w11 В|w10 В|w9 В|w8 В|w7 В
 w6 А|w5 А|w4 А|w3 А|w2 А
 w6 Б|w5 Б|w4 Б|w3 Б|w2 Б
 w6 В|w5 В|w4 В|w3 В|w2 В
-w1 А|w1 Б|w1 В|wотмена'''
+w1 А|w1 Б|w1 В|rотмена'''
 #клавиатура выбора класса
 timkey='''
 w04\u205a00|w04\u205a30|w05\u205a00|w05\u205a30
@@ -100,9 +100,9 @@ def keygen(id,key):
    key+='\nrотключить пустые сообщения'
  if key==optkey:
   if db[id]['until']<time():
-   key+='\nвключить рассылку'
+   key+='\ngвключить рассылку'
   else:
-   key+='\nотключить рассылку'
+   key+='\nrотключить рассылку'
  key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e[0]]+'","action":{"type":"text","label":"'+e[1:]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
  key='&keyboard='+key
  return key

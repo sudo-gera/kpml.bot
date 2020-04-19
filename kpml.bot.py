@@ -90,7 +90,7 @@ admin=['225847803','382227482']
 #keygen###################################################################
 #функция, которая преобразует клавиатуру в формат вк
 def keygen(id,key):
- global defkey, db,d
+ global defkey, db,d,optkey
  if key==None:
   key=defkey
  if key==setkey:
@@ -98,7 +98,7 @@ def keygen(id,key):
    key+='\ngвключить пустые сообщения'
   else:
    key+='\nrотключить пустые сообщения'
- if key==optket:
+ if key==optkey:
   if db[id]['until']<time():
    key+='\nвключить рассылку'
   else:

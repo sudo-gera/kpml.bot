@@ -142,16 +142,9 @@ def look(a=0):
  q=[[w[0],w[1].lower(),w[1]] for w in q]
  return q
 
-def send(text,key=None,id=None):
+def basend(text,id):
   text=str(text)
-  global q
-  if id==None:
-   id=q[0]
-  while len(text)>4096:
-   send(text[:4096],key,id)
-   text=text[4096:]
-  key=keygen(id,key)
-  qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text+key)
+  qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
   r=1
   if list(qq.keys())!=['response']:
    try:
@@ -161,6 +154,20 @@ def send(text,key=None,id=None):
     pass
    if r:
     log(qq)
+
+def send(text,key=None,id=None):
+  text=str(text)
+  global q
+  if id==None:
+   id=q[0]
+  while len(text)>4096:
+   send(text[:4096],key,id)
+   text=text[4096:]
+  key=keygen(id,key)
+  try:
+   basend(text+key,id)
+  except:
+   log(error())
 
 #отправка сообщения администрации
 def log(q):
@@ -173,7 +180,7 @@ def log(q):
  if time()-float(bt)>100 or '\x08'.join(a.split('\x08')[1:]) != q:
   try:
    for w in admin:
-    send(str(q),defkey,w)
+    basend(str(q),w)
   except:
    print(q,error())
   open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q)

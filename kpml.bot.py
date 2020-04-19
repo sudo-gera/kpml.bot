@@ -472,8 +472,14 @@ def isktm(q):
 timrer=time()
 for w in [w for w in db if w.isdigit()]:
  db[w]['until']=timrer+2**30
- delete(db[w]['untill'])
-delete(db['time'])
+ try:
+  delete(db[w]['untill'])
+ except:
+  pass
+try:
+ delete(db['time'])
+except:
+ pass
 
 try:
  tn=time()

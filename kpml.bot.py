@@ -473,7 +473,7 @@ try:
  wai=[]
 #mainloop#########################################################
  while wai==[]:
-  tn=int(time()/0)
+  tn=int(time())
   for w in db.keys():
    if w.isdigit() and 'time' in db[w] and 'until' in db[w].keys() and tn<db[w]['until']:
     for e in db[w]['time']:

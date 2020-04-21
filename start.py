@@ -10,7 +10,7 @@ from time import asctime
 from traceback import format_exc as error
 from os import popen
 from random import shuffle
-from os import abspath
+from os.path import abspath
 
 try:
  token=open(path+'kpml.bot.token').read()

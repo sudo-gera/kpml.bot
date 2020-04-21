@@ -11,6 +11,7 @@ from traceback import format_exc as error
 from os import popen
 from random import shuffle
 from os.path import abspath
+from sys import argv
 
 try:
  token=open(path+'kpml.bot.token').read()

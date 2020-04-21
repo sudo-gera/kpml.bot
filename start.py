@@ -35,4 +35,4 @@ except:
     urlopen('https://api.vk.com/method/messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(w)+'&v=5.101&access_token='+token,data=('message='+q).encode()).read()
   except:
    print(q,error())
-  open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q)
+  open('/'.join(abspath(argv[0]).split('/')[:-1])+'/kpml.bot.error','w').write(str(time())+'\x08'+q)

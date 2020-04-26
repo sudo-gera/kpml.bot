@@ -511,6 +511,7 @@ try:
   shuffle(wai)
 #gotmess###########################################################
  for q in wai:
+  print(q[1])
   added=0
   if q[0] not in db.keys():
    db[q[0]]=dict()

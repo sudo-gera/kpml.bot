@@ -473,13 +473,14 @@ definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[
 
 try:
  tn=time()
-# for w in [w for w in db if w.isdigit()]:
- for w in [w for w in db if w in admin]:
+ for w in [w for w in db if w.isdigit()]:
+# for w in [w for w in db if w in admin]:
   for e in definf:
    if e not in db[w]:
     db[w][e]=definf[e]
   if tn-db[w]['until']>2**25:
    delete(db[w])
+  db[w]['lm']=2020
   if today()[2]-db[w]['lm']>0 and today()[1]>5:
    f=[]
    for e in db[w]['class']:

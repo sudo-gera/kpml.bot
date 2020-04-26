@@ -470,10 +470,10 @@ try:
  for w in [w for w in db if w.isdigit()]:
   if tn-db[w]['until']>2**25:
    delete(db[w])
- wai=[]
 except:
  pass
 try:
+ wai=[]
 #mainloop#########################################################
  while wai==[]:
   tn=int(time())

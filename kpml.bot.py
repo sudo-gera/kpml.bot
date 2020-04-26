@@ -480,7 +480,10 @@ try:
     db[w][e]=definf[e]
   if tn-db[w]['until']>2**25:
    delete(db[w])
-  db[w]['lm']=2020
+  try:
+   delete(db[w]['untill'])
+  except:
+   pass
   if today()[2]-db[w]['lm']>0 and today()[1]>5:
    f=[]
    for e in db[w]['class']:

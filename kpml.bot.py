@@ -84,8 +84,8 @@ try:
 except:
  db=loads('{}')
 #открытие базы данных с информацией кому что когда присылать
-admin=['225847803','382227482']
-#admin=['225847803']
+#admin=['225847803','382227482']
+admin=['225847803']
 #список id администрации, это люди, которые получают оповещения об ошибках. Дополнительных полномочий наличие в этом списке не даёт
 
 #keygen###################################################################
@@ -471,25 +471,26 @@ def isktm(q):
 
 try:
  tn=time()
- for w in [w for w in db if w.isdigit()]:
+# for w in [w for w in db if w.isdigit()]:
+ for w in [w for w in db if w in admin]:
   for e in definf:
    if e not in db[w]:
     db[w][e]=definf[e]
- if tn-db[w]['until']>2**25:
+  if tn-db[w]['until']>2**25:
    delete(db[w])
- if tn-db[w]['lm']>31556926:
-  f=[]
-  for e in db[w]['class']:
-   i=''
-   while e and e[0].isdigit():
-    i+=e[0]
-    e=e[1:]
-   i=str(int(i)+1)
-   e=i+e
-   f+=[e]
-  send('теперь вы подписаны классы: \n'+' '.join(f)+'\nраньше вы были подписаны на классы: \n'+' '.join(db[w]['class']))
-  db[w]['class']=f[:]
-  db[w]['lm']=time()
+  if tn-db[w]['lm']>31556926:
+   f=[]
+   for e in db[w]['class']:
+    i=''
+    while e and e[0].isdigit():
+     i+=e[0]
+     e=e[1:]
+    i=str(int(i)+1)
+    e=i+e
+    f+=[e]
+   send('теперь вы подписаны классы: \n'+' '.join(f)+'\nраньше вы были подписаны на классы: \n'+' '.join(db[w]['class']))
+   db[w]['class']=f[:]
+   db[w]['lm']=time()
  wai=[]
 #mainloop#########################################################
  while wai==[]:

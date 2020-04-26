@@ -474,7 +474,7 @@ try:
  for w in [w for w in db if w.isdigit()]:
   for e in definf:
    if e not in db[w]:
-    db[w][e]=defint[e]
+    db[w][e]=definf[e]
  if tn-db[w]['until']>2**25:
    delete(db[w])
  if tn-db[w]['lm']>31556926:
@@ -514,7 +514,7 @@ try:
    added=1
   for w in definf:
    if w not in db[q[0]]:
-    db[q[0]][w]=defint[w]
+    db[q[0]][w]=definf[w]
 #logic###############################################################
   if q[1] == '':
    send('текстом, пожалуйста')

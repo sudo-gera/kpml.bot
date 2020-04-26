@@ -18,7 +18,6 @@ rdw='понедельник вторник среда четверг пятни�
 edw='mon tue wed thu fri sat sun'.split()
 beg='Изменения в расписании на '
 d={'w':'default','b':'primary','r':'negative','g':'positive'}
-definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[2]}
 #некоторые константы
 
 
@@ -470,6 +469,7 @@ def isktm(q):
   return 1
  return 0
 
+definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[2]}
 
 try:
  tn=time()

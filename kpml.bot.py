@@ -228,15 +228,18 @@ def parse():
  except:
   q=str(time()-400)+'\x01'
  bt=q.split('\x01')[0]
+ oq=q.split('\x01')[1]
  if time()-float(bt)>300:
   try:
    q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+   if q!=oq:
+    log('site changed')
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)
   except:
    log(error())
-   q=q.split('\x01')[1]
+   q=oq
  else:
-  q=q.split('\x01')[1]
+  q=oq
  #opened
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q[:q.index('«Кировский')]

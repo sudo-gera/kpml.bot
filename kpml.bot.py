@@ -471,7 +471,6 @@ def isktm(q):
  return 0
 
 
-log('it started')
 try:
  tn=time()
 # for w in [w for w in db if w.isdigit()]:

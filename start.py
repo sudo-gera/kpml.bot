@@ -34,7 +34,9 @@ except:
   try:
    for w in admin:
     sleep(1/3)
-    loads(urlopen('https://api.vk.com/method/messages.send?random_id='+str(time()).replace('.','0')+'&user_id='+str(w)+'&v=5.101&access_token='+token,data=('message='+q).encode()).read().decode())['response']
+    q=loads(urlopen('https://api.vk.com/method/messages.send?random_id='+str(time()).replace('.','0')+'&user_id='+str(w)+'&v=5.101&access_token='+token,data=('message='+q).encode()).read().decode())
+    if 'response' not in q:
+     print(q)
   except:
    print(q,error())
   open('/'.join(abspath(argv[0]).split('/')[:-1])+'/kpml.bot.error','w').write(str(time())+'\x08'+q)

@@ -471,6 +471,9 @@ try:
   if tn-db[w]['until']>2**25:
    delete(db[w])
  wai=[]
+except:
+ pass
+try:
 #mainloop#########################################################
  while wai==[]:
   tn=int(time())
@@ -501,6 +504,8 @@ try:
    db[w]['class']=[]
   if 'empty' not in db[w].keys():
    db[w]['empty']=1
+  if 'until' not in db[w].keys():
+   db[w]['until']=time()+2**30
 #logic###############################################################
   if q[1] == '':
    send('текстом, пожалуйста')

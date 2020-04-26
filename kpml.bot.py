@@ -18,7 +18,7 @@ rdw='понедельник вторник среда четверг пятни�
 edw='mon tue wed thu fri sat sun'.split()
 beg='Изменения в расписании на '
 d={'w':'default','b':'primary','r':'negative','g':'positive'}
-definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':(time()-31556926/2)//31556926+31556926/2}
+definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[2]}
 #некоторые константы
 
 
@@ -478,7 +478,7 @@ try:
     db[w][e]=definf[e]
   if tn-db[w]['until']>2**25:
    delete(db[w])
-  if tn-db[w]['lm']>31556926:
+  if today()[2]-db[w]['lm']>0 and today()[1]>5:
    f=[]
    for e in db[w]['class']:
     i=''
@@ -490,7 +490,7 @@ try:
     f+=[e]
    send('теперь вы подписаны классы: \n'+' '.join(f)+'\nраньше вы были подписаны на классы: \n'+' '.join(db[w]['class']),w)
    db[w]['class']=f[:]
-   db[w]['lm']=time()
+   db[w]['lm']=today()[2]
  wai=[]
 #mainloop#########################################################
  while wai==[]:

@@ -123,7 +123,7 @@ def api(path,data=''):
 
 #получить последние сообщения в формате [[id,сообщение],[id,сообщение],[id,сообщение]]
 def look(a=0):
- q=api('messages.getConversations?count=200&filter=unread&','')
+ q=api('messages.getConversations?count=200&filter=unanswered&','')
  if 'response' not in q.keys():
   r=1
   try:
@@ -150,6 +150,8 @@ def basend(text,id):
    try:
     if qq['error']['error_code'] in [901,10,5]:
      r=0
+     if qq['error']['error_code'] in [901]:
+      db['ban']=2**40
    except:
     pass
    if r:
@@ -469,7 +471,7 @@ def isktm(q):
   return 1
  return 0
 
-definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[2]}
+definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[2],'ban':0}
 
 try:
  tn=time()
@@ -519,6 +521,9 @@ try:
   for w in definf:
    if w not in db[q[0]]:
     db[q[0]][w]=definf[w]
+  if db[q[0]]['ban']>0:
+   db[q[0]]['ban']-=1
+   continue
 #logic###############################################################
   if q[1] == '':
    send('текстом, пожалуйста')

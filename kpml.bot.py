@@ -262,7 +262,7 @@ def parse():
 
 def out():
  q=parse()
- if q.strip():
+ if ''.join(q).strip():
   t='<===========>\n'+beg
   q=t+t.join(q)
   return q

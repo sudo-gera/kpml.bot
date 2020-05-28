@@ -1,1 +1,4 @@
-python3 -m py_compile kpml.bot.py && git commit -am "send" && git push
+if [ $# -lt 1 ]
+then echo "needs comment"
+else python3 -m py_compile kpml.bot.py && rm -r __pycache__ && git commit -am "$1" && git push
+fi

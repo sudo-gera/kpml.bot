@@ -28,17 +28,51 @@ d={'w':'default','b':'primary','r':'negative','g':'positive'}
 #скнопка|скнопка|скнопка
 #
 #где с это цвет из набора r - красный, g - зелёный, b - синий, w - белый
+#цвета определены для пк версии без цветоискажающих программ. На телефоне могут отличаться
 
 defkey='''
-wполучить изменения
-bизменить кол-во оповещений в день
-bизменить кол-во отслеживаемых классов
+gполучить изменения
+wнастройки
 rсообщение об ошибке
 '''
 #клавиатура по умолчанию
+optkey='''
+gуказать класс
+gуказать время
+wрасширенные настройки
+rотмена
+'''
+#клавиатура быстрой настройки
+setkey='''
+bизменить кол-во оповещений в день
+bизменить кол-во отслеживаемых классов
+rотмена
+'''
+#клавиатура настроек
 backey='rотмена'
 #клавиатура отмены
-
+clskey='''
+w11 А|w10 А|w9 А|w8 А|w7 А
+w11 Б|w10 Б|w9 Б|w8 Б|w7 Б
+w11 В|w10 В|w9 В|w8 В|w7 В
+w6 А|w5 А|w4 А|w3 А|w2 А
+w6 Б|w5 Б|w4 Б|w3 Б|w2 Б
+w6 В|w5 В|w4 В|w3 В|w2 В
+w1 А|w1 Б|w1 В|rотмена'''
+#клавиатура выбора класса
+timkey='''
+w04\u205a00|w04\u205a30|w05\u205a00|w05\u205a30
+w06\u205a00|w06\u205a30|w07\u205a00|w07\u205a30
+w07\u205a00|w07\u205a30|w09\u205a00|w09\u205a30
+w10\u205a00|w10\u205a30|w11\u205a00|w11\u205a30
+w12\u205a00|w12\u205a30|w13\u205a00|w13\u205a30
+w14\u205a00|w14\u205a30|w15\u205a00|w15\u205a30
+w16\u205a00|w16\u205a30|w17\u205a00|w17\u205a30
+w17\u205a00|w17\u205a30|w19\u205a00|w19\u205a30
+w20\u205a00|w20\u205a30|w21\u205a00|w21\u205a30
+w22\u205a00|w22\u205a30|w23\u205a00|w23\u205a30
+'''
+#клавиатура выбора времени
 try:
  token=open(path+'kpml.bot.token').read()
 except:
@@ -49,21 +83,26 @@ try:
 except:
  db=loads('{}')
 #открытие базы данных с информацией кому что когда присылать
-admin=['225847803','382227482']
-#admin=['225847803']
+#admin=['225847803','382227482']
+admin=['225847803']
 #список id администрации, это люди, которые получают оповещения об ошибках. Дополнительных полномочий наличие в этом списке не даёт
 
 #keygen###################################################################
 #функция, которая преобразует клавиатуру в формат вк
 def keygen(id,key):
- global defkey, db,d
+ global defkey, db,d,optkey
  if key==None:
   key=defkey
- if key==defkey:
+ if key==setkey:
   if db[id]['empty']:
-   key+='g×включить пустые сообщения'
+   key+='\ngвключить пустые сообщения'
   else:
-   key+='r×отключить пустые сообщения'
+   key+='\nrотключить пустые сообщения'
+ if key==optkey:
+  if db[id]['until']<time():
+   key+='\ngвключить рассылку'
+  else:
+   key+='\nrотключить рассылку'
  key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e[0]]+'","action":{"type":"text","label":"'+e[1:]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
  key='&keyboard='+key
  return key
@@ -81,11 +120,10 @@ def api(path,data=''):
  global token
  ret= loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
  return ret
- print(asctime())
 
 #получить последние сообщения в формате [[id,сообщение],[id,сообщение],[id,сообщение]]
 def look(a=0):
- q=api('messages.getConversations?count=200&filter=unread&','')
+ q=api('messages.getConversations?count=200&filter=unanswered&','')
  if 'response' not in q.keys():
   r=1
   try:
@@ -104,6 +142,21 @@ def look(a=0):
  q=[[w[0],w[1].lower(),w[1]] for w in q]
  return q
 
+def basend(text,id):
+  text=str(text)
+  qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
+  r=1
+  if list(qq.keys())!=['response']:
+   try:
+    if qq['error']['error_code'] in [901,10,5]:
+     r=0
+     if qq['error']['error_code'] in [901]:
+      db['ban']=2**40
+   except:
+    pass
+   if r:
+    log(qq)
+
 def send(text,key=None,id=None):
   text=str(text)
   global q
@@ -113,17 +166,10 @@ def send(text,key=None,id=None):
    send(text[:4096],key,id)
    text=text[4096:]
   key=keygen(id,key)
-  qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text+key)
-  print(qq)
-  r=1
-  if list(qq.keys())!=['response']:
-   try:
-    if qq['error']['error_code'] in [901,10,5]:
-     r=0
-   except:
-    pass
-   if r:
-    log(qq)
+  try:
+   basend(text+key,id)
+  except:
+   log(error())
 
 #отправка сообщения администрации
 def log(q):
@@ -134,8 +180,11 @@ def log(q):
   a=str(time()-400)+'\x08'
  bt=a.split('\x08')[0]
  if time()-float(bt)>100 or '\x08'.join(a.split('\x08')[1:]) != q:
-  for w in admin:
-   send(str(q),defkey,w)
+  try:
+   for w in admin:
+    basend(str(q),w)
+  except:
+   print(q,error())
   open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q)
 
 #dates########################################################
@@ -181,15 +230,18 @@ def parse():
  except:
   q=str(time()-400)+'\x01'
  bt=q.split('\x01')[0]
+ oq=q.split('\x01')[1]
  if time()-float(bt)>300:
   try:
    q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+   if q!=oq:
+    log('site changed')
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)
   except:
    log(error())
-   q=q.split('\x01')[1]
+   q=oq
  else:
-  q=q.split('\x01')[1]
+  q=oq
  #opened
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q[:q.index('«Кировский')]
@@ -211,9 +263,12 @@ def parse():
 
 def out():
  q=parse()
- t='<===========>\n'+beg
- q=t+t.join(q)
- return q
+ if ''.join(q).strip():
+  t='<===========>\n'+beg
+  q=t+t.join(q)
+  return q
+ else:
+  return 'изменений нет'
 
 def repa(day,mon):
  q=parse()
@@ -318,20 +373,18 @@ def get(day,mon,clas):
  return q
 
 
+
 def view(day=None,mon=None,id=None):
  try:
   if day==None and mon==None and id==None:
    parsed=out()
   else:
-   parsed=repa(day,mon)
-   if ' '.join([w for w in parsed.split('\x01') if w and w[0]!='\x02']).lower().split()!='изменений нет'.split() and ' '.join([w for w in parsed.split('\x01') if w and w[0]!='\x02']).lower().split()!=[]:
-    parsed='Происходит тестирование алгоритма, находящего изменения для вашего класса. Предлагаем вам помогать находить ошибки. Сейчас вы подписаны на классы: '+' '.join(db[id]['class'])+'\nИзменения по всем классам:\n'+parsed+'\n<=========================>\n<===================>изменения по вашим классам\n'
-    for w in db[id]['class']:
-     parsed+=get(day,mon,w)+'\n'
-    parsed+='\u212D\nОтнеситесь к этому с пониманием, если вы видите в списке всех изменений то, которое должно было отправиться к вам, но его нет среди изменений по вашему классу, значит, если бы не тестирование то вы бы его не увидели'
-  parsed=attach(parsed)
-  if parsed.lower().split()=='изменений нет'.split():
    parsed=''
+   for w in db[id]['class']:
+    tj=get(day,mon,w)
+    if tj:
+     parsed+=w+': '+tj+'\n'
+  parsed=attach(parsed)
   return parsed
  except:
   log(error())
@@ -342,11 +395,11 @@ def work(id,empty=0):
  q,w,e,dw=today()
  td=view(q,w,id)
  if td or empty==0:
-  td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':'+ td
+  td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':\n'+ td
  r,t,y,dw=next(q,w,e,dw)
  tn=view(r,t,id)
  if tn or empty==0:
-  tn='Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':'+tn
+  tn='Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':\n'+tn
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   if td.split()+tn.split():
    q=td+'<=====================>'+tn
@@ -407,37 +460,71 @@ def istm(q):
   return 1
  return 0
 
+def iskcl(q):
+ q=q.strip()
+ if q.count(' ')==1 and iscl(q.replace(' ','')):
+  return 1
+ return 0
+
+def isktm(q):
+ q=q.strip()
+ if q.count('\u205a')==1 and istm(q.replace('\u205a',':')):
+  return 1
+ return 0
+
+definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[2],'ban':0}
 
 try:
+ tn=time()
+ for w in [w for w in db if w.isdigit()]:
+# for w in [w for w in db if w in admin]:
+  for e in definf:
+   if e not in db[w]:
+    db[w][e]=definf[e]
+  if tn-db[w]['until']>2**25:
+   delete(db[w])
+  if today()[2]-db[w]['lm']>0 and today()[1]>5:
+   f=[]
+   for e in db[w]['class']:
+    i=''
+    while e and e[0].isdigit():
+     i+=e[0]
+     e=e[1:]
+    i=str(int(i)+1)
+    e=i+e
+    f+=[e]
+   send('теперь вы подписаны классы: \n'+' '.join(f)+'\nраньше вы были подписаны на классы: \n'+' '.join(db[w]['class'])+'\nЕсли вы завершили обучение в лицее, перейдите в настройки и отключите оповещения',w)
+   db[w]['class']=f[:]
+   db[w]['lm']=today()[2]
  wai=[]
 #mainloop#########################################################
  while wai==[]:
   tn=int(time())
   for w in db.keys():
-   if w.isdigit() and 'time' in db[w]:
+   if w.isdigit() and 'time' in db[w] and 'until' in db[w].keys() and tn<db[w]['until']:
     for e in db[w]['time']:
      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
       worked=work(w,db[w]['empty'])
       if worked:
+       if db['until']-tn<2**19:
+        worked+='\nобратите внимание, что вы были зарегистрированы очень давно, по этой причине через неделю вы будете отключены от рассылки. Если вы хотите продолжать получать уведомления, то зайдите в настройки и отключите, а затем включите рассылку'
        send(worked,defkey,w)
        db[w]['ls']=int(time())
   wai=look()
   shuffle(wai)
 #gotmess###########################################################
  for q in wai:
+  print(q[1])
   added=0
   if q[0] not in db.keys():
    db[q[0]]=dict()
    added=1
-  w=q[0]
-  if 'ls' not in db[w].keys():
-   db[w]['ls']=0
-  if 'time' not in db[w].keys():
-   db[w]['time']=[]
-  if 'class' not in db[w].keys():
-   db[w]['class']=[]
-  if 'empty' not in db[w].keys():
-   db[w]['empty']=0
+  for w in definf:
+   if w not in db[q[0]]:
+    db[q[0]][w]=definf[w]
+  if db[q[0]]['ban']>0:
+   db[q[0]]['ban']-=1
+   continue
 #logic###############################################################
   if q[1] == '':
    send('текстом, пожалуйста')
@@ -453,6 +540,8 @@ try:
    send(len([w for w in db if 'time' in db[w] and db[w]['time']]))
   elif q[1] == 'xg':
    send('\n'.join(['vk.com/id'+w+' '+str(db[w]) for w in db.keys()]))
+  elif q[1] == 'sw':
+   send('\n'.join(['vk.com/id'+w+' class: '+str(db[w]['class'] if 'class' in db[w] else 0)+' time: '+str([str(e//3600+3)+':'+str(e//60%60) for e in (db[w]['time'] if 'time' in db[w] else [])]) for w in db.keys()]))
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:
@@ -469,7 +558,7 @@ try:
    send('напишите сообщение об ошибке, начните его с символа $',backey)
   elif q[1][0] == '$':
    log('сообщение об ошибке\nавтор vk.com/id'+q[0]+'\n'+q[1][1:])
-   send('сообщение отправлено администрации, с вами скоро свяжутся')
+   send('спасибо за обращение. Именно благодаря вам этот сервис скоро станет лучше. сообщение отправлено администрации, с вами скоро свяжутся')
   elif q[1] == 'lookall':
    send(work(q[0]))
   elif isdt(q[1]):
@@ -478,6 +567,18 @@ try:
    tmp='\n'.join(tmp)
    tmp='Изменения на '+q[1]+':\n'+tmp
    send(tmp)
+  elif iskcl(q[1]):
+   q[1]=q[1].replace(' ','')
+   q[1]=q[1].upper()
+   db[q[0]]['class']=[q[1]]
+   send('теперь вы подписаны на класс '+q[1])
+  elif isktm(q[1]):
+   q[1]=q[1].replace('\u205a',':')
+   ms=q[1]
+   q[1]=q[1].split(':')
+   q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
+   db[q[0]]['time']=[q[1]]
+   send('теперь вы будете узнавать об изменениях в '+ms)
   elif istm(q[1]):
    ms=q[1]
    q[1]=q[1].split(':')
@@ -507,6 +608,14 @@ try:
    else:
     ts='Сейчас вам не приходят оповещения, введите время для оповещения'
    send(ts,backey)
+  elif q[1]=='указать класс':
+   send('выберите свой класс',clskey)
+  elif q[1]=='указать время':
+   send('выберите, когда вас оповещать. Обратите внимание, что оповещение не содержит измений, опубликованных позднее. Любое время, которого здесь нет можно указать через расширенные настройки',timkey)
+  elif q[1]=='настройки':
+   send('панель настроек поможет настроить бота под себя',optkey)
+  elif q[1]=='расширенные настройки':
+   send('панель настроек поможет более точно настроить бота под себя',setkey)
   elif q[1]=='help':
    send('''
 чтобы изменить кол-во отслеживаемых классов напиши слово класс
@@ -529,7 +638,7 @@ try:
     else:
      db[q[0]]['class']+=[q[1]]
      t='количество отслеживаемых классов увеличено классом  '+ms+'.'
-   send(t+' Система оповещения только по выбранным классам сейчас находится в разработке, поэтому вы будете получать оповещения по всем классам')
+   send(t)
   elif q[1] in ['изменить кол-во отслеживаемых классов','класс']:
    ts=db[q[0]]['class'][:]
    lts=len(ts)
@@ -538,6 +647,12 @@ try:
     send('Сейчас вы подписаны на '+str(lts)+' классов:\n'+ts+'\n Введите класс, который вас интересует, если вы подписаны на него, то будете отписаны, если подписаны не были, то будете подписаны. Вводить класс следует указав номер и букву без пробела, если в параллели один класс, то это класс "а". Используйте только русские буквы, а не их латинские аналоги',backey)
    else:
     send('Сейчас вы не подписаны ни на один из классов. Введите класс, на который хотите подписаться.  Вводить класс следует узазав номер и букву без пробела, если в параллели один класс, то это класс "а". Используйте только русские буквы, а не их латинские аналоги',backey)
+  elif q[1]=='отключить рассылку':
+   db[q[0]]['until']=time()
+   send('рассылка отключена, однако, вы всё ещё можете получать изменения по нажатии на кнопку. Если вы не включите её в течение года, информация о ваших настройках бота будет удаена')
+  elif q[1]=='включить рассылку':
+   db[q[0]]['until']=time()+2**29
+   send('рассылка включена')
   else:
    send('''Привет, это бот-оповещатель об изменениях в расписании.
 Бота надо настроить, чтобы он знал, в каком вы классе и во сколько вас оповещать.
@@ -546,7 +661,6 @@ try:
 если твоё приложение не поддерживает работу с клавиатурами, то напиши мне команду help
 ''')
 except:
- print(error())
  log(error())
 
 open(path+'kpml.bot.db.json','w').write(dumps(db))

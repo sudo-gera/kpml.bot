@@ -162,7 +162,7 @@ def look():
 def basend(text,id):
   text=str(text)
   if len(text)>4096:
-   send(text[:4096],id)
+   basend(text[:4096],id)
    text=text[4096:]
 #отправка сообщения
   qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
@@ -184,9 +184,9 @@ def send(text,key=None,id=None):
   if id==None:
    id=q[0]
   #если сообщение большое, его стоит порезать на части
-  while len(text)>4096:
-   send(text[:4096],key,id)
-   text=text[4096:]
+  while len(text)>2048:
+   send(text[:2048],key,id)
+   text=text[2048:]
   key=keygen(id,key)
   #отправка сообщений
   try:

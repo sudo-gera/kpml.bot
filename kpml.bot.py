@@ -1,7 +1,10 @@
 
 
 #основной код работы сервиса kpml.bot, для опнимания работы енкоторых компонентов следует почитать документацию вк, расположеннцю по адреcу https://vk.com/dev/manuals
-from urllib.request import urlopen
+if 'urlopen' in globals():
+ pass
+else:
+ from urllib.request import urlopen
 from json import loads
 from json import dumps
 from urllib.parse import quote

@@ -421,6 +421,7 @@ def view(day=None,mon=None,id=None):
     if tj:
      parsed+=w+': '+tj+'\n'
   parsed=attach(parsed)
+  log(parsed)
   return parsed
  except:
   log(error())

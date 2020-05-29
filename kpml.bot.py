@@ -1,5 +1,6 @@
 
 
+#основной код работы сервиса kpml.bot, для опнимания работы енкоторых компонентов следует почитать документацию вк, расположеннцю по адреcу https://vk.com/dev/manuals
 from urllib.request import urlopen
 from json import loads
 from json import dumps
@@ -29,37 +30,46 @@ d={'w':'default','b':'primary','r':'negative','g':'positive'}
 #
 #где с это цвет из набора r - красный, g - зелёный, b - синий, w - белый
 #цвета определены для пк версии без цветоискажающих программ. На телефоне могут отличаться
+#все изменяющиеся кнопки, например, включить/отключить пустые сообщения, описаны внутри функции keygen
 
+#клавиатура по умолчанию
 defkey='''
 gполучить изменения
 wнастройки
 rсообщение об ошибке
 '''
-#клавиатура по умолчанию
+
+#клавиатура быстрой настройки
 optkey='''
 gуказать класс
 gуказать время
 wрасширенные настройки
 rотмена
 '''
-#клавиатура быстрой настройки
+
+#клавиатура настроек
 setkey='''
 bизменить кол-во оповещений в день
 bизменить кол-во отслеживаемых классов
 rотмена
 '''
-#клавиатура настроек
-backey='rотмена'
+
 #клавиатура отмены
-clskey='''
-w11 А|w10 А|w9 А|w8 А|w7 А
-w11 Б|w10 Б|w9 Б|w8 Б|w7 Б
-w11 В|w10 В|w9 В|w8 В|w7 В
-w6 А|w5 А|w4 А|w3 А|w2 А
-w6 Б|w5 Б|w4 Б|w3 Б|w2 Б
-w6 В|w5 В|w4 В|w3 В|w2 В
-w1 А|w1 Б|w1 В|rотмена'''
+backey='rотмена'
+
 #клавиатура выбора класса
+#символ \u2000 похож на ' ', и служит отличителем того, ввёл пользователь время сам или нажал на кнопку
+clskey='''
+w11\u2000А|w10\u2000А|w9\u2000А|w8\u2000А|w7\u2000А
+w11\u2000Б|w10\u2000Б|w9\u2000Б|w8\u2000Б|w7\u2000Б
+w11\u2000В|w10\u2000В|w9\u2000В|w8\u2000В|w7\u2000В
+w6\u2000А|w5\u2000А|w4\u2000А|w3\u2000А|w2\u2000А
+w6\u2000Б|w5\u2000Б|w4\u2000Б|w3\u2000Б|w2\u2000Б
+w6\u2000В|w5\u2000В|w4\u2000В|w3\u2000В|w2\u2000В
+w1\u2000А|w1\u2000Б|w1\u2000В|rотмена'''
+
+#клавиатура выбора времени
+#символ \u205a похож на ':', и служит отличителем того, ввёл пользователь время сам или нажал на кнопку
 timkey='''
 w04\u205a00|w04\u205a30|w05\u205a00|w05\u205a30
 w06\u205a00|w06\u205a30|w07\u205a00|w07\u205a30
@@ -72,7 +82,6 @@ w17\u205a00|w17\u205a30|w19\u205a00|w19\u205a30
 w20\u205a00|w20\u205a30|w21\u205a00|w21\u205a30
 w22\u205a00|w22\u205a30|w23\u205a00|w23\u205a30
 '''
-#клавиатура выбора времени
 try:
  token=open(path+'kpml.bot.token').read()
 except:
@@ -90,6 +99,7 @@ admin=['225847803']
 #keygen###################################################################
 #функция, которая преобразует клавиатуру в формат вк
 def keygen(id,key):
+ #id - получатель, обязательный параметр, key - клавиатура, по умолчанию, defkey
  global defkey, db,d,optkey
  if key==None:
   key=defkey
@@ -103,6 +113,7 @@ def keygen(id,key):
    key+='\ngвключить рассылку'
   else:
    key+='\nrотключить рассылку'
+#до сюда генерация изменяемых кнопок клавиатуры, далее идёт преобразование, оно описано в документации
  key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e[0]]+'","action":{"type":"text","label":"'+e[1:]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
  key='&keyboard='+key
  return key
@@ -110,6 +121,8 @@ def keygen(id,key):
 #vkwork###################################################################
 #функция обращения к вк, идеально работает, редактировать только в крайнем случае
 def api(path,data=''):
+ #аргумент path имеет формат method?arg1=val1&arg2=val2 где method это название метода, далее список аргуметов и их значений. Подробнее методы и значения описаны в документации
+ #аргумент data может содержать ещё несколько аргуметов в том же формате, только без метода, отличие в том, что здесь нет ограничения на размер аргументов
  sleep(1/3)
  if path and path[-1] not in '?&':
   if '?' in path:
@@ -118,11 +131,11 @@ def api(path,data=''):
    path+='?'
  data=data.encode()
  global token
- ret= loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
+ ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
  return ret
 
 #получить последние сообщения в формате [[id,сообщение],[id,сообщение],[id,сообщение]]
-def look(a=0):
+def look():
  q=api('messages.getConversations?count=200&filter=unanswered&','')
  if 'response' not in q.keys():
   r=1
@@ -134,38 +147,45 @@ def look(a=0):
   if r:
    log(q)
   return []
+ #в случае серьёзной ошибки при чтении сообщений, администрации придёт сообщение об этом
  q=q['response']['items']
- q=[[w['conversation']['peer']['id'],w['last_message']['text'],w] for w in q if w['conversation']['can_write']['allowed']]
- if a==0:
-  q=[w[:2] for w in q]
+ q=[[w['conversation']['peer']['id'],w['last_message']['text']] for w in q if w['conversation']['can_write']['allowed']]
  q=[[str(w[0])]+w[1:] for w in q]
  q=[[w[0],w[1].lower(),w[1]] for w in q]
+ #обработка полученных данных для возвращения в удобном виде
  return q
 
+#простейшая функция отправки текста, в случае неудачи оповестит администрацию
 def basend(text,id):
   text=str(text)
+  if len(text)>4096:
+   send(text[:4096],id)
+   text=text[4096:]
+#отправка сообщения
   qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
+#в случае серьёзной ошибки оповестить админа
   r=1
   if list(qq.keys())!=['response']:
    try:
     if qq['error']['error_code'] in [901,10,5]:
      r=0
-     if qq['error']['error_code'] in [901]:
-      db['ban']=2**40
    except:
     pass
    if r:
     log(qq)
 
+#настоящая функция отправки сообщений, аргументы: текст, клавиатура (по умолчанию: то, что описано по умолчанию в keygen), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
 def send(text,key=None,id=None):
   text=str(text)
   global q
   if id==None:
    id=q[0]
+  #если сообщение большое, его стоит порезать на части
   while len(text)>4096:
    send(text[:4096],key,id)
    text=text[4096:]
   key=keygen(id,key)
+  #отправка сообщений
   try:
    basend(text+key,id)
   except:
@@ -174,6 +194,7 @@ def send(text,key=None,id=None):
 #отправка сообщения администрации
 def log(q):
  q=str(q)
+ #избежание отправки одинаковых сообщений об ошибках слишком часто
  try:
   a=open(path+'kpml.bot.error').read()
  except:
@@ -188,6 +209,9 @@ def log(q):
   open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q)
 
 #dates########################################################
+#формат даты, который испоьзуется вовсей пограмме: день (число, как есть) месяц (число, нумеруются с 0, то есть от 0 до 11) год (число, как есть) день недели (не обязательно, число, нумеруются с 0, то есть от 0 до 6)
+
+#по дню определяет следующий
 def next(q,w,e,dw=None):
  q,w,e=int(q),int(w),int(e)
  if dw!=None:
@@ -210,6 +234,7 @@ def next(q,w,e,dw=None):
   return [q,w,e,(dw+1)%7]
  return [q,w,e]
 
+#узнать, какой день сегодня
 def today():
  t=asctime()
  t=t.split()[0:5]
@@ -225,12 +250,13 @@ def today():
 
 #открытие и базовая обработка страницы
 def parse():
+ #предотвращение повторного открытия страницы, если она была открыта не давно
  try:
   q=open(path+'kpml.bot.html').read()
  except:
   q=str(time()-400)+'\x01'
- bt=q.split('\x01')[0]
- oq=q.split('\x01')[1]
+ bt=q.split('\x01',1)[0]
+ oq=q.split('\x01',1)[1]
  if time()-float(bt)>300:
   try:
    q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
@@ -242,7 +268,7 @@ def parse():
    q=oq
  else:
   q=oq
- #opened
+ #здесь старница открыта, далее базовая обработка
  q=q.replace('<','\x01\x02').replace('>','\x01').replace('&nbsp;',' ').replace('&lt;','<').replace('&gt;','>').replace('&amp;','&').replace('&quot;','"').replace('&apos;',"'")
  q=q[:q.index('«Кировский')]
  q=q[q.index('\x01\x02body'):]
@@ -261,6 +287,7 @@ def parse():
  return q
 
 
+#отправка всех изменений при нажатии кнопки "получить изменения"
 def out():
  q=parse()
  if ''.join(q).strip():
@@ -270,6 +297,7 @@ def out():
  else:
   return 'изменений нет'
 
+#выделение изменений, относящихся к нужной дате
 def repa(day,mon):
  q=parse()
  q=[w.split(rmo[mon]) for w in q if rmo[mon] in w]
@@ -301,7 +329,7 @@ def repa(day,mon):
  q='\n'.join(q)
  e=q
  q=q.strip()
- if q[:4]=='2020':
+ if q[:4]==str(today()[2]):
   q=q[4:]
   q=q.strip()
   if q[:4].lower()=='года':
@@ -309,6 +337,7 @@ def repa(day,mon):
    e=e[e.index(q):]
  return e
 
+#функция обработки каждого прикреплённого материала к изменениям в расписании
 def uft(q,w,e):
   ee=e
   if q[:len(w)+2]=='\x02'+w+' ':
@@ -328,6 +357,7 @@ def uft(q,w,e):
   else:
    return q
 
+#функция обработки прикреплённых материалов
 def attach(q):
  q=q.split('\x01')
  q=[[w] for w in q if w]
@@ -339,6 +369,7 @@ def attach(q):
  q='\n'.join(q)
  return q
 
+#вспомогательная функция для проверки наличия данного класса среди нескольких, если фрагмент ориентирован на несоклько классов
 def isin(q,c):
  q=q.replace(' классы ',' ')
  q=q.strip()
@@ -363,6 +394,7 @@ def isin(q,c):
    return 1
  return 0
 
+#выделение изменений по нужному классу
 def get(day,mon,clas):
  q=repa(int(day),int(mon))
  q=q.split('\n')
@@ -373,7 +405,7 @@ def get(day,mon,clas):
  return q
 
 
-
+#функция чтения изменений, оболочка всех предыдущих
 def view(day=None,mon=None,id=None):
  try:
   if day==None and mon==None and id==None:
@@ -391,6 +423,7 @@ def view(day=None,mon=None,id=None):
   return '''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii'''
 
+#обработчик генерации текста автоматического оповещения
 def work(id,empty=0):
  q,w,e,dw=today()
  td=view(q,w,id)
@@ -412,6 +445,9 @@ def work(id,empty=0):
  return q
 
 #inputparse######################################################33
+#тут представлены функции, проверяющие, верно ли, что строка является каким-либо объектом
+
+#классом
 def iscl(q):
  q=''.join(q.split())
  w=0
@@ -428,6 +464,7 @@ def iscl(q):
   return [q[:d],q[d:]]
  return 0
 
+#датой
 def isdt(q):
  ot=q
  if '.' not in q:
@@ -448,6 +485,7 @@ def isdt(q):
   return ot
  return 0
 
+#временем
 def istm(q):
  q=''.join(q.split())
  if ':' not in q:
@@ -460,22 +498,29 @@ def istm(q):
   return 1
  return 0
 
+#классом, введённым с клавиатуры
 def iskcl(q):
  q=q.strip()
- if q.count(' ')==1 and iscl(q.replace(' ','')):
+ if q.count('\u2000')==1 and iscl(q.replace('\u2000','')):
   return 1
  return 0
 
+#временем, ввудённым с клавиатуры
 def isktm(q):
  q=q.strip()
  if q.count('\u205a')==1 and istm(q.replace('\u205a',':')):
   return 1
  return 0
 
+#userwork######################################################
 definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[2],'ban':0}
+#список полей, которые должны содержаться в профиле каждого пользователя, а так же значения полей по умолчанию
 
+#весь дальнейший код выполняется сам, поэтому его нужно заключить в конструкцию try except, для возможности оповещения админов в случае ошибки
 try:
  tn=time()
+ wai=[]
+ #пройти по списку пользователей и обновить информацию профиля
  for w in [w for w in db if w.isdigit()]:
 # for w in [w for w in db if w in admin]:
   for e in definf:
@@ -496,8 +541,8 @@ try:
    send('теперь вы подписаны классы: \n'+' '.join(f)+'\nраньше вы были подписаны на классы: \n'+' '.join(db[w]['class'])+'\nЕсли вы завершили обучение в лицее, перейдите в настройки и отключите оповещения',w)
    db[w]['class']=f[:]
    db[w]['lm']=today()[2]
- wai=[]
 #mainloop#########################################################
+#бот ходит по этому циклу, пока не получит соообщения
  while wai==[]:
   tn=int(time())
   for w in db.keys():
@@ -511,8 +556,9 @@ try:
        send(worked,defkey,w)
        db[w]['ls']=int(time())
   wai=look()
-  shuffle(wai)
 #gotmess###########################################################
+#сообщене получено, сначала нужно проверить верность профиля пользователя
+ shuffle(wai)
  for q in wai:
   print(q[1])
   added=0
@@ -526,6 +572,7 @@ try:
    db[q[0]]['ban']-=1
    continue
 #logic###############################################################
+#теперь можно приступать к пониманию, чего хотел пользователь
   if q[1] == '':
    send('текстом, пожалуйста')
   elif q[1] == 'json':
@@ -662,7 +709,7 @@ try:
 ''')
 except:
  log(error())
-
+#запись базы данных после успешного завершения программы
 open(path+'kpml.bot.db.json','w').write(dumps(db))
 
 

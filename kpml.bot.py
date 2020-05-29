@@ -160,9 +160,6 @@ def look():
 
 #простейшая функция отправки текста, в случае неудачи оповестит администрацию
 def basend(text,id):
-  if id not in admin:
-   log('nedds ans')
-   return
   text=str(text)
   if len(text)>4096:
    send(text[:4096],id)
@@ -433,7 +430,6 @@ def view(day=None,mon=None,id=None):
 #обработчик генерации текста автоматического оповещения
 def work(id,empty=0):
  q,w,e,dw=today()
- q,w=17,2
  td=view(q,w,id)
  if td or empty==0:
   td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':\n'+ td

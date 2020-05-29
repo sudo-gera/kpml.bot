@@ -203,7 +203,7 @@ def log(q):
  except:
   a=str(time()-400)+'\x08'
  bt=a.split('\x08')[0]
- if time()-float(bt)>100 or '\x08'.join(a.split('\x08')[1:]) != q:
+ if time()-float(bt)>100 or q not in a.split('\x08'):
   try:
    for w in admin:
     basend(str(q),w)

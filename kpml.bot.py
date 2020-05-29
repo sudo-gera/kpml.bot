@@ -100,6 +100,7 @@ admin=['225847803']
 #функция, которая преобразует клавиатуру в формат вк
 def keygen(id,key):
  #id - получатель, обязательный параметр, key - клавиатура, по умолчанию, defkey
+ log(key)
  global defkey, db,d,optkey
  if key==None:
   key=defkey
@@ -421,7 +422,6 @@ def view(day=None,mon=None,id=None):
     if tj:
      parsed+=w+': '+tj+'\n'
   parsed=attach(parsed)
-  log(parsed)
   return parsed
  except:
   log(error())

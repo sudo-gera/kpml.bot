@@ -255,7 +255,7 @@ def today():
 def parse():
  #предотвращение повторного открытия страницы, если она была открыта не давно
  try:
-  q=open(path+'kpml.bot.html').read()
+  q=open(path+'kpml.bot.html').read()+0
  except:
   q=str(time()-400)+'\x01'
  bt=q.split('\x01',1)[0]

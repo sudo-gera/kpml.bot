@@ -438,7 +438,7 @@ def work(id,empty=0):
  tn=view(r,t,id)
  if tn or empty==0:
   tn='Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':\n'+tn
- if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
+ if 1 or int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
   if td.split()+tn.split():
    q=td+'<=====================>'+tn
   else:

@@ -255,15 +255,14 @@ def today():
 def parse():
  #предотвращение повторного открытия страницы, если она была открыта не давно
  try:
-  q=open(path+'kpml.bot.html').read()+0
+  q=open(path+'kpml.bot.html').read()
  except:
   q=str(time()-400)+'\x01'
  bt=q.split('\x01',1)[0]
  oq=q.split('\x01',1)[1]
  if time()-float(bt)>300:
   try:
-#   q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
-   q=urlopen('http://192.168.0.109:9000/kpml.bot.html').read().decode()
+   q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
    if q!=oq:
     log('site changed')
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)

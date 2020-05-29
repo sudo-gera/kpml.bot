@@ -263,7 +263,7 @@ def parse():
  if time()-float(bt)>300:
   try:
 #   q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
-   q=urlopen('http://192.168.0.109:9000').read().decode()
+   q=urlopen('http://192.168.0.109:9000/kpml.bot.index.html').read().decode()
    if q!=oq:
     log('site changed')
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)

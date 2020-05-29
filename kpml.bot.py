@@ -209,7 +209,7 @@ def log(q):
     basend(str(q),w)
   except:
    print(q,error())
-  open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q)
+  open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q+'\x08'+a)
 
 #dates########################################################
 #формат даты, который испоьзуется вовсей пограмме: день (число, как есть) месяц (число, нумеруются с 0, то есть от 0 до 11) год (число, как есть) день недели (не обязательно, число, нумеруются с 0, то есть от 0 до 6)
@@ -263,7 +263,7 @@ def parse():
  if time()-float(bt)>300:
   try:
 #   q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
-   q=urlopen('http://192.168.0.109:9000/kpml.bot.index.html').read().decode()
+   q=urlopen('http://192.168.0.109:9000/kpml.bot.html').read().decode()
    if q!=oq:
     log('site changed')
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)

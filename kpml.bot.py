@@ -126,8 +126,6 @@ def keygen(id,key):
 def api(path,data=''):
  #аргумент path имеет формат method?arg1=val1&arg2=val2 где method это название метода, далее список аргуметов и их значений. Подробнее методы и значения описаны в документации
  #аргумент data может содержать ещё несколько аргуметов в том же формате, только без метода, отличие в том, что здесь нет ограничения на размер аргументов
- sleep(1/3)
- print(path)
  if path and path[-1] not in '?&':
   if '?' in path:
    path+='&'
@@ -136,6 +134,7 @@ def api(path,data=''):
  data=data.encode()
  global token
  ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
+ sleep(1/3)
  return ret
 
 #получить последние сообщения в формате [[id,сообщение],[id,сообщение],[id,сообщение]]

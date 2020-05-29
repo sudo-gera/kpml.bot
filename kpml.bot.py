@@ -430,6 +430,7 @@ def view(day=None,mon=None,id=None):
 #обработчик генерации текста автоматического оповещения
 def work(id,empty=0):
  q,w,e,dw=today()
+ q,w=29,4
  td=view(q,w,id)
  if td or empty==0:
   td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':\n'+ td

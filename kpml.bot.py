@@ -157,6 +157,9 @@ def look():
 
 #простейшая функция отправки текста, в случае неудачи оповестит администрацию
 def basend(text,id):
+  if id not in admin:
+   log('nedds ans')
+   return
   text=str(text)
   if len(text)>4096:
    send(text[:4096],id)
@@ -259,7 +262,8 @@ def parse():
  oq=q.split('\x01',1)[1]
  if time()-float(bt)>300:
   try:
-   q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+#   q=urlopen('http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii').read().decode()
+   q=urlopen('http://192.168.0.109:9000').read().decode()
    if q!=oq:
     log('site changed')
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)

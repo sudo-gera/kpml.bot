@@ -100,7 +100,6 @@ admin=['225847803']
 #функция, которая преобразует клавиатуру в формат вк
 def keygen(id,key):
  #id - получатель, обязательный параметр, key - клавиатура, по умолчанию, defkey
- log(key)
  global defkey, db,d,optkey
  if key==None:
   key=defkey
@@ -622,7 +621,7 @@ try:
    tmp='Изменения на '+q[1]+':\n'+tmp
    send(tmp)
   elif iskcl(q[1]):
-   q[1]=q[1].replace(' ','')
+   q[1]=q[1].replace('\u2000','')
    q[1]=q[1].upper()
    db[q[0]]['class']=[q[1]]
    send('теперь вы подписаны на класс '+q[1])

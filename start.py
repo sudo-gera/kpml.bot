@@ -45,7 +45,8 @@ while 1:
    try:
     for w in admin:
      sleep(1/3)
-     url='https://api.vk.com/method/messages.send?random_id='+str(time()).replace('.','0')
+     url='https://api.vk.com/method/messages.send?random_id='
+     url+=str(time()).replace('.','0')
      url+='&user_id='+str(w)+'&v=5.101&access_token='+str(token)
      data=('message='+str(q)).encode()
      q=loads(urlopen(url,data=data).read().decode())

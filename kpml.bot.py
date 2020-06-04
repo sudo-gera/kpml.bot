@@ -584,7 +584,7 @@ try:
 #сообщене получено, сначала нужно проверить верность профиля пользователя
  shuffle(wai)
  for q in wai:
-  print(q[1])
+  print(q)
   added=0
   if q[0] not in db[q[2]].keys():
    db[q[2]][q[0]]=dict()

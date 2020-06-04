@@ -27,7 +27,7 @@ try:
 except:
  token=''
 while 1:
- system('git pull -q --no-edit')
+ system('git pull --no-edit')
  try:
   exec(open('./kpml.bot.py').read())
  except:

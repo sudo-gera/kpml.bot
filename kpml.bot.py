@@ -21,7 +21,6 @@ emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
 beg='Изменения в расписании на '
-errl=[]
 #некоторые константы
 
 
@@ -211,25 +210,8 @@ def send_vk(text,key=None,id=None):
 
 #отправка сообщения администрации
 def log(q=None):
- if q==None:
-  global errl
-  for e in errl:
-   log(e)
-  return
- q=str(q)
- #избежание отправки одинаковых сообщений об ошибках слишком часто
- try:
-  a=open(path+'kpml.bot.error').read()
- except:
-  a=str(time()-400)+'\x08'
- bt=a.split('\x08')[0]
- if time()-float(bt)>100 or q not in a.split('\x08'):
-  try:
-   raise SyntaxError(str(q))
-   #обработчик ошибок (starter) это обработает
-  except:
-   print(q,error())
-  open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q+'\x08'+a)
+ for w in admin:
+  send(str(q),defkey,w,'vk')
 
 #dates########################################################
 #формат даты, который испоьзуется вовсей пограмме: день (число, как есть) месяц (число, нумеруются с 0, то есть от 0 до 11) год (число, как есть) день недели (не обязательно, число, нумеруются с 0, то есть от 0 до 6)
@@ -287,7 +269,7 @@ def parse():
     log('site changed')
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)
   except:
-   errl+=[error()]
+   log(error())
    q=oq
  else:
   q=oq
@@ -446,7 +428,7 @@ def view(day=None,mon=None,id=None,prof=None):
   parsed=attach(parsed)
   return parsed
  except:
-  errl+=[error()]
+  log(error())
   return '''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii'''
 
@@ -620,6 +602,8 @@ if 1:
    send(len(db[q[2]].keys()))
   elif q[1] == 'sub':
    send(len([w for w in db[q[2]] if 'time' in db[q[2]][w] and db[q[2]][w]['time']]))
+  elif q[1] == 'gl':
+   send(globals())
   elif q[1] == 'xg':
    send('\n'.join(['vk.com/id'+w+' '+str(db[q[2]][w]) for w in db[q[2]].keys()]))
   elif q[1] == 'sw':
@@ -743,7 +727,6 @@ if 1:
 если твоё приложение не поддерживает работу с клавиатурами, то напиши мне команду help
 ''')
 #запись базы данных после успешного завершения программы
-log()
 open(path+'kpml.bot.db.json','w').write(dumps(db))
 
 

@@ -47,4 +47,5 @@ while 1:
       print(q)
    except:
     print(q,error())
+   q=str(q)
    open('../kpml.bot.error','w').write(str(time())+'\x08'+q)

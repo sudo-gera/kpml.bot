@@ -21,6 +21,7 @@ emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
 beg='Изменения в расписании на '
+errl=[]
 #некоторые константы
 
 
@@ -193,7 +194,7 @@ def send_vk(text,key=None,id=None):
    text=text[2048:]
   key=keygen_vk(id,key)
   #отправка сообщений
-  try:
+  if 1:
    text=str(text+key)
 #отправка сообщения
    qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
@@ -207,11 +208,14 @@ def send_vk(text,key=None,id=None):
      pass
     if r:
      log(qq)
-  except:
-   log(error())
 
 #отправка сообщения администрации
-def log(q):
+def log(q=None):
+ if q==None:
+  global errl
+  for e in errl:
+   log(e)
+  return
  q=str(q)
  #избежание отправки одинаковых сообщений об ошибках слишком часто
  try:
@@ -283,7 +287,7 @@ def parse():
     log('site changed')
    open(path+'kpml.bot.html','w').write(str(time())+'\x01'+q)
   except:
-   log(error())
+   errl+=[error()]
    q=oq
  else:
   q=oq
@@ -442,7 +446,7 @@ def view(day=None,mon=None,id=None,prof=None):
   parsed=attach(parsed)
   return parsed
  except:
-  log(error())
+  errl+=[error()]
   return '''При чтении изменений произошла ошибка, о которой админ бота уже оповещён.
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii'''
 
@@ -546,7 +550,7 @@ if 'vk' not in db:
 
 
 #весь дальнейший код выполняется сам, поэтому его нужно заключить в конструкцию try except, для возможности оповещения админов в случае ошибки
-try:
+if 1:
  tn=time()
  wai=[]
  #пройти по списку пользователей и обновить информацию профиля
@@ -739,9 +743,8 @@ try:
 Клавиатура поможет тебе в этом.
 если твоё приложение не поддерживает работу с клавиатурами, то напиши мне команду help
 ''')
-except:
- log(error())
 #запись базы данных после успешного завершения программы
+log()
 open(path+'kpml.bot.db.json','w').write(dumps(db))
 
 

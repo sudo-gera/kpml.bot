@@ -603,7 +603,7 @@ if 1:
   elif q[1] == 'sub':
    send(len([w for w in db[q[2]] if 'time' in db[q[2]][w] and db[q[2]][w]['time']]))
   elif q[1] == '.':
-   send('&#13;'.join('''
+   send('%26%2313%3B'.join('''
  _______
 < hello >
  -------

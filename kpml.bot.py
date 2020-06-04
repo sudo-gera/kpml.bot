@@ -85,9 +85,9 @@ w20\u205a00|w20\u205a30|w21\u205a00|w21\u205a30
 w22\u205a00|w22\u205a30|w23\u205a00|w23\u205a30
 '''
 try:
- token=open(path+'kpml.bot.token').read()
+ token_vk=open(path+'kpml.bot.token_vk').read()
 except:
- token=''
+ token_vk=''
 #открытие файла с токеном, который нельзя встраивать в код работы бота, ибо код находится в открытом доступе
 try:
  db=loads(open(path+'kpml.bot.db.json').read())
@@ -132,8 +132,8 @@ def api_vk(path,data=''):
   else:
    path+='?'
  data=data.encode()
- global token
- ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
+ global token_vk
+ ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token_vk,data=data).read().decode())
  sleep(1/3)
  return ret
 

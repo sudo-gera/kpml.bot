@@ -21,7 +21,6 @@ emo='jan feb mar apr may jun jul aug sep oct nov dec'.split()
 rdw='понедельник вторник среда четверг пятница суббота воскресенье'.split()
 edw='mon tue wed thu fri sat sun'.split()
 beg='Изменения в расписании на '
-d={'w':'default','b':'primary','r':'negative','g':'positive'}
 #некоторые константы
 
 
@@ -100,22 +99,24 @@ admin=['225847803','382227482']
 
 #keygen###################################################################
 #функция, которая преобразует клавиатуру в формат вк
-def keygen(id,key):
+def keygen_vk(id,key):
+ prof='vk'
  #id - получатель, обязательный параметр, key - клавиатура, по умолчанию, defkey
  global defkey, db,d,optkey
  if key==None:
   key=defkey
  if key==setkey:
-  if db[id]['empty']:
+  if db[prof][id]['empty']:
    key+='\ngвключить пустые сообщения'
   else:
    key+='\nrотключить пустые сообщения'
  if key==optkey:
-  if db[id]['until']<time():
+  if db[prof][id]['until']<time():
    key+='\ngвключить рассылку'
   else:
    key+='\nrотключить рассылку'
 #до сюда генерация изменяемых кнопок клавиатуры, далее идёт преобразование, оно описано в документации
+ d={'w':'default','b':'primary','r':'negative','g':'positive'}
  key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e[0]]+'","action":{"type":"text","label":"'+e[1:]+'"}}' for e in w.split('|')]) +']' for w in key.split('\n') if w])+']}'
  key='&keyboard='+key
  return key
@@ -136,8 +137,20 @@ def api(path,data=''):
  sleep(1/3)
  return ret
 
-#получить последние сообщения в формате [[id,сообщение],[id,сообщение],[id,сообщение]]
+#получить последние сообщения в формате [[id,сообщение,профиль],[id,сообщение,профиль],[id,сообщение,профль]]
+#заметьте, что все переменные, которые начинаются с look_ воспринимаются как функции, поэтому используйте такие имена тоько для получения изменений с определённого сервиса
 def look():
+ ext=[]
+ for w in globals():
+  if w[:5]=='look_':
+   exec('e='+w+'()')
+   e=[r+[w[5:]] for r in e]
+   ext+=e
+ return ext
+
+#функция для вк, подобные функции должны возвращать формат [[id,сообщение],[id,сообщение],[id,сообщение]]
+#рекомендуется сообщение пропусаать через .lower() для упрощения взаимодействия без клавиатуры
+def look_vk():
  q=api('messages.getConversations?count=200&filter=unanswered&','')
  if 'response' not in q.keys():
   r=1
@@ -153,43 +166,44 @@ def look():
  q=q['response']['items']
  q=[[w['conversation']['peer']['id'],w['last_message']['text']] for w in q if w['conversation']['can_write']['allowed']]
  q=[[str(w[0])]+w[1:] for w in q]
- q=[[w[0],w[1].lower(),w[1]] for w in q]
+ q=[[w[0],w[1].lower()] for w in q]
  #обработка полученных данных для возвращения в удобном виде
  return q
 
-#простейшая функция отправки текста, в случае неудачи оповестит администрацию
-def basend(text,id):
-  text=str(text)
-  if len(text)>4096:
-   basend(text[:4096],id)
-   text=text[4096:]
-#отправка сообщения
-  qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
-#в случае серьёзной ошибки оповестить админа
-  r=1
-  if list(qq.keys())!=['response']:
-   try:
-    if qq['error']['error_code'] in [901,10,5]:
-     r=0
-   except:
-    pass
-   if r:
-    log(qq)
 
 #настоящая функция отправки сообщений, аргументы: текст, клавиатура (по умолчанию: то, что описано по умолчанию в keygen), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
-def send(text,key=None,id=None):
+def send(text,key=None,id=None,prof=None):
+ global q
+ if prof==None:
+  prof=q[2]
+ exec('return send_'+prof+'(text,key,id)')
+
+#функция отправки сообщений в вк, аргументы: текст, клавиатура (по умолчанию: то, что описано по умолчанию в keygen), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
+def send_vk(text,key=None,id=None):
   text=str(text)
   global q
   if id==None:
    id=q[0]
   #если сообщение большое, его стоит порезать на части
   while len(text)>2048:
-   send(text[:2048],key,id)
+   send_vk(text[:2048],key,id)
    text=text[2048:]
-  key=keygen(id,key)
+  key=keygen_vk(id,key)
   #отправка сообщений
   try:
-   basend(text+key,id)
+   text=str(text+key)
+#отправка сообщения
+   qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
+#в случае серьёзной ошибки оповестить админа
+   r=1
+   if list(qq.keys())!=['response']:
+    try:
+     if qq['error']['error_code'] in [901,10,5]:
+      r=0
+    except:
+     pass
+    if r:
+     log(qq)
   except:
    log(error())
 
@@ -204,8 +218,8 @@ def log(q):
  bt=a.split('\x08')[0]
  if time()-float(bt)>100 or q not in a.split('\x08'):
   try:
-   for w in admin:
-    basend(str(q),w)
+   raise ZeroDivizionError(str(q))
+   #обработчик ошибок (starter) это обработает
   except:
    print(q,error())
   open(path+'kpml.bot.error','w').write(str(time())+'\x08'+q+'\x08'+a)
@@ -414,7 +428,7 @@ def view(day=None,mon=None,id=None):
    parsed=out()
   else:
    parsed=''
-   for w in db[id]['class']:
+   for w in db[prof][id]['class']:
     tj=get(day,mon,w)
     if tj:
      parsed+=w+': '+tj+'\n'
@@ -518,45 +532,53 @@ def isktm(q):
 definf={'until':time()+2**29,'class':[],'time':[],'ls':0,'empty':1,'lm':today()[2],'ban':0}
 #список полей, которые должны содержаться в профиле каждого пользователя, а так же значения полей по умолчанию
 
+if 'vk' not in db:
+ tdb=dict(db)
+ db=dict()
+ db['vk']=tdb
+
+
 #весь дальнейший код выполняется сам, поэтому его нужно заключить в конструкцию try except, для возможности оповещения админов в случае ошибки
 try:
  tn=time()
  wai=[]
  #пройти по списку пользователей и обновить информацию профиля
- for w in [w for w in db if w.isdigit()]:
-# for w in [w for w in db if w in admin]:
-  for e in definf:
-   if e not in db[w]:
-    db[w][e]=definf[e]
-  if tn-db[w]['until']>2**25:
-   delete(db[w])
-  if today()[2]-db[w]['lm']>0 and today()[1]>5:
-   f=[]
-   for e in db[w]['class']:
-    i=''
-    while e and e[0].isdigit():
-     i+=e[0]
-     e=e[1:]
-    i=str(int(i)+1)
-    e=i+e
-    f+=[e]
-   send('теперь вы подписаны классы: \n'+' '.join(f)+'\nраньше вы были подписаны на классы: \n'+' '.join(db[w]['class'])+'\nЕсли вы завершили обучение в лицее, перейдите в настройки и отключите оповещения',w)
-   db[w]['class']=f[:]
-   db[w]['lm']=today()[2]
+ for cdb in db:
+  #cdb - текущий профиль (например, вк)
+  for w in [w for w in db[cdb] if w.isdigit()]:
+   for e in definf:
+    if e not in db[cdb][w]:
+     db[cdb][w][e]=definf[e]
+   if tn-db[cdb][w]['until']>2**25:
+    delete(db[cdb][w])
+   if today()[2]-db[cdb][w]['lm']>0 and today()[1]>5:
+    f=[]
+    for e in db[cdb][w]['class']:
+     i=''
+     while e and e[0].isdigit():
+      i+=e[0]
+      e=e[1:]
+     i=str(int(i)+1)
+     e=i+e
+     f+=[e]
+    send('теперь вы подписаны классы: \n'+' '.join(f)+'\nраньше вы были подписаны на классы: \n'+' '.join(db[cdb][w]['class'])+'\nЕсли вы завершили обучение в лицее, перейдите в настройки и отключите оповещения',defkey,w,cdb)
+    db[cdb][w]['class']=f[:]
+    db[cdb][w]['lm']=today()[2]
 #mainloop#########################################################
 #бот ходит по этому циклу, пока не получит соообщения
  while wai==[]:
   tn=int(time())
-  for w in db.keys():
-   if w.isdigit() and 'time' in db[w] and 'until' in db[w].keys() and tn<db[w]['until']:
-    for e in db[w]['time']:
-     if 0 < tn % (24*3600) - int(e) < 300 and tn - db[w]['ls'] >= 300:
-      worked=work(w,db[w]['empty'])
-      if worked:
-       if db['until']-tn<2**19:
-        worked+='\nобратите внимание, что вы были зарегистрированы очень давно, по этой причине через неделю вы будете отключены от рассылки. Если вы хотите продолжать получать уведомления, то зайдите в настройки и отключите, а затем включите рассылку'
-       send(worked,defkey,w)
-       db[w]['ls']=int(time())
+  for cdb in db:
+   for w in db[cdb].keys():
+    if w.isdigit() and 'time' in db[cdb][w] and 'until' in db[cdb][w].keys() and tn<db[cdb][w]['until']:
+     for e in db[cdb][w]['time']:
+      if 0 < tn % (24*3600) - int(e) < 300 and tn - db[cdb][w]['ls'] >= 300:
+       worked=work(w,db[cdb][w]['empty'])
+       if worked:
+        if db[cdb]['until']-tn<2**19:
+         worked+='\nобратите внимание, что вы были зарегистрированы очень давно, по этой причине через неделю вы будете отключены от рассылки. Если вы хотите продолжать получать уведомления, то зайдите в настройки и отключите, а затем включите рассылку'
+        send(worked,defkey,w,cdb)
+        db[cdb][w]['ls']=int(time())
   wai=look()
 #gotmess###########################################################
 #сообщене получено, сначала нужно проверить верность профиля пользователя
@@ -564,44 +586,44 @@ try:
  for q in wai:
   print(q[1])
   added=0
-  if q[0] not in db.keys():
-   db[q[0]]=dict()
+  if q[0] not in db[q[2]].keys():
+   db[q[2]][q[0]]=dict()
    added=1
   for w in definf:
-   if w not in db[q[0]]:
-    db[q[0]][w]=definf[w]
-  if db[q[0]]['ban']>0:
-   db[q[0]]['ban']-=1
+   if w not in db[q[2]][q[0]]:
+    db[q[2]][q[0]][w]=definf[w]
+  if db[q[2]][q[0]]['ban']>0:
+   db[q[2]][q[0]]['ban']-=1
    continue
 #logic###############################################################
 #теперь можно приступать к пониманию, чего хотел пользователь
   if q[1] == '':
    send('текстом, пожалуйста')
   elif q[1] == 'json':
-   send(str(db).replace("'",'"'))
+   send(str(db[q[2]]).replace("'",'"'))
   elif q[1] == 'git':
    t=popen('git show').read()
    t=t.split('\n\n')[0]
    send(t)
   elif q[1] == 'len':
-   send(len(db.keys()))
+   send(len(db[q[2]].keys()))
   elif q[1] == 'sub':
-   send(len([w for w in db if 'time' in db[w] and db[w]['time']]))
+   send(len([w for w in db[q[2]] if 'time' in db[q[2]][w] and db[q[2]][w]['time']]))
   elif q[1] == 'xg':
-   send('\n'.join(['vk.com/id'+w+' '+str(db[w]) for w in db.keys()]))
+   send('\n'.join(['vk.com/id'+w+' '+str(db[q[2]][w]) for w in db[q[2]].keys()]))
   elif q[1] == 'sw':
-   send('\n'.join(['vk.com/id'+w+' class: '+str(db[w]['class'] if 'class' in db[w] else 0)+' time: '+str([str(e//3600+3)+':'+str(e//60%60) for e in (db[w]['time'] if 'time' in db[w] else [])]) for w in db.keys()]))
+   send('\n'.join(['vk.com/id'+w+' class: '+str(db[q[2]][w]['class'] if 'class' in db[q[2]][w] else 0)+' time: '+str([str(e//3600+3)+':'+str(e//60%60) for e in (db[q[2]][w]['time'] if 'time' in db[q[2]][w] else [])]) for w in db[q[2]].keys()]))
   elif q[1] == 'отмена':
    send('отменено')
   elif q[1] in ['получить изменения','сейчас']:
    tmp=view()
    tmp=tmp
    send(tmp)
-  elif q[1] == 'отключить пустые сообщения' or q[1] == 'пусто' and db[q[0]]['empty']==0:
-   db[q[0]]['empty']=1
+  elif q[1] == 'отключить пустые сообщения' or q[1] == 'пусто' and db[q[2]][q[0]]['empty']==0:
+   db[q[2]][q[0]]['empty']=1
    send('теперь вам не будут приходить автоматические оповещения, если они не содержат изменений. Обратите внимание, что иногда вам всё же будут приходить пустые оповещения, сообщайте о таких ошибках и они будут исправлены.')
-  elif q[1] == 'включить пустые сообщения' or q[1] == 'пусто' and db[q[0]]['empty']==1:
-   db[q[0]]['empty']=0
+  elif q[1] == 'включить пустые сообщения' or q[1] == 'пусто' and db[q[2]][q[0]]['empty']==1:
+   db[q[2]][q[0]]['empty']=0
    send('теперь вам будут приходить автоматические оповещения строго по расписанию, даже если в них ничего нет.')
   elif q[1] == 'сообщение об ошибке':
    send('напишите сообщение об ошибке, начните его с символа $',backey)
@@ -619,31 +641,31 @@ try:
   elif iskcl(q[1]):
    q[1]=q[1].replace('\u2000','')
    q[1]=q[1].upper()
-   db[q[0]]['class']=[q[1]]
+   db[q[2]][q[0]]['class']=[q[1]]
    send('теперь вы подписаны на класс '+q[1])
   elif isktm(q[1]):
    q[1]=q[1].replace('\u205a',':')
    ms=q[1]
    q[1]=q[1].split(':')
    q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
-   db[q[0]]['time']=[q[1]]
+   db[q[2]][q[0]]['time']=[q[1]]
    send('теперь вы будете узнавать об изменениях в '+ms)
   elif istm(q[1]):
    ms=q[1]
    q[1]=q[1].split(':')
    q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
-   if q[1] in db[q[0]]['time']:
-    db[q[0]]['time']=[w for w in db[q[0]]['time'] if w != q[1]]
+   if q[1] in db[q[2]][q[0]]['time']:
+    db[q[2]][q[0]]['time']=[w for w in db[q[2]][q[0]]['time'] if w != q[1]]
     t='количество оповещений в день уменьшено временем '+ms
    else:
-    if len(db[q[0]]['time']) >= 256:
+    if len(db[q[2]][q[0]]['time']) >= 256:
      t='вы не можете получать более чем 256 уведомлений в сутки'
     else:
-     db[q[0]]['time']+=[q[1]]
+     db[q[2]][q[0]]['time']+=[q[1]]
      t='количество оповещений в день увеличено временем '+ms
    send(t+'. Обратие внимание, что оповещение не содержит изменений, опубликованных позднее, чем оно пришло')
   elif q[1] in ['изменить кол-во оповещений в день','время']:
-   ts=db[q[0]]['time'][:]
+   ts=db[q[2]][q[0]]['time'][:]
    ts=[str((w//3600+3)%24)+':'+str(w%3600//60) for w in ts]
    lts=len(ts)
    ts='\n'.join(ts)
@@ -676,20 +698,20 @@ try:
   elif iscl(q[1]):
    q[1]=q[1].upper()
    ms=q[1]
-   if q[1] in db[q[0]]['class']:
-    db[q[0]]['class']=[w for w in db[q[0]]['class'] if w != q[1]]
+   if q[1] in db[q[2]][q[0]]['class']:
+    db[q[2]][q[0]]['class']=[w for w in db[q[2]][q[0]]['class'] if w != q[1]]
     t='количество отслеживаемых классов уменьшено классом '+ms+'.'
    else:
-    if len(db[q[0]]['class'])>=256:
+    if len(db[q[2]][q[0]]['class'])>=256:
      t='вы не можете подписаться более чем на 256 классов'
     elif len(q[1]) > 16:
      t='длина класса не может превышать 16 символов'
     else:
-     db[q[0]]['class']+=[q[1]]
+     db[q[2]][q[0]]['class']+=[q[1]]
      t='количество отслеживаемых классов увеличено классом  '+ms+'.'
    send(t)
   elif q[1] in ['изменить кол-во отслеживаемых классов','класс']:
-   ts=db[q[0]]['class'][:]
+   ts=db[q[2]][q[0]]['class'][:]
    lts=len(ts)
    ts='\n'.join(ts)
    if ts:
@@ -697,10 +719,10 @@ try:
    else:
     send('Сейчас вы не подписаны ни на один из классов. Введите класс, на который хотите подписаться.  Вводить класс следует узазав номер и букву без пробела, если в параллели один класс, то это класс "а". Используйте только русские буквы, а не их латинские аналоги',backey)
   elif q[1]=='отключить рассылку':
-   db[q[0]]['until']=time()
+   db[q[2]][q[0]]['until']=time()
    send('рассылка отключена, однако, вы всё ещё можете получать изменения по нажатии на кнопку. Если вы не включите её в течение года, информация о ваших настройках бота будет удаена')
   elif q[1]=='включить рассылку':
-   db[q[0]]['until']=time()+2**29
+   db[q[2]][q[0]]['until']=time()+2**29
    send('рассылка включена')
   else:
    send('''Привет, это бот-оповещатель об изменениях в расписании.

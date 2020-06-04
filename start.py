@@ -13,20 +13,22 @@ from random import shuffle
 from os.path import abspath
 from sys import argv
 
-try:
- token=open(path+'kpml.bot.token').read()
-except:
- token=''
+
 
 admin=['225847803','382227482']
 
 
+#это обработчик ошибок. Сообщения идут в вк админам. Всё что ниже редактировать только в крайнем случае.
+try:
+ token=open('/'.join(abspath(argv[0]).split('/')[:-2])+'kpml.bot.token').read()
+except:
+ token=''
 try:
  exec(open('/'.join(abspath(argv[0]).split('/')[:-1])+'/kpml.bot.py').read())
 except:
  q=str(error())
  try:
-  a=open('/'.join(abspath(argv[0]).split('/')[:-1])+'/kpml.bot.error').read()
+  a=open('/'.join(abspath(argv[0]).split('/')[:-2])+'/kpml.bot.error').read()
  except:
   a=str(time()-400)+'\x08'
  bt=a.split('\x08')[0]
@@ -39,4 +41,4 @@ except:
      print(q)
   except:
    print(q,error())
-  open('/'.join(abspath(argv[0]).split('/')[:-1])+'/kpml.bot.error','w').write(str(time())+'\x08'+q)
+  open('/'.join(abspath(argv[0]).split('/')[:-2])+'/kpml.bot.error','w').write(str(time())+'\x08'+q)

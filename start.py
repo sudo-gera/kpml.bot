@@ -37,7 +37,10 @@ while 1:
    a=open('../kpml.bot.error').read()
   except:
    a=str(time()-400)+'\x08'
-  bt=a.split('\x08')[0]
+  try:
+   bt=float(a.split('\x08')[0])
+  except:
+   bt=time()-400
   if time()-float(bt)>100 or '\x08'.join(a.split('\x08')[1:]) != q:
    try:
     for w in admin:

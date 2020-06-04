@@ -611,7 +611,7 @@ if 1:
   if q[1] == '':
    send('текстом, пожалуйста')
   elif q[1] == 'json':
-   send(str(db[q[2]]).replace("'",'"'))
+   send(str(db).replace("'",'"'))
   elif q[1] == 'git':
    t=popen('git show').read()
    t=t.split('\n\n')[0]

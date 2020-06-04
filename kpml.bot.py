@@ -583,6 +583,8 @@ if 1:
  for q in wai:
   print(q)
   added=0
+  if q[2] not in db.keys():
+   db[q[2]]=dict()
   if q[0] not in db[q[2]].keys():
    db[q[2]][q[0]]=dict()
    added=1

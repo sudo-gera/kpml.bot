@@ -218,7 +218,7 @@ def log(q):
  bt=a.split('\x08')[0]
  if time()-float(bt)>100 or q not in a.split('\x08'):
   try:
-   raise ZeroDivizionError(str(q))
+   raise SyntaxError(str(q))
    #обработчик ошибок (starter) это обработает
   except:
    print(q,error())

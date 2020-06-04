@@ -210,6 +210,7 @@ def send_vk(text,key=None,id=None):
 
 #отправка сообщения администрации
 def log(q=None):
+ print(q)
  for w in admin:
   send(str(q),defkey,w,'vk')
 

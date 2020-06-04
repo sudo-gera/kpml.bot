@@ -31,6 +31,7 @@ while 1:
  try:
   exec(open('./kpml.bot.py').read())
  except:
+  print('kk')
   q=str(error())
   try:
    a=open('../kpml.bot.error').read()

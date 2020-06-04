@@ -131,7 +131,7 @@ def api_vk(path,data=''):
    path+='&'
   else:
    path+='?'
- data=quote(data).encode()
+ data=data.encode()
  global token
  ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
  sleep(1/3)

@@ -5,7 +5,6 @@ if 'urlopen' in globals():
  pass
 else:
  from urllib.request import urlopen
-#from urllib.parse import url
 from json import loads
 from json import dumps
 from urllib.parse import quote
@@ -132,7 +131,7 @@ def api_vk(path,data=''):
    path+='&'
   else:
    path+='?'
- data=data.encode()
+ data=quote(data).encode()
  global token
  ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
  sleep(1/3)

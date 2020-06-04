@@ -136,6 +136,7 @@ def api_vk(path,data=''):
  global token_vk
  ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token_vk,data=data).read().decode())
  sleep(1/3)
+ print(ret)
  return ret
 
 #получить последние сообщения в формате [[id,сообщение,профиль],[id,сообщение,профиль],[id,сообщение,профль]]

@@ -178,7 +178,8 @@ def send(text,key=None,id=None,prof=None):
  global q
  if prof==None:
   prof=q[2]
- exec('return send_'+prof+'(text,key,id)')
+ if prof=='vk':
+  return send_vk(text,key,id)
 
 #функция отправки сообщений в вк, аргументы: текст, клавиатура (по умолчанию: то, что описано по умолчанию в keygen), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
 def send_vk(text,key=None,id=None):

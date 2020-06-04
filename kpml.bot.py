@@ -418,9 +418,13 @@ def get(day,mon,clas):
 
 
 #функция чтения изменений, оболочка всех предыдущих
-def view(day=None,mon=None,id=None):
+def view(day=None,mon=None,id=None,prof=None):
+ if id==None and prof==None and day != None and mon != None:
+  global q
+  id=q[0]
+  prof=q[2]
  try:
-  if day==None and mon==None and id==None:
+  if day==None and mon==None:
    parsed=out()
   else:
    parsed=''
@@ -436,13 +440,13 @@ def view(day=None,mon=None,id=None):
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii'''
 
 #обработчик генерации текста автоматического оповещения
-def work(id,empty=0):
+def work(id,prof,empty=0):
  q,w,e,dw=today()
- td=view(q,w,id)
+ td=view(q,w,id,prof)
  if td or empty==0:
   td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':\n'+ td
  r,t,y,dw=next(q,w,e,dw)
- tn=view(r,t,id)
+ tn=view(r,t,id,prof)
  if tn or empty==0:
   tn='Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':\n'+tn
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:
@@ -569,7 +573,7 @@ try:
     if w.isdigit() and 'time' in db[cdb][w] and 'until' in db[cdb][w].keys() and tn<db[cdb][w]['until']:
      for e in db[cdb][w]['time']:
       if 0 < tn % (24*3600) - int(e) < 300 and tn - db[cdb][w]['ls'] >= 300:
-       worked=work(w,db[cdb][w]['empty'])
+       worked=work(w,cdb,db[cdb][w]['empty'])
        if worked:
         if db[cdb]['until']-tn<2**19:
          worked+='\nобратите внимание, что вы были зарегистрированы очень давно, по этой причине через неделю вы будете отключены от рассылки. Если вы хотите продолжать получать уведомления, то зайдите в настройки и отключите, а затем включите рассылку'
@@ -627,10 +631,10 @@ try:
    log('сообщение об ошибке\nавтор vk.com/id'+q[0]+'\n'+q[1][1:])
    send('спасибо за обращение. Именно благодаря вам этот сервис скоро станет лучше. сообщение отправлено администрации, с вами скоро свяжутся')
   elif q[1] == 'lookall':
-   send(work(q[0]))
+   send(work(q[0],q[2]))
   elif isdt(q[1]):
    tmp=isdt(q[1])
-   tmp=view(tmp[0],tmp[1])
+   tmp=view(tmp[0],tmp[1],q[0],q[2])
    tmp='\n'.join(tmp)
    tmp='Изменения на '+q[1]+':\n'+tmp
    send(tmp)

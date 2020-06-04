@@ -123,7 +123,7 @@ def keygen_vk(id,key):
 
 #vkwork###################################################################
 #функция обращения к вк, идеально работает, редактировать только в крайнем случае
-def api(path,data=''):
+def api_vk(path,data=''):
  #аргумент path имеет формат method?arg1=val1&arg2=val2 где method это название метода, далее список аргуметов и их значений. Подробнее методы и значения описаны в документации
  #аргумент data может содержать ещё несколько аргуметов в том же формате, только без метода, отличие в том, что здесь нет ограничения на размер аргументов
  if path and path[-1] not in '?&':
@@ -131,7 +131,7 @@ def api(path,data=''):
    path+='&'
   else:
    path+='?'
- data=data.encode()
+ data=urlencode(data).encode()
  global token
  ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token,data=data).read().decode())
  sleep(1/3)
@@ -153,7 +153,7 @@ def look():
 #функция для вк, подобные функции должны возвращать формат [[id,сообщение],[id,сообщение],[id,сообщение]]
 #рекомендуется сообщение пропусаать через .lower() для упрощения взаимодействия без клавиатуры
 def look_vk():
- q=api('messages.getConversations?count=200&filter=unanswered&','')
+ q=api_vk('messages.getConversations?count=200&filter=unanswered&','')
  if 'response' not in q.keys():
   r=1
   try:
@@ -196,7 +196,7 @@ def send_vk(text,key=None,id=None):
   if 1:
    text=str(text+key)
 #отправка сообщения
-   qq=api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
+   qq=api_vk('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
 #в случае серьёзной ошибки оповестить админа
    r=1
    if list(qq.keys())!=['response']:

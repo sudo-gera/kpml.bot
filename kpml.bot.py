@@ -551,7 +551,6 @@ if 1:
   for w in db[cdb]:
    #w - id пользователя
    #проходим по списку полей профиля и заполняем значениями по умолчанию те, которых нет
-   db[cdb][w]['lm']=2019
    for e in definf:
     if e not in db[cdb][w]:
      db[cdb][w][e]=definf[e]

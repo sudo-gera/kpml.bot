@@ -1,4 +1,4 @@
-class vk(platform):
+class vk(stdplatform):
  def sendsometext(self,text,key,id):
   text=str(text)
   #если сообщение большое, его стоит порезать на части, иначе вк его не пропустит

@@ -4,7 +4,7 @@
 
 #универсальный класс для платформ, тут описаны общие методы
 #описанием платформы является класс, который наследует от этого
-class platform:
+class stdplatform:
  def __init__(self):
   self.name=self.__class__.__name__
   self.token=self.loadtoken()
@@ -16,7 +16,7 @@ class platform:
  def savetoken(self,token):
   open('../kpml.bot.token_'+self.name,'w').write(str(token).strip())
 
-#для создания новой платформы достаточно создать класс, наследующий от platform и имеющий функции
+#для создания новой платформы достаточно создать класс, наследующий от stdplatform и имеющий функции
 #sendsometext(self,text,keyboard,id):
 # отправка сообщения
 # если платформа не поддерживает клавиатуры, параметр keyboard можно игнорировать
@@ -33,7 +33,7 @@ dplats=dict()
 #обращение напрямую к платформе рекомендуется делать только из этого файла, а в остальных использовать обие функции, описанные здесь
 #функция plats записывает в словарь dplats экземпляры классов платформ, каждый экземпляр создаётся единожды за время работы программы
 def plats(q=None):
- for w in platform.__subclasses__():
+ for w in stdplatform.__subclasses__():
   if w not in dplats:
    dplats[w.__name__]=w()
  if q==None:

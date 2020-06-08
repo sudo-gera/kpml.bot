@@ -34,9 +34,8 @@ class vk(platform):
    else:
     path+='?'
   data=data.encode()
-  global token_vk
   sleep(1/3)
-  ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token_vk,data=data).read().decode())
+  ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+self.token,data=data).read().decode())
   print(ret)
   if 'response' in ret:
    return ret['response']

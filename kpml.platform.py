@@ -25,7 +25,7 @@ class platform:
 #getlink(self,id):
 # получение ссылки по id
 #по мимо них могут содержаться любые вспомогательные функции
-#первым аргументом всегда передаётся объект (self), его рекомендуется игнорировать
+#первым аргументом всегда передаётся объект (self), его рекомендуется использовать для хранения токена: self.token
 
 #создание словаря dplats, где будут содержаться информация обо всех платформах
 dplats=dict()
@@ -54,8 +54,10 @@ def send(text,key=None,id=None,platform=None):
  text=str(text)
  print(text)
  if platform==None:
+  del(platform)
   global platform
  if id==None:
+  del(id)
   global id
  if key==None:
   key=defkey

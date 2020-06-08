@@ -263,7 +263,7 @@ def send(text,key=None,id=None,prof=None):
   id=q[0]
  if key==None:
   key=defkey
- plats[prof].sendsometext(text,key,id,prof)
+ plats[prof].sendsometext(text,key,id)
 
 #функция отправки сообщений в вк, аргументы: текст, клавиатура (по умолчанию: то, что описано по умолчанию в keygen), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
 def send_vk(text,key=None,id=None):

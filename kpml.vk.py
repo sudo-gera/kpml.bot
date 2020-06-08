@@ -16,7 +16,7 @@ class vk(platform):
   q=self.api('messages.getConversations?count=200&filter=unanswered&','')
   if q==None:
    return []
-  q=q['response']['items']
+  q=q['items']
   q=[[w['conversation']['peer']['id'],w['last_message']['text']] for w in q if w['conversation']['can_write']['allowed']]
   q=[[str(w[0])]+w[1:] for w in q]
   #обработка полученных данных для возвращения в удобном виде

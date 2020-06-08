@@ -73,7 +73,7 @@ w22\u205a00+w22\u205a30+w23\u205a00+rотмена
 '''
 
 #функция, которая обрабатывает все изменяемые объекты
-def keygen(id,key,prof):
+def keygen(key,id,prof):
  #id - получатель, обязательный параметр, key - клавиатура, по умолчанию, defkey
  while '{' in key and '}' in key:
   key=key.split('{',1)[0]+eval(key.split('{',1)[1].split('}',1)[0])+key.split('}',1)[1]

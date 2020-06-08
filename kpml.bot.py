@@ -103,7 +103,7 @@ if 1:
         db[cdb][w]['ls']=int(time())
   wai=look()
   if wai==[] and tn-loopstart>16:
-   sleep(10)
+   sleep(16)
 #gotmess###########################################################
 #сообщене получено
  shuffle(wai)

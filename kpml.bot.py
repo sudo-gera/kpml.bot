@@ -1,6 +1,6 @@
 
 
-#основной код работы сервиса kpml.bot, для понимания работы некоторых компонентов следует почитать документацию вк, расположеннцю по адреcу https://vk.com/dev/manuals
+#основной код работы сервиса kpml.bot, для понимания работы некоторых компонентов следует почитать документацию вк, расположенную по адреcу https://vk.com/dev/manuals
 from urllib.request import urlopen
 from json import loads
 from json import dumps

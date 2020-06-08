@@ -692,6 +692,7 @@ if 1:
   #сначала нужно проверить верность профиля пользователя
   print(q)
   added=0
+  log(q)
   if q[2] not in db.keys():
    db[q[2]]=dict()
   if q[0] not in db[q[2]].keys():

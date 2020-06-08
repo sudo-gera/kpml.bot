@@ -81,16 +81,100 @@ w18\u205a00|w18\u205a30|w19\u205a00|w19\u205a30
 w20\u205a00|w20\u205a30|w21\u205a00|w21\u205a30
 w22\u205a00|w22\u205a30|w23\u205a00|w23\u205a30
 '''
-try:
- token_vk=open('../kpml.bot.token_vk').read()
-except:
- token_vk=''
-#открытие файла с токеном, который нельзя встраивать в код работы бота, ибо код находится в открытом доступе
+
+class platform:
+ def __init__(self):
+  self.token=self.loadtoken()
+#для создания новой платформы достаточно создать класс, наследующий от platform и имеющий функции
+#loadtoken:
+# получить токен (или другие данные авторизации)
+#sendsometext:
+# отправка сообщения
+#lookforunread:
+# получить список непрочитанных сообщений
+#savetoken:
+# сохранение токена
+#по мимо них могут содержаться любые вспомогательные функции
+
+class vk(platform):
+ def loadtoken(self):
+  try:
+   token_vk=open('../kpml.bot.token_vk').read()
+  except:
+   token_vk=''
+  return token_vk
+ def sendsometext(self,text,key=None,id=None):
+  text=str(text)
+  global q
+  if id==None:
+   id=q[0]
+  #если сообщение большое, его стоит порезать на части
+  while len(text)>2048:
+   send_vk(text[:2048],key,id)
+   text=text[2048:]
+  key=keygen_vk(id,key)
+  #отправка сообщений
+  if 1:
+   text=str(text+key)
+#отправка сообщения
+   qq=self.api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','message='+text)
+#в случае серьёзной ошибки оповестить админа
+   r=1
+   if list(qq.keys())!=['response']:
+    try:
+     if qq['error']['error_code'] in [901,10,5]:
+      r=0
+    except:
+     pass
+    if r:
+     log(qq)
+ def lookforunread(self):
+  q=self.api('messages.getConversations?count=200&filter=unanswered&','')
+  if 'response' not in q.keys():
+   r=1
+   try:
+    if q['error']['error_code']in[10,5]:
+     r=0
+   except:
+    pass
+   if r:
+    log(q)
+   return []
+  #в случае серьёзной ошибки при чтении сообщений, администрации придёт сообщение об этом
+  q=q['response']['items']
+  q=[[w['conversation']['peer']['id'],w['last_message']['text']] for w in q if w['conversation']['can_write']['allowed']]
+  q=[[str(w[0])]+w[1:] for w in q]
+  q=[[w[0],w[1].lower()] for w in q]
+  #обработка полученных данных для возвращения в удобном виде
+  return q
+ def api(path,data=''):
+ #аргумент path имеет формат method?arg1=val1&arg2=val2 где method это название метода, далее список аргуметов и их значений. Подробнее методы и значения описаны в документации
+ #аргумент data может содержать ещё несколько аргуметов в том же формате, только без метода, отличие в том, что здесь нет ограничения на размер аргументов
+  print(path,data)
+  if path and path[-1] not in '?&':
+   if '?' in path:
+    path+='&'
+   else:
+    path+='?'
+  data=data.encode()
+  global token_vk
+  ret=loads(urlopen('https://api.vk.com/method/'+path+'v=5.101&access_token='+token_vk,data=data).read().decode())
+  sleep(1/3)
+  print(ret)
+  return ret
+
+
+#создание словаря plats, где будут содержаться информация обо всех платформах
+plats=dict()
+for w in platform.__subclasses__():
+ plats[w.__name__]=w()
+
+
 try:
  db=loads(open('../kpml.bot.db.json').read())
 except:
  db=loads('{}')
-#открытие базы данных с информацией кому что когда присылать
+#открытие базы данных с информацией кому что когда присылать (профили пользователей)
 admin=['225847803','382227482']
 #список id администрации, это люди, которые получают оповещения об ошибках. Дополнительных полномочий наличие в этом списке не даёт
 
@@ -141,12 +225,8 @@ def api_vk(path,data=''):
 
 def look():
  ext=[]
- #vk
- t=look_vk()
- for w in t:
-  w+=['vk']
- ext+=t
- #can be other service
+ for w in plats:
+  ext+=plats[w].lookforunread()
  return ext
 
 #функция для вк, подобные функции должны возвращать формат [[id,сообщение],[id,сообщение],[id,сообщение]]
@@ -174,12 +254,16 @@ def look_vk():
 
 #настоящая функция отправки сообщений, аргументы: текст, клавиатура (по умолчанию: то, что описано по умолчанию в keygen), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
 def send(text,key=None,id=None,prof=None):
+ text=str(text)
  print(text)
  global q
  if prof==None:
   prof=q[2]
- if prof=='vk':
-  return send_vk(text,key,id)
+ if id==None:
+  id=q[0]
+ if key==None:
+  key=defkey
+ plats[prof].sendsometext(text,key,id,prof)
 
 #функция отправки сообщений в вк, аргументы: текст, клавиатура (по умолчанию: то, что описано по умолчанию в keygen), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
 def send_vk(text,key=None,id=None):

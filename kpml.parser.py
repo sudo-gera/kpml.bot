@@ -205,17 +205,15 @@ def get(day,mon,clas):
 
 
 #функция чтения изменений, оболочка всех предыдущих
-def view(day=None,mon=None,id=None,prof=None):
- if id==None and prof==None and day != None and mon != None:
-  global q
-  id=q[0]
-  prof=q[2]
+def view(day=None,mon=None,profile=None):
+ if profile==None and day != None and mon != None:
+  global profile
  try:
   if day==None and mon==None:
    parsed=out()
   else:
    parsed=''
-   for w in db[prof][id]['class']:
+   for w in profile['class']:
     tj=get(day,mon,w)
     if tj:
      parsed+=w+': '+tj+'\n'
@@ -227,13 +225,13 @@ def view(day=None,mon=None,id=None,prof=None):
 Для получения изменений в расписании перейдите по ссылке http://kpml.ru/pages/raspisanie/izmeneniya-v-raspisanii'''
 
 #обработчик генерации текста автоматического оповещения
-def work(id,prof,empty=0):
+def work(profile,empty=0):
  q,w,e,dw=today()
- td=view(q,w,id,prof)
+ td=view(q,w,profile)
  if td or empty==0:
   td='Изменения на сегодня, '+str(q)+' '+rmo[int(w)]+' '+rdw[dw]+':\n'+ td
  r,t,y,dw=next(q,w,e,dw)
- tn=view(r,t,id,prof)
+ tn=view(r,t,profile)
  if tn or empty==0:
   tn='Изменения на завтра, '+str(r)+' '+rmo[int(t)]+' '+rdw[dw]+':\n'+tn
  if int(time())%(24*3600)<12*3600 or int(time())%(24*3600)>21*3600:

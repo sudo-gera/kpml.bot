@@ -50,18 +50,18 @@ def look():
  return ext
 
 #функция отправки сообщений, аргументы: текст, клавиатура (по умолчанию: defkey), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
-def send(text,key=None,id=None,prof=None):
+def send(text,key=None,id=None,platform=None):
  text=str(text)
  print(text)
- global q
- if prof==None:
-  prof=q[2]
+ if platform==None:
+  global platform
  if id==None:
-  id=q[0]
+  global id
  if key==None:
   key=defkey
- key=keygen(key,id,prof)
- plats(prof).sendsometext(text,key,id)
+ profile=db[platform][id]
+ key=keygen(key,profile)
+ plats(platform).sendsometext(text,key,id)
 
 #отправка сообщения администрации (только в вк)
 def log(q):
@@ -70,7 +70,7 @@ def log(q):
   send(str(q),defkey,w,'vk')
 
 #создаёт ссылку на пользователя. Формат входа: [id,text,platform] где text не используется и может быть чем угодно
-def getlink(q):
- return plats(q[2]).getlink(q[0])
+def getlink(id,platform):
+ return plats(platform).getlink(id)
 
 

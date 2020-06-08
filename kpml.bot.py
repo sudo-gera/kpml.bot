@@ -97,7 +97,7 @@ if 1:
      for e in db[cdb][w]['time']:
       #если с момента, когда надо было отправить сообщение прошло не более 5 минут и с последней рассылочной отправки прошло не менее 5 минут (не факт, что этот фрагмент кода выполнится именно в назначенное время, поэтому нужно допускать погрешность)
       if 0 < tn % (24*3600) - int(e) < 300 and tn - db[cdb][w]['ls'] >= 300:
-       worked=work(w,cdb,db[cdb][w]['dis_empty'])
+       worked=work(db[cdb][w],db[cdb][w]['dis_empty'])
        if worked:
         send(worked,defkey,w,cdb)
         db[cdb][w]['ls']=int(time())
@@ -120,84 +120,86 @@ if 1:
   for w in definf:
    if w not in db[q[2]][q[0]]:
     db[q[2]][q[0]][w]=definf[w]
-   continue
-  current_profile=db[q[2]][q[0]]
+  profile=db[q[2]][q[0]]
+  id=q[0]
+  platform=q[2]
+  text=q[1]
   #при присвоени словаря передаётся указатель на него а не копия
 #logic###############################################################
 #теперь можно приступать к пониманию, чего хотел пользователь
-  if q[1] == '':
+  if text == '':
    send('текстом, пожалуйста')
-  elif q[1] == 'json':
+  elif text == 'json':
    send(str(db).replace("'",'"'))
-  elif q[1] == 'git':
+  elif text == 'git':
    t=popen('git show').read()
    t=t.split('\n\n')[0]
    send(t)
-  elif q[1] == 'len':
-   send(len(db[q[2]].keys()))
-  elif q[1] == 'sub':
-   send(len([w for w in db[q[2]] if 'time' in db[q[2]][w] and db[q[2]][w]['time']]))
-  elif q[1] == '.':
+  elif text == 'len':
+   send(len(db[platform].keys()))
+  elif text == 'sub':
+   send(len([w for w in db[platform] if 'time' in db[platform][w] and db[platform][w]['time']]))
+  elif text == '.':
    send('.')
-  elif q[1] == 'gl':
+  elif text == 'gl':
    send(globals())
-  elif q[1] == 'xg':
-   send('\n'.join(['vk.com/id'+w+' '+str(db[q[2]][w]) for w in db[q[2]].keys()]))
-  elif q[1] == 'sw':
-   send('\n'.join(['vk.com/id'+w+' class: '+str(db[q[2]][w]['class'] if 'class' in db[q[2]][w] else 0)+' time: '+str([str(e//3600+3)+':'+str(e//60%60) for e in (db[q[2]][w]['time'] if 'time' in db[q[2]][w] else [])]) for w in db[q[2]].keys()]))
-  elif q[1] == 'отмена':
+  elif text == 'xg':
+   send('\n'.join(['vk.com/id'+w+' '+str(db[platform][w]) for w in db[platform].keys()]))
+  elif text == 'sw':
+   send('\n'.join(['vk.com/id'+w+' class: '+str(db[platform][w]['class'] if 'class' in db[platform][w] else 0)+' time: '+str([str(e//3600+3)+':'+str(e//60%60) for e in (db[platform][w]['time'] if 'time' in db[platform][w] else [])]) for w in db[platform].keys()]))
+  elif text == 'отмена':
    send('отменено')
-  elif q[1] in ['получить изменения','сейчас']:
+  elif text in ['получить изменения','сейчас']:
    tmp=view()
    tmp=tmp
    send(tmp)
-  elif q[1] == 'отключить пустые сообщения' or q[1] == 'пусто' and current_profile['dis_empty']==0:
-   current_profile['dis_empty']=1
+  elif text == 'отключить пустые сообщения' or text == 'пусто' and profile['dis_empty']==0:
+   profile['dis_empty']=1
    send('теперь вам не будут приходить автоматические оповещения, если они не содержат изменений. Обратите внимание, что иногда вам всё же будут приходить пустые оповещения, сообщайте о таких ошибках и они будут исправлены.')
-  elif q[1] == 'включить пустые сообщения' or q[1] == 'пусто' and current_profile['dis_empty']==1:
-   current_profile['dis_empty']=0
+  elif text == 'включить пустые сообщения' or text == 'пусто' and profile['dis_empty']==1:
+   profile['dis_empty']=0
    send('теперь вам будут приходить автоматические оповещения строго по расписанию, даже если в них ничего нет.')
-  elif q[1] == 'сообщение об ошибке':
+  elif text == 'сообщение об ошибке':
    send('напишите сообщение об ошибке, начните его с символа $',backey)
-  elif q[1][0] == '$':
-   log('сообщение об ошибке\nавтор '+getlink(q)+'\n'+q[1][1:])
+  elif text[0] == '$':
+   log('сообщение об ошибке\nавтор '+getlink(id,platform)+'\n'+text[1:])
    send('спасибо за обращение. Именно благодаря вам этот сервис скоро станет лучше. сообщение отправлено администрации, с вами скоро свяжутся')
-  elif q[1] == 'lookall':
-   send(work(q[0],q[2]))
-  elif isdt(q[1]):
-   tmp=isdt(q[1])
-   tmp=view(tmp[0],tmp[1],q[0],q[2])
+  elif text == 'lookall':
+   send(work(profile))
+  elif isdt(text):
+   tmp=isdt(text)
+   tmp=view(tmp[0],tmp[1],profile)
    tmp='\n'.join(tmp)
-   tmp='Изменения на '+q[1]+':\n'+tmp
+   tmp='Изменения на '+text+':\n'+tmp
    send(tmp)
-  elif iskcl(q[1]):
-   q[1]=q[1].replace('\u2000','')
-   q[1]=q[1].upper()
-   current_profile['class']=[q[1]]
-   send('теперь вы подписаны на класс '+q[1])
-  elif isktm(q[1]):
-   q[1]=q[1].replace('\u205a',':')
-   ms=q[1]
-   q[1]=q[1].split(':')
-   q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
-   current_profile['time']=[q[1]]
+  elif iskcl(text):
+   text=text.replace('\u2000','')
+   text=text.upper()
+   profile['class']=[text]
+   send('теперь вы подписаны на класс '+text)
+  elif isktm(text):
+   text=text.replace('\u205a',':')
+   ms=text
+   text=text.split(':')
+   text=(int(text[0])-3)%24*3600+int(text[1])%60*60
+   profile['time']=[text]
    send('теперь вы будете узнавать об изменениях в '+ms)
-  elif istm(q[1]):
-   ms=q[1]
-   q[1]=q[1].split(':')
-   q[1]=(int(q[1][0])-3)%24*3600+int(q[1][1])%60*60
-   if q[1] in current_profile['time']:
-    current_profile['time']=[w for w in current_profile['time'] if w != q[1]]
+  elif istm(text):
+   ms=text
+   text=text.split(':')
+   text=(int(text[0])-3)%24*3600+int(text[1])%60*60
+   if text in profile['time']:
+    profile['time']=[w for w in profile['time'] if w != text]
     t='количество оповещений в день уменьшено временем '+ms
    else:
-    if len(current_profile['time']) >= 256:
+    if len(profile['time']) >= 256:
      t='вы не можете получать более чем 256 уведомлений в сутки'
     else:
-     current_profile['time']+=[q[1]]
+     profile['time']+=[text]
      t='количество оповещений в день увеличено временем '+ms
    send(t+'. Обратие внимание, что оповещение не содержит изменений, опубликованных позднее, чем оно пришло')
-  elif q[1] in ['изменить кол-во оповещений в день','время']:
-   ts=current_profile['time'][:]
+  elif text in ['изменить кол-во оповещений в день','время']:
+   ts=profile['time'][:]
    ts=[str((w//3600+3)%24)+':'+str(w%3600//60) for w in ts]
    lts=len(ts)
    ts='\n'.join(ts)
@@ -211,15 +213,15 @@ if 1:
    else:
     ts='Сейчас вам не приходят оповещения, введите время для оповещения'
    send(ts,backey)
-  elif q[1]=='указать класс':
+  elif text=='указать класс':
    send('выберите свой класс',clskey)
-  elif q[1]=='указать время':
+  elif text=='указать время':
    send('выберите, когда вас оповещать. Обратите внимание, что оповещение не содержит измений, опубликованных позднее. Любое время, которого здесь нет можно указать через расширенные настройки',timkey)
-  elif q[1]=='настройки':
+  elif text=='настройки':
    send('панель настроек поможет настроить бота под себя',optkey)
-  elif q[1]=='расширенные настройки':
+  elif text=='расширенные настройки':
    send('панель настроек поможет более точно настроить бота под себя',setkey)
-  elif q[1]=='help':
+  elif text=='help':
    send('''
 чтобы изменить кол-во отслеживаемых классов напиши слово класс
 чтобы изменить кол-во оповещений в день напиши слово время
@@ -227,36 +229,36 @@ if 1:
 чтобы включить или отключить пустые сообщения напиши слово пусто
 чтобы сообщить об ошибке напиши сообщение, начав его с символа $
   ''')
-  elif iscl(q[1]):
-   q[1]=q[1].upper()
-   ms=q[1]
-   if q[1] in current_profile['class']:
-    current_profile['class']=[w for w in current_profile['class'] if w != q[1]]
+  elif iscl(text):
+   text=text.upper()
+   ms=text
+   if text in profile['class']:
+    profile['class']=[w for w in profile['class'] if w != text]
     t='количество отслеживаемых классов уменьшено классом '+ms+'.'
    else:
-    if len(current_profile['class'])>=256:
+    if len(profile['class'])>=256:
      t='вы не можете подписаться более чем на 256 классов'
-    elif len(q[1]) > 16:
+    elif len(text) > 16:
      t='длина класса не может превышать 16 символов'
     else:
-     current_profile['class']+=[q[1]]
+     profile['class']+=[text]
      t='количество отслеживаемых классов увеличено классом  '+ms+'.'
    send(t)
-  elif q[1] in ['изменить кол-во отслеживаемых классов','класс']:
-   ts=current_profile['class'][:]
+  elif text in ['изменить кол-во отслеживаемых классов','класс']:
+   ts=profile['class'][:]
    lts=len(ts)
    ts='\n'.join(ts)
    if ts:
     send('Сейчас вы подписаны на '+str(lts)+' классов:\n'+ts+'\n Введите класс, который вас интересует, если вы подписаны на него, то будете отписаны, если подписаны не были, то будете подписаны. Вводить класс следует указав номер и букву без пробела, если в параллели один класс, то это класс "а". Используйте только русские буквы, а не их латинские аналоги',backey)
    else:
     send('Сейчас вы не подписаны ни на один из классов. Введите класс, на который хотите подписаться.  Вводить класс следует узазав номер и букву без пробела, если в параллели один класс, то это класс "а". Используйте только русские буквы, а не их латинские аналоги',backey)
-  elif q[1]=='отключить рассылку':
-   current_profile['until']=time()+yis
-   current_profile['need']=0
+  elif text=='отключить рассылку':
+   profile['until']=time()+yis
+   profile['need']=0
    send('рассылка отключена, однако, вы всё ещё можете получать изменения по нажатии на кнопку. Если вы не включите её в течение года, информация о ваших настройках бота будет удаена')
-  elif q[1]=='включить рассылку':
-   current_profile['need']=1
-   current_profile['until']=time()+yis*32
+  elif text=='включить рассылку':
+   profile['need']=1
+   profile['until']=time()+yis*32
    send('рассылка включена')
   else:
    send('''Привет, это бот-оповещатель об изменениях в расписании.

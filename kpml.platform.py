@@ -50,15 +50,17 @@ def look():
  return ext
 
 #функция отправки сообщений, аргументы: текст, клавиатура (по умолчанию: defkey), приниматель(если не указан и функция вызвана во время обработки входящих сообщений, получателем будет тот, чьё сообение обрабатывается
-def send(text,key=None,id=None,platform=None):
+def send(text,key=None,_id=None,_platform=None):
  text=str(text)
  print(text)
- if platform==None:
-  del(platform)
+ if _platform==None:
   global platform
- if id==None:
-  del(id)
+ else:
+  platform=_platform
+ if _id==None:
   global id
+ else:
+  id=_id
  if key==None:
   key=defkey
  profile=db[platform][id]

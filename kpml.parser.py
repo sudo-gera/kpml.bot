@@ -205,10 +205,11 @@ def get(day,mon,clas):
 
 
 #функция чтения изменений, оболочка всех предыдущих
-def view(day=None,mon=None,profile=None):
- if profile==None and day != None and mon != None:
-  del(profile)
+def view(day=None,mon=None,_profile=None):
+ if _profile==None and day != None and mon != None:
   global profile
+ else:
+  profile=_profile
  try:
   if day==None and mon==None:
    parsed=out()

@@ -13,7 +13,7 @@ class vk(platform):
   #отправка сообщений
   text+=key
   key=''
-  self.api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&',+'keyboard='+key+'&message='+text)
+  self.api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&','keyboard='+key+'&message='+text)
  def lookforunread(self):
   q=self.api('messages.getConversations?count=200&filter=unanswered&','')
   if q==None:

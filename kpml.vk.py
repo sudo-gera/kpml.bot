@@ -8,9 +8,11 @@ class vk(platform):
   #key=keygen_vk(id,key)
   #генерация клавиатуры
   d={'w':'default','b':'primary','r':'negative','g':'positive'}
-  key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e[0]]+'","action":{"type":"text","label":"'+e[1:]+'"}}' for e in w.split('+')]) +']' for w in key.split('\n') if w])+']}'
-  key='&keyboard='+key
+  #key='{"buttons":['+','.join(['['+','.join(['{"color":"'+d[e[0]]+'","action":{"type":"text","label":"'+e[1:]+'"}}' for e in w.split('+')]) +']' for w in key.split('\n') if w])+']}'
+  #key='&keyboard='+key
   #отправка сообщений
+  text+=key
+  key=''
   self.api('messages.send?random_id='+str(time()).replace('.','')+'&user_id='+str(id)+'&',+'keyboard='+key+'&message='+text)
  def lookforunread(self):
   q=self.api('messages.getConversations?count=200&filter=unanswered&','')

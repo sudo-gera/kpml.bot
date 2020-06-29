@@ -18,19 +18,20 @@ class stdplatform:
     def savetoken(self, token):
         open('../kpml.bot.token_' + self.name, 'w').write(str(token).strip())
 
-    def sendsometext(self,text,keyboard,id):
-     pass
+    def sendsometext(self, text, keyboard, id):
+        pass
 
     def lookforunread(self):
-     return []
+        return []
 
-    def getlink(self,id):
-     return ''
+    def getlink(self, id):
+        return ''
 
 # для создания новой платформы достаточно создать класс, наследующий от stdplatform и имеющий функции
 # sendsometext(self,text,keyboard,id):
 # отправка сообщения
-# если платформа не поддерживает клавиатуры, параметр keyboard можно игнорировать
+# если платформа не поддерживает клавиатуры, параметр keyboard можно
+# игнорировать
 
 # lookforunread(self):
 # получить список непрочитанных сообщений
@@ -93,7 +94,9 @@ def send(text, key=None, _id=None, _platform=None):
     plats(platform).sendsometext(text, key, id)
 
 # отправка сообщения администрации (только в вк)
-# если вы не используете вк из-за старнности приложения, используйте kate mobile
+# если вы не используете вк из-за старнности приложения, используйте kate
+# mobile
+
 
 def log(q):
     print(q)

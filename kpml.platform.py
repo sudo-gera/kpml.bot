@@ -18,14 +18,27 @@ class stdplatform:
     def savetoken(self, token):
         open('../kpml.bot.token_' + self.name, 'w').write(str(token).strip())
 
+    def sendsometext(self,text,keyboard,id):
+     pass
+
+    def lookforunread(self):
+     return []
+
+    def getlink(self,id):
+     return ''
+
 # для создания новой платформы достаточно создать класс, наследующий от stdplatform и имеющий функции
 # sendsometext(self,text,keyboard,id):
 # отправка сообщения
 # если платформа не поддерживает клавиатуры, параметр keyboard можно игнорировать
-# lookforunread():
+
+# lookforunread(self):
 # получить список непрочитанных сообщений
+
 # getlink(self,id):
 # получение ссылки по id
+# используется только для отладки
+
 # по мимо них могут содержаться любые вспомогательные функции
 # первым аргументом всегда передаётся объект (self), его рекомендуется
 # использовать для хранения токена: self.token
@@ -80,14 +93,14 @@ def send(text, key=None, _id=None, _platform=None):
     plats(platform).sendsometext(text, key, id)
 
 # отправка сообщения администрации (только в вк)
-
+# если вы не используете вк из-за старнности приложения, используйте kate mobile
 
 def log(q):
     print(q)
     for w in admin:
         send(str(q), defkey, w, 'vk')
 
-# создаёт ссылку на пользователя. Формат входа: [id,text,platform] где
+# создаёт ссылку на пользователя. Формат входа: [id,platform] где
 # text не используется и может быть чем угодно
 
 

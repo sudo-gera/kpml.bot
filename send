@@ -1,4 +1,4 @@
 if [ $# -lt 1 ]
 then echo "usage: ./send \"comment\""
-else python3 -m py_compile kpml.bot.py && rm -r __pycache__ && git add * && git commit -am "$1" && git push
+else esc -node -c index.py && python3 -m py_compile kpml.bot.py && rm -r __pycache__ && git add * && git commit -am "$1" && git push
 fi

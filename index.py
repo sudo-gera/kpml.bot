@@ -125,7 +125,10 @@ def edit_c(q):
  return false
 def save():
  check()
- download('kpml.txt', document.forms.mainform.elements.maintext.value)
+ today=new Date()
+ date=String(today.getDate()).padStart(2,'0')
+ date+='.'+String(today.getMonth()+1).padStart(2,'0')
+ download(date+'.kpml.txt', document.forms.mainform.elements.maintext.value)
 def open_s():
  show('menu','''<form name="openform" onchange="open_o();return false"><input type="file" name="opentext"/></form><button onclick="edit();return false">cancel</button>''')
  check()
